@@ -2,3 +2,55 @@
 title: "R Notebook"
 output: html_notebook
 ---
+
+"api_keys.txt" needs to be present in the same folder as the project. The file
+contains the variable omdb_api_key set to be the key of whomever is running
+the notebook.
+```{r}
+source("api_keys.txt")
+```
+
+Load libraries
+```{r}
+library(httr)
+library(jsonlite)
+library(purrr)
+```
+
+Download movie data and save to JSON file
+```{r}
+movie_list <- c("tt0371746", "tt0848228", "tt4154796", "tt0084787",
+        "tt0092991")
+favourite_movies <- NULL
+
+for (movie in movie_list) {
+        response <- GET("http://www.omdbapi.com/", query = list(apikey =
+                omdb_api_key, i = movie))
+        raw_info <- content(response)
+        favourite_movies[[length(favourite_movies) + 1]] <- raw_info
+}
+
+write_json(favourite_movies, "favourite_movies.json", pretty = TRUE,
+        auto_unbox = TRUE)
+```
+
+Write output to csv
+```{r}
+raw_movies <- read_file("favourite_movies.json")
+movies_dataframe <- fromJSON(raw_movies)
+#write_csv(movies_dataframe, "favourite_movies.csv")
+movies_dataframe
+```
+
+Calculate mean rating of films
+```{r}
+ratings <- NULL
+
+for (number in 1:length(movie_list)) {
+        ratings <- c(ratings, favourite_movies[[number]]$imdbRating)
+}
+
+mean_rating <- mean(as.numeric(ratings))
+mean_rating
+```
+

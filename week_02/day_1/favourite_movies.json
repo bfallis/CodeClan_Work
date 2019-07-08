@@ -1,0 +1,202 @@
+[
+  {
+    "Title": "Iron Man",
+    "Year": "2008",
+    "Rated": "PG-13",
+    "Released": "02 May 2008",
+    "Runtime": "126 min",
+    "Genre": "Action, Adventure, Sci-Fi",
+    "Director": "Jon Favreau",
+    "Writer": "Mark Fergus (screenplay), Hawk Ostby (screenplay), Art Marcum (screenplay), Matt Holloway (screenplay), Stan Lee (characters), Don Heck (characters), Larry Lieber (characters), Jack Kirby (characters)",
+    "Actors": "Robert Downey Jr., Terrence Howard, Jeff Bridges, Gwyneth Paltrow",
+    "Plot": "After being held captive in an Afghan cave, billionaire engineer Tony Stark creates a unique weaponized suit of armor to fight evil.",
+    "Language": "English, Persian, Urdu, Arabic, Hungarian",
+    "Country": "USA",
+    "Awards": "Nominated for 2 Oscars. Another 20 wins & 65 nominations.",
+    "Poster": "https://m.media-amazon.com/images/M/MV5BMTczNTI2ODUwOF5BMl5BanBnXkFtZTcwMTU0NTIzMw@@._V1_SX300.jpg",
+    "Ratings": [
+      {
+        "Source": "Internet Movie Database",
+        "Value": "7.9/10"
+      },
+      {
+        "Source": "Rotten Tomatoes",
+        "Value": "93%"
+      },
+      {
+        "Source": "Metacritic",
+        "Value": "79/100"
+      }
+    ],
+    "Metascore": "79",
+    "imdbRating": "7.9",
+    "imdbVotes": "863,899",
+    "imdbID": "tt0371746",
+    "Type": "movie",
+    "DVD": "30 Sep 2008",
+    "BoxOffice": "$318,298,180",
+    "Production": "Paramount Pictures",
+    "Website": "http://www.ironmanmovie.com/",
+    "Response": "True"
+  },
+  {
+    "Title": "The Avengers",
+    "Year": "2012",
+    "Rated": "PG-13",
+    "Released": "04 May 2012",
+    "Runtime": "143 min",
+    "Genre": "Action, Adventure, Sci-Fi",
+    "Director": "Joss Whedon",
+    "Writer": "Joss Whedon (screenplay), Zak Penn (story), Joss Whedon (story)",
+    "Actors": "Robert Downey Jr., Chris Evans, Mark Ruffalo, Chris Hemsworth",
+    "Plot": "Earth's mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army from enslaving humanity.",
+    "Language": "English, Russian, Hindi",
+    "Country": "USA",
+    "Awards": "Nominated for 1 Oscar. Another 38 wins & 79 nominations.",
+    "Poster": "https://m.media-amazon.com/images/M/MV5BNDYxNjQyMjAtNTdiOS00NGYwLWFmNTAtNThmYjU5ZGI2YTI1XkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_SX300.jpg",
+    "Ratings": [
+      {
+        "Source": "Internet Movie Database",
+        "Value": "8.1/10"
+      },
+      {
+        "Source": "Rotten Tomatoes",
+        "Value": "92%"
+      },
+      {
+        "Source": "Metacritic",
+        "Value": "69/100"
+      }
+    ],
+    "Metascore": "69",
+    "imdbRating": "8.1",
+    "imdbVotes": "1,186,132",
+    "imdbID": "tt0848228",
+    "Type": "movie",
+    "DVD": "25 Sep 2012",
+    "BoxOffice": "$623,279,547",
+    "Production": "Walt Disney Pictures",
+    "Website": "http://marvel.com/avengers_movie",
+    "Response": "True"
+  },
+  {
+    "Title": "Avengers: Endgame",
+    "Year": "2019",
+    "Rated": "PG-13",
+    "Released": "26 Apr 2019",
+    "Runtime": "181 min",
+    "Genre": "Action, Adventure, Sci-Fi",
+    "Director": "Anthony Russo, Joe Russo",
+    "Writer": "Christopher Markus (screenplay by), Stephen McFeely (screenplay by), Stan Lee (based on the Marvel comics by), Jack Kirby (based on the Marvel comics by), Jim Starlin (comic book)",
+    "Actors": "Robert Downey Jr., Chris Evans, Mark Ruffalo, Chris Hemsworth",
+    "Plot": "After the devastating events of Avengers: Infinity War (2018), the universe is in ruins. With the help of remaining allies, the Avengers assemble once more in order to undo Thanos' actions and restore order to the universe.",
+    "Language": "English, Japanese, Xhosa",
+    "Country": "USA",
+    "Awards": "N/A",
+    "Poster": "https://m.media-amazon.com/images/M/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_SX300.jpg",
+    "Ratings": [
+      {
+        "Source": "Internet Movie Database",
+        "Value": "8.7/10"
+      },
+      {
+        "Source": "Rotten Tomatoes",
+        "Value": "94%"
+      },
+      {
+        "Source": "Metacritic",
+        "Value": "78/100"
+      }
+    ],
+    "Metascore": "78",
+    "imdbRating": "8.7",
+    "imdbVotes": "449,066",
+    "imdbID": "tt4154796",
+    "Type": "movie",
+    "DVD": "N/A",
+    "BoxOffice": "N/A",
+    "Production": "Marvel Studios",
+    "Website": "N/A",
+    "Response": "True"
+  },
+  {
+    "Title": "The Thing",
+    "Year": "1982",
+    "Rated": "R",
+    "Released": "25 Jun 1982",
+    "Runtime": "109 min",
+    "Genre": "Horror, Mystery, Sci-Fi",
+    "Director": "John Carpenter",
+    "Writer": "Bill Lancaster (screenplay), John W. Campbell Jr. (story)",
+    "Actors": "Kurt Russell, Wilford Brimley, T.K. Carter, David Clennon",
+    "Plot": "A research team in Antarctica is hunted by a shape-shifting alien that assumes the appearance of its victims.",
+    "Language": "English, Norwegian",
+    "Country": "USA",
+    "Awards": "3 nominations.",
+    "Poster": "https://m.media-amazon.com/images/M/MV5BNDcyZmFjY2YtN2I1OC00MzU3LWIzZGEtZDA5N2VlNDJjYWI3L2ltYWdlXkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_SX300.jpg",
+    "Ratings": [
+      {
+        "Source": "Internet Movie Database",
+        "Value": "8.1/10"
+      },
+      {
+        "Source": "Rotten Tomatoes",
+        "Value": "84%"
+      },
+      {
+        "Source": "Metacritic",
+        "Value": "57/100"
+      }
+    ],
+    "Metascore": "57",
+    "imdbRating": "8.1",
+    "imdbVotes": "331,513",
+    "imdbID": "tt0084787",
+    "Type": "movie",
+    "DVD": "28 Aug 2001",
+    "BoxOffice": "N/A",
+    "Production": "Universal Pictures",
+    "Website": "http://www.theofficialjohncarpenter.com/pages/themovies/th/th.html",
+    "Response": "True"
+  },
+  {
+    "Title": "Evil Dead II",
+    "Year": "1987",
+    "Rated": "R",
+    "Released": "13 Mar 1987",
+    "Runtime": "84 min",
+    "Genre": "Comedy, Horror",
+    "Director": "Sam Raimi",
+    "Writer": "Sam Raimi, Scott Spiegel",
+    "Actors": "Bruce Campbell, Sarah Berry, Dan Hicks, Kassie Wesley DePaiva",
+    "Plot": "The lone survivor of an onslaught of flesh-possessing spirits holes up in a cabin with a group of strangers while the demons continue their attack.",
+    "Language": "English, Latin",
+    "Country": "USA",
+    "Awards": "5 nominations.",
+    "Poster": "https://m.media-amazon.com/images/M/MV5BMWY3ODZlOGMtNzJmOS00ZTNjLWI3ZWEtZTJhZTk5NDZjYWRjXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg",
+    "Ratings": [
+      {
+        "Source": "Internet Movie Database",
+        "Value": "7.8/10"
+      },
+      {
+        "Source": "Rotten Tomatoes",
+        "Value": "98%"
+      },
+      {
+        "Source": "Metacritic",
+        "Value": "69/100"
+      }
+    ],
+    "Metascore": "69",
+    "imdbRating": "7.8",
+    "imdbVotes": "135,779",
+    "imdbID": "tt0092991",
+    "Type": "movie",
+    "DVD": "04 Aug 1998",
+    "BoxOffice": "N/A",
+    "Production": "Rosebud Communications Releasing",
+    "Website": "N/A",
+    "Response": "True"
+  }
+]

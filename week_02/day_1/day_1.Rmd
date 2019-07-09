@@ -38,8 +38,8 @@ Write output to csv
 ```{r}
 raw_movies <- read_file("favourite_movies.json")
 movies_dataframe <- fromJSON(raw_movies)
-#write_csv(movies_dataframe, "favourite_movies.csv")
-movies_dataframe
+movies_dataframe <- movies_dataframe[ , -15]
+write_csv(movies_dataframe, "favourite_movies.csv")
 ```
 
 Calculate mean rating of films

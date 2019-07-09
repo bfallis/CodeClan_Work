@@ -1,0 +1,139 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+1.1
+createdb wrestling
+psql -d wrestling -f ~/de1_classnotes/week_02/day_2/7_homework/wrestling.sql
+
+Get user details from keyring
+```{r}
+library(keyring)
+keyring_unlock(keyring = "local")
+username <- key_get("postgresql_username", keyring = "local")
+password <- key_get("postgresql_password", keyring = "local")
+keyring_lock(keyring = "local")
+```
+
+Create a connection to the local wrestling database from R. 
+```{r}
+library(RPostgreSQL)
+
+my_db_connection <- dbConnect(drv = PostgreSQL(max.con = 2), user = username,
+        password = password, dbname = "wrestling", host = "localhost")
+```
+
+Using the R connection you just created, write and execute a SQL query to return
+all the wrestlers in the wrestlers table.
+```{r}
+dbGetQuery(my_db_connection, "SELECT * FROM wrestlers")
+```
+
+State which data type you think each column stores:
+born          - varchar
+name          - varchar
+gender        - varchar
+win_percent   - double
+total_matches - int
+
+1.2
+Store the credentials in appropriately named keys in the remote keyring.
+```{r}
+#keyring_create(keyring = "remote")
+#key_set(service = "elephant_username", keyring = "remote")
+#key_set(service = "elephant_password", keyring = "remote")
+#keyring_lock(keyring = "remote")
+```
+
+```{r}
+keyring_unlock(keyring = "remote")
+elephant_username <- key_get("elephant_username", keyring = "remote")
+elephant_password <- key_get("elephant_password", keyring = "remote")
+keyring_lock(keyring = "local")
+```
+
+Use your credentials to establish a connection from R to the remote database.
+```{r}
+my_remote_connection <- dbConnect(drv = PostgreSQL(max.con = 2), 
+        user = elephant_username, password = elephant_password,
+        dbname = "mvhbdgdk", host = "manny.db.elephantsql.com")
+```
+
+Using this R connection, write and execute a query to return all the wrestlers
+from the wrestlers table
+```{r}
+dbGetQuery(my_remote_connection, "SELECT * FROM wrestlers")
+```
+
+2
+Return all the details for any wrestlers from the United Kingdom
+```{r}
+dbGetQuery(my_db_connection, "SELECT * FROM wrestlers WHERE born = 'United Kingdom'")
+```
+
+Get the names of all Japanese wrestlers who have appeared in 40 or more matches.
+```{r}
+dbGetQuery(my_db_connection, 
+        "SELECT *
+         FROM wrestlers 
+         WHERE born = 'Japan' AND total_matches > 40"
+)
+```
+
+Find the wrestlers who have won between 50% and 60% of their matches.
+```{r}
+dbGetQuery(my_db_connection,
+        "SELECT *
+         FROM wrestlers
+         WHERE win_percent BETWEEN 50 AND 60"
+)
+```
+
+Find all the wrestlers with names beginning with ‘X’.
+```{r}
+dbGetQuery(my_db_connection,
+        "SELECT *
+         FROM wrestlers
+         WHERE name LIKE 'X%'"
+)
+```
+
+Find all the wrestlers who were born in countries beginning with the letter ‘I’. Try this using IN (there are 9 countries) and using a wildcard comparison.
+```{r}
+dbGetQuery(my_db_connection,
+        "SELECT *
+         FROM wrestlers
+         WHERE born IN ('India', 'Iran', 'Ireland', 'Italy')"
+)
+
+dbGetQuery(my_db_connection,
+        "SELECT *
+         FROM wrestlers
+         WHERE born LIKE 'I%'"
+)
+```
+
+Find all the wrestlers who were not born in countries beginning with the letter ‘I’.
+```{r}
+dbGetQuery(my_db_connection,
+        "SELECT *
+         FROM wrestlers
+         WHERE born NOT LIKE 'I%'"
+)
+```
+
+Close connections
+```{r}
+dbDisconnect(conn = my_db_connection)
+dbDisconnect(conn = my_remote_connection)
+```
+
+
+
+
+
+
+
+
+

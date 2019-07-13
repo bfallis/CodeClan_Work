@@ -128,12 +128,3 @@ Close connections
 dbDisconnect(conn = my_db_connection)
 dbDisconnect(conn = my_remote_connection)
 ```
-
-
-
-
-
-
-
-
-

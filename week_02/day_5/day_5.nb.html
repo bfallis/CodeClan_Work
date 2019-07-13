@@ -1729,7 +1729,7 @@ $(document).ready(function () {
 </style>
 <script>
 $(document).ready(function () {
-  window.initializeSourceEmbed("day_2.Rmd");
+  window.initializeSourceEmbed("day_5.Rmd");
   window.initializeCodeFolding("show" === "show");
 });
 </script>
@@ -1767,162 +1767,177 @@ $(document).ready(function () {
 
 
 <!-- rnb-text-begin -->
-<p>1.1 createdb wrestling psql -d wrestling -f ~/de1_classnotes/week_02/day_2/7_homework/wrestling.sql</p>
-<p>Get user details from keyring</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShrZXlyaW5nKVxua2V5cmluZ191bmxvY2soa2V5cmluZyA9IFwibG9jYWxcIilcbnVzZXJuYW1lIDwtIGtleV9nZXQoXCJwb3N0Z3Jlc3FsX3VzZXJuYW1lXCIsIGtleXJpbmcgPSBcImxvY2FsXCIpXG5wYXNzd29yZCA8LSBrZXlfZ2V0KFwicG9zdGdyZXNxbF9wYXNzd29yZFwiLCBrZXlyaW5nID0gXCJsb2NhbFwiKVxua2V5cmluZ19sb2NrKGtleXJpbmcgPSBcImxvY2FsXCIpXG5gYGAifQ== -->
-<pre class="r"><code>library(keyring)
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI0dldCBkYXRhYmFzZSB1c2VybmFtZSBhbmQgcGFzc3dvcmRcbmtleXJpbmdfdW5sb2NrKGtleXJpbmcgPSBcImxvY2FsXCIpXG51c2VybmFtZSA8LSBrZXlfZ2V0KFwicG9zdGdyZXNxbF91c2VybmFtZVwiLCBrZXlyaW5nID0gXCJsb2NhbFwiKVxucGFzc3dvcmQgPC0ga2V5X2dldChcInBvc3RncmVzcWxfcGFzc3dvcmRcIiwga2V5cmluZyA9IFwibG9jYWxcIilcbmtleXJpbmdfbG9jayhrZXlyaW5nID0gXCJsb2NhbFwiKVxuXG4jR2V0IGluZGljbyBhcGkga2V5XG5rZXlyaW5nX3VubG9jayhrZXlyaW5nID0gXCJyZW1vdGVcIilcbmluZGljb19hcGlfa2V5IDwtIGtleV9nZXQoXCJpbmRpY29fYXBpX2tleVwiLCBrZXlyaW5nID0gXCJyZW1vdGVcIilcbmtleXJpbmdfbG9jayhrZXlyaW5nID0gXCJyZW1vdGVcIilcbmBgYCJ9 -->
+<pre class="r"><code>#Get database username and password
 keyring_unlock(keyring = &quot;local&quot;)
 username &lt;- key_get(&quot;postgresql_username&quot;, keyring = &quot;local&quot;)
 password &lt;- key_get(&quot;postgresql_password&quot;, keyring = &quot;local&quot;)
-keyring_lock(keyring = &quot;local&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Create a connection to the local wrestling database from R.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShSUG9zdGdyZVNRTClcblxubXlfZGJfY29ubmVjdGlvbiA8LSBkYkNvbm5lY3QoZHJ2ID0gUG9zdGdyZVNRTChtYXguY29uID0gMiksIHVzZXIgPSB1c2VybmFtZSxcbiAgICAgICAgcGFzc3dvcmQgPSBwYXNzd29yZCwgZGJuYW1lID0gXCJ3cmVzdGxpbmdcIiwgaG9zdCA9IFwibG9jYWxob3N0XCIpXG5gYGAifQ== -->
-<pre class="r"><code>library(RPostgreSQL)
+keyring_lock(keyring = &quot;local&quot;)
 
-my_db_connection &lt;- dbConnect(drv = PostgreSQL(max.con = 2), user = username,
-        password = password, dbname = &quot;wrestling&quot;, host = &quot;localhost&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Using the R connection you just created, write and execute a SQL query to return all the wrestlers in the wrestlers table.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGJHZXRRdWVyeShteV9kYl9jb25uZWN0aW9uLCBcIlNFTEVDVCAqIEZST00gd3Jlc3RsZXJzXCIpXG5gYGAifQ== -->
-<pre class="r"><code>dbGetQuery(my_db_connection, &quot;SELECT * FROM wrestlers&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>State which data type you think each column stores: born - varchar name - varchar gender - varchar win_percent - double total_matches - int</p>
-<p>1.2 Store the credentials in appropriately named keys in the remote keyring.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxua2V5cmluZ19jcmVhdGUoa2V5cmluZyA9IFwicmVtb3RlXCIpXG5rZXlfc2V0KHNlcnZpY2UgPSBcImVsZXBoYW50X3VzZXJuYW1lXCIsIGtleXJpbmcgPSBcInJlbW90ZVwiKVxua2V5X3NldChzZXJ2aWNlID0gXCJlbGVwaGFudF9wYXNzd29yZFwiLCBrZXlyaW5nID0gXCJyZW1vdGVcIilcbmtleXJpbmdfbG9jayhrZXlyaW5nID0gXCJyZW1vdGVcIilcbmBgYCJ9 -->
-<pre class="r"><code>keyring_create(keyring = &quot;remote&quot;)
-key_set(service = &quot;elephant_username&quot;, keyring = &quot;remote&quot;)
-key_set(service = &quot;elephant_password&quot;, keyring = &quot;remote&quot;)
+#Get indico api key
+keyring_unlock(keyring = &quot;remote&quot;)
+indico_api_key &lt;- key_get(&quot;indico_api_key&quot;, keyring = &quot;remote&quot;)
 keyring_lock(keyring = &quot;remote&quot;)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxua2V5cmluZ191bmxvY2soa2V5cmluZyA9IFwicmVtb3RlXCIpXG5lbGVwaGFudF91c2VybmFtZSA8LSBrZXlfZ2V0KFwiZWxlcGhhbnRfdXNlcm5hbWVcIiwga2V5cmluZyA9IFwicmVtb3RlXCIpXG5lbGVwaGFudF9wYXNzd29yZCA8LSBrZXlfZ2V0KFwiZWxlcGhhbnRfcGFzc3dvcmRcIiwga2V5cmluZyA9IFwicmVtb3RlXCIpXG5rZXlyaW5nX2xvY2soa2V5cmluZyA9IFwibG9jYWxcIilcbmBgYCJ9 -->
-<pre class="r"><code>keyring_unlock(keyring = &quot;remote&quot;)
-elephant_username &lt;- key_get(&quot;elephant_username&quot;, keyring = &quot;remote&quot;)
-elephant_password &lt;- key_get(&quot;elephant_password&quot;, keyring = &quot;remote&quot;)
-keyring_lock(keyring = &quot;local&quot;)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI0NyZWF0ZSBsb2NhbCBkYXRhYmFzZSBjb25uZWN0aW9uXG5kYl9jb25uZWN0aW9uIDwtIGRiQ29ubmVjdChkcnYgPSBQb3N0Z3JlU1FMKG1heC5jb24gPSAxKSwgdXNlciA9IHVzZXJuYW1lLFxuICAgICAgICBwYXNzd29yZCA9IHBhc3N3b3JkLCBkYm5hbWUgPSBcImFjbWVfZW1wbG95ZWVzXCIsIGhvc3QgPSBcImxvY2FsaG9zdFwiKVxucm0obGlzdCA9IGMoXCJwYXNzd29yZFwiLCBcInVzZXJuYW1lXCIpKVxuYGBgIn0= -->
+<pre class="r"><code>#Create local database connection
+db_connection &lt;- dbConnect(drv = PostgreSQL(max.con = 1), user = username,
+        password = password, dbname = &quot;acme_employees&quot;, host = &quot;localhost&quot;)
+rm(list = c(&quot;password&quot;, &quot;username&quot;))</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Use your credentials to establish a connection from R to the remote database.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXlfcmVtb3RlX2Nvbm5lY3Rpb24gPC0gZGJDb25uZWN0KGRydiA9IFBvc3RncmVTUUwobWF4LmNvbiA9IDIpLCBcbiAgICAgICAgdXNlciA9IGVsZXBoYW50X3VzZXJuYW1lLCBwYXNzd29yZCA9IGVsZXBoYW50X3Bhc3N3b3JkLFxuICAgICAgICBkYm5hbWUgPSBcIm12aGJkZ2RrXCIsIGhvc3QgPSBcIm1hbm55LmRiLmVsZXBoYW50c3FsLmNvbVwiKVxuYGBgIn0= -->
-<pre class="r"><code>my_remote_connection &lt;- dbConnect(drv = PostgreSQL(max.con = 2), 
-        user = elephant_username, password = elephant_password,
-        dbname = &quot;mvhbdgdk&quot;, host = &quot;manny.db.elephantsql.com&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Using this R connection, write and execute a query to return all the wrestlers from the wrestlers table</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGJHZXRRdWVyeShteV9yZW1vdGVfY29ubmVjdGlvbiwgXCJTRUxFQ1QgKiBGUk9NIHdyZXN0bGVyc1wiKVxuYGBgIn0= -->
-<pre class="r"><code>dbGetQuery(my_remote_connection, &quot;SELECT * FROM wrestlers&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>2 Return all the details for any wrestlers from the United Kingdom</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGJHZXRRdWVyeShteV9kYl9jb25uZWN0aW9uLCBcIlNFTEVDVCAqIEZST00gd3Jlc3RsZXJzIFdIRVJFIGJvcm4gPSAnVW5pdGVkIEtpbmdkb20nXCIpXG5gYGAifQ== -->
-<pre class="r"><code>dbGetQuery(my_db_connection, &quot;SELECT * FROM wrestlers WHERE born = 'United Kingdom'&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Get the names of all Japanese wrestlers who have appeared in 40 or more matches.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGJHZXRRdWVyeShteV9kYl9jb25uZWN0aW9uLCBcbiAgICAgICAgXCJTRUxFQ1QgKlxuICAgICAgICAgRlJPTSB3cmVzdGxlcnMgXG4gICAgICAgICBXSEVSRSBib3JuID0gJ0phcGFuJyBBTkQgdG90YWxfbWF0Y2hlcyA+IDQwXCJcbilcbmBgYCJ9 -->
-<pre class="r"><code>dbGetQuery(my_db_connection, 
-        &quot;SELECT *
-         FROM wrestlers 
-         WHERE born = 'Japan' AND total_matches &gt; 40&quot;
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZW1wbG95ZWVzX3dpdGhfdGVhbXNfZmVlZGJhY2tzIDwtIGRiR2V0UXVlcnkoZGJfY29ubmVjdGlvbixcbiAgICAgICAgXCJTRUxFQ1QgZS5maXJzdF9uYW1lXG4gICAgICAgICAgICAgICAgLCBlLmxhc3RfbmFtZVxuICAgICAgICAgICAgICAgICwgZS5lbWFpbFxuICAgICAgICAgICAgICAgICwgdC5uYW1lIEFTIHRlYW1fbmFtZVxuICAgICAgICAgICAgICAgICwgZi5tZXNzYWdlXG4gICAgICAgICAgICAgICAgLCBmLmRhdGUgQVMgbWVzc2FnZV9kYXRlXG4gICAgICAgICBGUk9NIGZlZWRiYWNrcyBBUyBmXG4gICAgICAgICAgICAgICAgSk9JTiBlbXBsb3llZXMgQVMgZSBPTiBmLmVtcGxveWVlX2lkID0gZS5pZFxuICAgICAgICAgICAgICAgIEpPSU4gdGVhbXMgQVMgVCBvbiBlLnRlYW1faWQgPSB0LmlkXG4gICAgICAgICBXSEVSRSBmLmRhdGUgPSAoU0VMRUNUIE1BWChkYXRlKSBcbiAgICAgICAgICAgICAgICAgICAgICAgIEZST00gZmVlZGJhY2tzXG4gICAgICAgICAgICAgICAgICAgICAgICBXSEVSRSBmZWVkYmFja3MuZW1wbG95ZWVfaWQgPSBmLmVtcGxveWVlX2lkKVxuICAgICAgICAgT1JERVIgQlkgdC5uYW1lLCBlLmxhc3RfbmFtZVwiXG4pXG5gYGAifQ== -->
+<pre class="r"><code>employees_with_teams_feedbacks &lt;- dbGetQuery(db_connection,
+        &quot;SELECT e.first_name
+                , e.last_name
+                , e.email
+                , t.name AS team_name
+                , f.message
+                , f.date AS message_date
+         FROM feedbacks AS f
+                JOIN employees AS e ON f.employee_id = e.id
+                JOIN teams AS T on e.team_id = t.id
+         WHERE f.date = (SELECT MAX(date) 
+                        FROM feedbacks
+                        WHERE feedbacks.employee_id = f.employee_id)
+         ORDER BY t.name, e.last_name&quot;
 )</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Find the wrestlers who have won between 50% and 60% of their matches.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGJHZXRRdWVyeShteV9kYl9jb25uZWN0aW9uLFxuICAgICAgICBcIlNFTEVDVCAqXG4gICAgICAgICBGUk9NIHdyZXN0bGVyc1xuICAgICAgICAgV0hFUkUgd2luX3BlcmNlbnQgQkVUV0VFTiA1MCBBTkQgNjBcIlxuKVxuYGBgIn0= -->
-<pre class="r"><code>dbGetQuery(my_db_connection,
-        &quot;SELECT *
-         FROM wrestlers
-         WHERE win_percent BETWEEN 50 AND 60&quot;
-)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShodHRyKVxubGlicmFyeShwdXJycilcbmBgYCJ9 -->
+<pre class="r"><code>library(httr)
+library(purrr)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Find all the wrestlers with names beginning with ‘X’.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGJHZXRRdWVyeShteV9kYl9jb25uZWN0aW9uLFxuICAgICAgICBcIlNFTEVDVCAqXG4gICAgICAgICBGUk9NIHdyZXN0bGVyc1xuICAgICAgICAgV0hFUkUgbmFtZSBMSUtFICdYJSdcIlxuKVxuYGBgIn0= -->
-<pre class="r"><code>dbGetQuery(my_db_connection,
-        &quot;SELECT *
-         FROM wrestlers
-         WHERE name LIKE 'X%'&quot;
-)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI0Z1bmN0aW9uIHRvIGdldCBtZXNzYWdlIHNlbnRpbWVudCBmcm9tIGluZGljb1xuYXBpX2ZldGNoZXIgPC0gZnVuY3Rpb24odXJsLCBhcGlfa2V5LCBtZXNzYWdlKSB7XG4gICAgICAgIHBhcmFtcyA8LSBsaXN0KGFwaV9rZXkgPSBhcGlfa2V5LCBkYXRhID0gbWVzc2FnZSlcbiAgICAgICAgXG4gICAgICAgIHJlc3BvbnNlIDwtIFBPU1QodXJsLCBxdWVyeSA9IHBhcmFtcylcbiAgICAgICAgXG4gICAgICAgIHJldHVybihjb250ZW50KHJlc3BvbnNlKSlcbn1cbmBgYCJ9 -->
+<pre class="r"><code>#Function to get message sentiment from indico
+api_fetcher &lt;- function(url, api_key, message) {
+        params &lt;- list(api_key = api_key, data = message)
+        
+        response &lt;- POST(url, query = params)
+        
+        return(content(response))
+}</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Find all the wrestlers who were born in countries beginning with the letter ‘I’. Try this using IN (there are 9 countries) and using a wildcard comparison.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGJHZXRRdWVyeShteV9kYl9jb25uZWN0aW9uLFxuICAgICAgICBcIlNFTEVDVCAqXG4gICAgICAgICBGUk9NIHdyZXN0bGVyc1xuICAgICAgICAgV0hFUkUgYm9ybiBJTiAoJ0luZGlhJywgJ0lyYW4nLCAnSXJlbGFuZCcsICdJdGFseScpXCJcbilcblxuZGJHZXRRdWVyeShteV9kYl9jb25uZWN0aW9uLFxuICAgICAgICBcIlNFTEVDVCAqXG4gICAgICAgICBGUk9NIHdyZXN0bGVyc1xuICAgICAgICAgV0hFUkUgYm9ybiBMSUtFICdJJSdcIlxuKVxuYGBgIn0= -->
-<pre class="r"><code>dbGetQuery(my_db_connection,
-        &quot;SELECT *
-         FROM wrestlers
-         WHERE born IN ('India', 'Iran', 'Ireland', 'Italy')&quot;
-)
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI0Z1bmN0aW9uIHRvIHVucGFjayByZXNwb25zZSB0byBhIGRvdWJsZSB2ZWN0b3JcbnJlc3BvbnNlX3VucGFja2VyIDwtIGZ1bmN0aW9uKHJlc3BvbnNlX2xpc3QpIHtcbiAgICAgICAgZW1vdGlvbl92ZWMgPC0gZmxhdHRlbl9kYmwocmVzcG9uc2VfbGlzdCRyZXN1bHRzKVxuICAgICAgICBuYW1lcyhlbW90aW9uX3ZlYykgPC0gYyhcImFuZ2VyXCIsIFwiZmVhclwiLCBcImpveVwiLCBcInNhZG5lc3NcIiwgXCJzdXJwcmlzZVwiKVxuICAgICAgICBcbiAgICAgICAgcmV0dXJuKGVtb3Rpb25fdmVjKVxufVxuYGBgIn0= -->
+<pre class="r"><code>#Function to unpack response to a double vector
+response_unpacker &lt;- function(response_list) {
+        emotion_vec &lt;- flatten_dbl(response_list$results)
+        names(emotion_vec) &lt;- c(&quot;anger&quot;, &quot;fear&quot;, &quot;joy&quot;, &quot;sadness&quot;, &quot;surprise&quot;)
+        
+        return(emotion_vec)
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudXJsIDwtIFwiaHR0cHM6Ly9hcGl2Mi5pbmRpY28uaW8vZW1vdGlvblwiXG5cbm1lc3NhZ2VfZW1vdGlvbnMgPC0gZGF0YS5mcmFtZShhbmdlciA9IDAsIGZlYXIgPSAwLCBqb3kgPSAwLCBzYWRuZXNzID0gMCxcbiAgICAgICAgc3VycHJpc2UgPSAwKVxuXG5mb3IgKHJlY29yZCBpbiAxOm5yb3coZW1wbG95ZWVzX3dpdGhfdGVhbXNfZmVlZGJhY2tzKSkge1xuICAgICAgICByZXN1bHQgPC0gYXBpX2ZldGNoZXIodXJsLCBpbmRpY29fYXBpX2tleSxcbiAgICAgICAgICAgICAgICBlbXBsb3llZXNfd2l0aF90ZWFtc19mZWVkYmFja3NbcmVjb3JkLCBcIm1lc3NhZ2VcIl0pXG4gICAgICAgIFxuICAgICAgICByZXN1bHRfdmVjdG9yIDwtIHJlc3BvbnNlX3VucGFja2VyKHJlc3VsdClcbiAgICAgICAgXG4gICAgICAgIG1lc3NhZ2VfZW1vdGlvbnMgPC0gcmJpbmQobWVzc2FnZV9lbW90aW9ucywgcmVzdWx0X3ZlY3Rvcilcbn1cblxubWVzc2FnZV9lbW90aW9ucyA8LSBtZXNzYWdlX2Vtb3Rpb25zWy0xLCBdXG5gYGAifQ== -->
+<pre class="r"><code>url &lt;- &quot;https://apiv2.indico.io/emotion&quot;
 
-dbGetQuery(my_db_connection,
-        &quot;SELECT *
-         FROM wrestlers
-         WHERE born LIKE 'I%'&quot;
-)</code></pre>
+message_emotions &lt;- data.frame(anger = 0, fear = 0, joy = 0, sadness = 0,
+        surprise = 0)
+
+for (record in 1:nrow(employees_with_teams_feedbacks)) {
+        result &lt;- api_fetcher(url, indico_api_key,
+                employees_with_teams_feedbacks[record, &quot;message&quot;])
+        
+        result_vector &lt;- response_unpacker(result)
+        
+        message_emotions &lt;- rbind(message_emotions, result_vector)
+}
+
+message_emotions &lt;- message_emotions[-1, ]</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Find all the wrestlers who were not born in countries beginning with the letter ‘I’.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGJHZXRRdWVyeShteV9kYl9jb25uZWN0aW9uLFxuICAgICAgICBcIlNFTEVDVCAqXG4gICAgICAgICBGUk9NIHdyZXN0bGVyc1xuICAgICAgICAgV0hFUkUgYm9ybiBOT1QgTElLRSAnSSUnXCJcbilcbmBgYCJ9 -->
-<pre class="r"><code>dbGetQuery(my_db_connection,
-        &quot;SELECT *
-         FROM wrestlers
-         WHERE born NOT LIKE 'I%'&quot;
-)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZW1wbG95ZWVzX3dpdGhfdGVhbXNfZmVlZGJhY2tzIDwtIGNiaW5kKGVtcGxveWVlc193aXRoX3RlYW1zX2ZlZWRiYWNrcyxcbiAgICAgICAgbWVzc2FnZV9lbW90aW9ucylcblxud3JpdGUuY3N2KGVtcGxveWVlc193aXRoX3RlYW1zX2ZlZWRiYWNrcyxcbiAgICAgICAgXCJkYXRhL3Byb2Nlc3NlZC9lbXBsb3llZXNfd2l0aF90ZWFtc19mZWVkYmFja3MuY3N2XCIpXG5gYGAifQ== -->
+<pre class="r"><code>employees_with_teams_feedbacks &lt;- cbind(employees_with_teams_feedbacks,
+        message_emotions)
+
+write.csv(employees_with_teams_feedbacks,
+        &quot;data/processed/employees_with_teams_feedbacks.csv&quot;)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Close connections</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGJEaXNjb25uZWN0KGNvbm4gPSBteV9kYl9jb25uZWN0aW9uKVxuZGJEaXNjb25uZWN0KGNvbm4gPSBteV9yZW1vdGVfY29ubmVjdGlvbilcbmBgYCJ9 -->
-<pre class="r"><code>dbDisconnect(conn = my_db_connection)
-dbDisconnect(conn = my_remote_connection)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI0Nsb3NlIGRhdGFiYXNlIGNvbm5lY3Rpb25cbmRiRGlzY29ubmVjdChjb25uID0gZGJfY29ubmVjdGlvbilcbnJtKGxpc3QgPSBscygpKVxuYGBgIn0= -->
+<pre class="r"><code>#Close database connection
+dbDisconnect(conn = db_connection)
+rm(list = ls())</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>================================================================================ 2.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI1JlYWQgaW4gcHJvY2Vzc2VkIGRhdGFcbnByb2Nlc3NlZF9kYXRhIDwtXG4gICAgICAgIHJlYWQuY3N2KFwiLi9kYXRhL3Byb2Nlc3NlZC9lbXBsb3llZXNfd2l0aF90ZWFtc19mZWVkYmFja3MuY3N2XCIpXG5gYGAifQ== -->
+<pre class="r"><code>#Read in processed data
+processed_data &lt;-
+        read.csv(&quot;./data/processed/employees_with_teams_feedbacks.csv&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI1doaWNoIG9mIG91ciB0ZWFtcyBoYXMgdGhlIGFuZ3JpZXN0IGVtcGxveWVlP1xuZW1wbG95ZWVzX3dpdGhfdGVhbXNfZmVlZGJhY2tzW2VtcGxveWVlc193aXRoX3RlYW1zX2ZlZWRiYWNrcyRhbmdlciA9PVxuICAgICAgICBtYXgoZW1wbG95ZWVzX3dpdGhfdGVhbXNfZmVlZGJhY2tzJGFuZ2VyKSwgXVxuYGBgIn0= -->
+<pre class="r"><code>#Which of our teams has the angriest employee?
+employees_with_teams_feedbacks[employees_with_teams_feedbacks$anger ==
+        max(employees_with_teams_feedbacks$anger), ]</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI0NhbiB5b3UgdGVsbCB1cyB0aGUgZW1vdGlvbmFsIHN0YXRlIG9mIGVhY2ggb2Ygb3VyIHRlYW1zIGZvciB3aGljaCB3ZSBoYXZlXG4jZmVlZGJhY2tzP1xuYWdncmVnYXRlZF9ieV90ZWFtIDwtIGVtcGxveWVlc193aXRoX3RlYW1zX2ZlZWRiYWNrc1sgLCBjKFwiYW5nZXJcIiwgXCJmZWFyXCIsXG4gICAgICAgIFwiam95XCIsIFwic2FkbmVzc1wiLCBcInN1cnByaXNlXCIpXVxuXG5hZ2dyZWdhdGUoYWdncmVnYXRlZF9ieV90ZWFtLFxuICAgICAgICAgIGJ5ID0gbGlzdChlbXBsb3llZXNfd2l0aF90ZWFtc19mZWVkYmFja3MkdGVhbV9uYW1lKSwgRlVOID0gbWVhbilcbmBgYCJ9 -->
+<pre class="r"><code>#Can you tell us the emotional state of each of our teams for which we have
+#feedbacks?
+aggregated_by_team &lt;- employees_with_teams_feedbacks[ , c(&quot;anger&quot;, &quot;fear&quot;,
+        &quot;joy&quot;, &quot;sadness&quot;, &quot;surprise&quot;)]
+
+aggregate(aggregated_by_team,
+          by = list(employees_with_teams_feedbacks$team_name), FUN = mean)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI1doaWNoIG9mIG91ciB0ZWFtcyBpcyB0aGUgaGFwcGllc3Qgb3ZlcmFsbD9cbmFnZ3JlZ2F0ZWRfYnlfdGVhbSA8LSBlbXBsb3llZXNfd2l0aF90ZWFtc19mZWVkYmFja3NbICwgXCJqb3lcIl1cblxubWVhbl90ZWFtX2pveSA8LSBhZ2dyZWdhdGUoYWdncmVnYXRlZF9ieV90ZWFtLFxuICAgICAgICAgIGJ5ID0gbGlzdChlbXBsb3llZXNfd2l0aF90ZWFtc19mZWVkYmFja3MkdGVhbV9uYW1lKSwgRlVOID0gbWVhbilcblxubmFtZXMobWVhbl90ZWFtX2pveSkgPC0gYyhcInRlYW1fbmFtZVwiLCBcImpveVwiKVxuXG5tZWFuX3RlYW1fam95W21lYW5fdGVhbV9qb3kkam95ID09IG1heChtZWFuX3RlYW1fam95JGpveSksIF1cbmBgYCJ9 -->
+<pre class="r"><code>#Which of our teams is the happiest overall?
+aggregated_by_team &lt;- employees_with_teams_feedbacks[ , &quot;joy&quot;]
+
+mean_team_joy &lt;- aggregate(aggregated_by_team,
+          by = list(employees_with_teams_feedbacks$team_name), FUN = mean)
+
+names(mean_team_joy) &lt;- c(&quot;team_name&quot;, &quot;joy&quot;)
+
+mean_team_joy[mean_team_joy$joy == max(mean_team_joy$joy), ]</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKMS4xCmNyZWF0ZWRiIHdyZXN0bGluZwpwc3FsIC1kIHdyZXN0bGluZyAtZiB+L2RlMV9jbGFzc25vdGVzL3dlZWtfMDIvZGF5XzIvN19ob21ld29yay93cmVzdGxpbmcuc3FsCgpHZXQgdXNlciBkZXRhaWxzIGZyb20ga2V5cmluZwpgYGB7cn0KbGlicmFyeShrZXlyaW5nKQprZXlyaW5nX3VubG9jayhrZXlyaW5nID0gImxvY2FsIikKdXNlcm5hbWUgPC0ga2V5X2dldCgicG9zdGdyZXNxbF91c2VybmFtZSIsIGtleXJpbmcgPSAibG9jYWwiKQpwYXNzd29yZCA8LSBrZXlfZ2V0KCJwb3N0Z3Jlc3FsX3Bhc3N3b3JkIiwga2V5cmluZyA9ICJsb2NhbCIpCmtleXJpbmdfbG9jayhrZXlyaW5nID0gImxvY2FsIikKYGBgCgpDcmVhdGUgYSBjb25uZWN0aW9uIHRvIHRoZSBsb2NhbCB3cmVzdGxpbmcgZGF0YWJhc2UgZnJvbSBSLiAKYGBge3J9CmxpYnJhcnkoUlBvc3RncmVTUUwpCgpteV9kYl9jb25uZWN0aW9uIDwtIGRiQ29ubmVjdChkcnYgPSBQb3N0Z3JlU1FMKG1heC5jb24gPSAyKSwgdXNlciA9IHVzZXJuYW1lLAogICAgICAgIHBhc3N3b3JkID0gcGFzc3dvcmQsIGRibmFtZSA9ICJ3cmVzdGxpbmciLCBob3N0ID0gImxvY2FsaG9zdCIpCmBgYAoKVXNpbmcgdGhlIFIgY29ubmVjdGlvbiB5b3UganVzdCBjcmVhdGVkLCB3cml0ZSBhbmQgZXhlY3V0ZSBhIFNRTCBxdWVyeSB0byByZXR1cm4KYWxsIHRoZSB3cmVzdGxlcnMgaW4gdGhlIHdyZXN0bGVycyB0YWJsZS4KYGBge3J9CmRiR2V0UXVlcnkobXlfZGJfY29ubmVjdGlvbiwgIlNFTEVDVCAqIEZST00gd3Jlc3RsZXJzIikKYGBgCgpTdGF0ZSB3aGljaCBkYXRhIHR5cGUgeW91IHRoaW5rIGVhY2ggY29sdW1uIHN0b3JlczoKYm9ybiAgICAgICAgICAtIHZhcmNoYXIKbmFtZSAgICAgICAgICAtIHZhcmNoYXIKZ2VuZGVyICAgICAgICAtIHZhcmNoYXIKd2luX3BlcmNlbnQgICAtIGRvdWJsZQp0b3RhbF9tYXRjaGVzIC0gaW50CgoxLjIKU3RvcmUgdGhlIGNyZWRlbnRpYWxzIGluIGFwcHJvcHJpYXRlbHkgbmFtZWQga2V5cyBpbiB0aGUgcmVtb3RlIGtleXJpbmcuCmBgYHtyfQoja2V5cmluZ19jcmVhdGUoa2V5cmluZyA9ICJyZW1vdGUiKQoja2V5X3NldChzZXJ2aWNlID0gImVsZXBoYW50X3VzZXJuYW1lIiwga2V5cmluZyA9ICJyZW1vdGUiKQoja2V5X3NldChzZXJ2aWNlID0gImVsZXBoYW50X3Bhc3N3b3JkIiwga2V5cmluZyA9ICJyZW1vdGUiKQoja2V5cmluZ19sb2NrKGtleXJpbmcgPSAicmVtb3RlIikKYGBgCgpgYGB7cn0Ka2V5cmluZ191bmxvY2soa2V5cmluZyA9ICJyZW1vdGUiKQplbGVwaGFudF91c2VybmFtZSA8LSBrZXlfZ2V0KCJlbGVwaGFudF91c2VybmFtZSIsIGtleXJpbmcgPSAicmVtb3RlIikKZWxlcGhhbnRfcGFzc3dvcmQgPC0ga2V5X2dldCgiZWxlcGhhbnRfcGFzc3dvcmQiLCBrZXlyaW5nID0gInJlbW90ZSIpCmtleXJpbmdfbG9jayhrZXlyaW5nID0gImxvY2FsIikKYGBgCgpVc2UgeW91ciBjcmVkZW50aWFscyB0byBlc3RhYmxpc2ggYSBjb25uZWN0aW9uIGZyb20gUiB0byB0aGUgcmVtb3RlIGRhdGFiYXNlLgpgYGB7cn0KbXlfcmVtb3RlX2Nvbm5lY3Rpb24gPC0gZGJDb25uZWN0KGRydiA9IFBvc3RncmVTUUwobWF4LmNvbiA9IDIpLCAKICAgICAgICB1c2VyID0gZWxlcGhhbnRfdXNlcm5hbWUsIHBhc3N3b3JkID0gZWxlcGhhbnRfcGFzc3dvcmQsCiAgICAgICAgZGJuYW1lID0gIm12aGJkZ2RrIiwgaG9zdCA9ICJtYW5ueS5kYi5lbGVwaGFudHNxbC5jb20iKQpgYGAKClVzaW5nIHRoaXMgUiBjb25uZWN0aW9uLCB3cml0ZSBhbmQgZXhlY3V0ZSBhIHF1ZXJ5IHRvIHJldHVybiBhbGwgdGhlIHdyZXN0bGVycwpmcm9tIHRoZSB3cmVzdGxlcnMgdGFibGUKYGBge3J9CmRiR2V0UXVlcnkobXlfcmVtb3RlX2Nvbm5lY3Rpb24sICJTRUxFQ1QgKiBGUk9NIHdyZXN0bGVycyIpCmBgYAoKMgpSZXR1cm4gYWxsIHRoZSBkZXRhaWxzIGZvciBhbnkgd3Jlc3RsZXJzIGZyb20gdGhlIFVuaXRlZCBLaW5nZG9tCmBgYHtyfQpkYkdldFF1ZXJ5KG15X2RiX2Nvbm5lY3Rpb24sICJTRUxFQ1QgKiBGUk9NIHdyZXN0bGVycyBXSEVSRSBib3JuID0gJ1VuaXRlZCBLaW5nZG9tJyIpCmBgYAoKR2V0IHRoZSBuYW1lcyBvZiBhbGwgSmFwYW5lc2Ugd3Jlc3RsZXJzIHdobyBoYXZlIGFwcGVhcmVkIGluIDQwIG9yIG1vcmUgbWF0Y2hlcy4KYGBge3J9CmRiR2V0UXVlcnkobXlfZGJfY29ubmVjdGlvbiwgCiAgICAgICAgIlNFTEVDVCAqCiAgICAgICAgIEZST00gd3Jlc3RsZXJzIAogICAgICAgICBXSEVSRSBib3JuID0gJ0phcGFuJyBBTkQgdG90YWxfbWF0Y2hlcyA+IDQwIgopCmBgYAoKRmluZCB0aGUgd3Jlc3RsZXJzIHdobyBoYXZlIHdvbiBiZXR3ZWVuIDUwJSBhbmQgNjAlIG9mIHRoZWlyIG1hdGNoZXMuCmBgYHtyfQpkYkdldFF1ZXJ5KG15X2RiX2Nvbm5lY3Rpb24sCiAgICAgICAgIlNFTEVDVCAqCiAgICAgICAgIEZST00gd3Jlc3RsZXJzCiAgICAgICAgIFdIRVJFIHdpbl9wZXJjZW50IEJFVFdFRU4gNTAgQU5EIDYwIgopCmBgYAoKRmluZCBhbGwgdGhlIHdyZXN0bGVycyB3aXRoIG5hbWVzIGJlZ2lubmluZyB3aXRoIOKAmFjigJkuCmBgYHtyfQpkYkdldFF1ZXJ5KG15X2RiX2Nvbm5lY3Rpb24sCiAgICAgICAgIlNFTEVDVCAqCiAgICAgICAgIEZST00gd3Jlc3RsZXJzCiAgICAgICAgIFdIRVJFIG5hbWUgTElLRSAnWCUnIgopCmBgYAoKRmluZCBhbGwgdGhlIHdyZXN0bGVycyB3aG8gd2VyZSBib3JuIGluIGNvdW50cmllcyBiZWdpbm5pbmcgd2l0aCB0aGUgbGV0dGVyIOKAmEnigJkuIFRyeSB0aGlzIHVzaW5nIElOICh0aGVyZSBhcmUgOSBjb3VudHJpZXMpIGFuZCB1c2luZyBhIHdpbGRjYXJkIGNvbXBhcmlzb24uCmBgYHtyfQpkYkdldFF1ZXJ5KG15X2RiX2Nvbm5lY3Rpb24sCiAgICAgICAgIlNFTEVDVCAqCiAgICAgICAgIEZST00gd3Jlc3RsZXJzCiAgICAgICAgIFdIRVJFIGJvcm4gSU4gKCdJbmRpYScsICdJcmFuJywgJ0lyZWxhbmQnLCAnSXRhbHknKSIKKQoKZGJHZXRRdWVyeShteV9kYl9jb25uZWN0aW9uLAogICAgICAgICJTRUxFQ1QgKgogICAgICAgICBGUk9NIHdyZXN0bGVycwogICAgICAgICBXSEVSRSBib3JuIExJS0UgJ0klJyIKKQpgYGAKCkZpbmQgYWxsIHRoZSB3cmVzdGxlcnMgd2hvIHdlcmUgbm90IGJvcm4gaW4gY291bnRyaWVzIGJlZ2lubmluZyB3aXRoIHRoZSBsZXR0ZXIg4oCYSeKAmS4KYGBge3J9CmRiR2V0UXVlcnkobXlfZGJfY29ubmVjdGlvbiwKICAgICAgICAiU0VMRUNUICoKICAgICAgICAgRlJPTSB3cmVzdGxlcnMKICAgICAgICAgV0hFUkUgYm9ybiBOT1QgTElLRSAnSSUnIgopCmBgYAoKQ2xvc2UgY29ubmVjdGlvbnMKYGBge3J9CmRiRGlzY29ubmVjdChjb25uID0gbXlfZGJfY29ubmVjdGlvbikKZGJEaXNjb25uZWN0KGNvbm4gPSBteV9yZW1vdGVfY29ubmVjdGlvbikKYGBgCg==</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKYGBge3J9CiNHZXQgZGF0YWJhc2UgdXNlcm5hbWUgYW5kIHBhc3N3b3JkCmtleXJpbmdfdW5sb2NrKGtleXJpbmcgPSAibG9jYWwiKQp1c2VybmFtZSA8LSBrZXlfZ2V0KCJwb3N0Z3Jlc3FsX3VzZXJuYW1lIiwga2V5cmluZyA9ICJsb2NhbCIpCnBhc3N3b3JkIDwtIGtleV9nZXQoInBvc3RncmVzcWxfcGFzc3dvcmQiLCBrZXlyaW5nID0gImxvY2FsIikKa2V5cmluZ19sb2NrKGtleXJpbmcgPSAibG9jYWwiKQoKI0dldCBpbmRpY28gYXBpIGtleQprZXlyaW5nX3VubG9jayhrZXlyaW5nID0gInJlbW90ZSIpCmluZGljb19hcGlfa2V5IDwtIGtleV9nZXQoImluZGljb19hcGlfa2V5Iiwga2V5cmluZyA9ICJyZW1vdGUiKQprZXlyaW5nX2xvY2soa2V5cmluZyA9ICJyZW1vdGUiKQpgYGAKCmBgYHtyfQojQ3JlYXRlIGxvY2FsIGRhdGFiYXNlIGNvbm5lY3Rpb24KZGJfY29ubmVjdGlvbiA8LSBkYkNvbm5lY3QoZHJ2ID0gUG9zdGdyZVNRTChtYXguY29uID0gMSksIHVzZXIgPSB1c2VybmFtZSwKICAgICAgICBwYXNzd29yZCA9IHBhc3N3b3JkLCBkYm5hbWUgPSAiYWNtZV9lbXBsb3llZXMiLCBob3N0ID0gImxvY2FsaG9zdCIpCnJtKGxpc3QgPSBjKCJwYXNzd29yZCIsICJ1c2VybmFtZSIpKQpgYGAKCmBgYHtyfQplbXBsb3llZXNfd2l0aF90ZWFtc19mZWVkYmFja3MgPC0gZGJHZXRRdWVyeShkYl9jb25uZWN0aW9uLAogICAgICAgICJTRUxFQ1QgZS5maXJzdF9uYW1lCiAgICAgICAgICAgICAgICAsIGUubGFzdF9uYW1lCiAgICAgICAgICAgICAgICAsIGUuZW1haWwKICAgICAgICAgICAgICAgICwgdC5uYW1lIEFTIHRlYW1fbmFtZQogICAgICAgICAgICAgICAgLCBmLm1lc3NhZ2UKICAgICAgICAgICAgICAgICwgZi5kYXRlIEFTIG1lc3NhZ2VfZGF0ZQogICAgICAgICBGUk9NIGZlZWRiYWNrcyBBUyBmCiAgICAgICAgICAgICAgICBKT0lOIGVtcGxveWVlcyBBUyBlIE9OIGYuZW1wbG95ZWVfaWQgPSBlLmlkCiAgICAgICAgICAgICAgICBKT0lOIHRlYW1zIEFTIFQgb24gZS50ZWFtX2lkID0gdC5pZAogICAgICAgICBXSEVSRSBmLmRhdGUgPSAoU0VMRUNUIE1BWChkYXRlKSAKICAgICAgICAgICAgICAgICAgICAgICAgRlJPTSBmZWVkYmFja3MKICAgICAgICAgICAgICAgICAgICAgICAgV0hFUkUgZmVlZGJhY2tzLmVtcGxveWVlX2lkID0gZi5lbXBsb3llZV9pZCkKICAgICAgICAgT1JERVIgQlkgdC5uYW1lLCBlLmxhc3RfbmFtZSIKKQpgYGAKCmBgYHtyfQpsaWJyYXJ5KGh0dHIpCmxpYnJhcnkocHVycnIpCmBgYAoKYGBge3J9CiNGdW5jdGlvbiB0byBnZXQgbWVzc2FnZSBzZW50aW1lbnQgZnJvbSBpbmRpY28KYXBpX2ZldGNoZXIgPC0gZnVuY3Rpb24odXJsLCBhcGlfa2V5LCBtZXNzYWdlKSB7CiAgICAgICAgcGFyYW1zIDwtIGxpc3QoYXBpX2tleSA9IGFwaV9rZXksIGRhdGEgPSBtZXNzYWdlKQogICAgICAgIAogICAgICAgIHJlc3BvbnNlIDwtIFBPU1QodXJsLCBxdWVyeSA9IHBhcmFtcykKICAgICAgICAKICAgICAgICByZXR1cm4oY29udGVudChyZXNwb25zZSkpCn0KYGBgCgpgYGB7cn0KI0Z1bmN0aW9uIHRvIHVucGFjayByZXNwb25zZSB0byBhIGRvdWJsZSB2ZWN0b3IKcmVzcG9uc2VfdW5wYWNrZXIgPC0gZnVuY3Rpb24ocmVzcG9uc2VfbGlzdCkgewogICAgICAgIGVtb3Rpb25fdmVjIDwtIGZsYXR0ZW5fZGJsKHJlc3BvbnNlX2xpc3QkcmVzdWx0cykKICAgICAgICBuYW1lcyhlbW90aW9uX3ZlYykgPC0gYygiYW5nZXIiLCAiZmVhciIsICJqb3kiLCAic2FkbmVzcyIsICJzdXJwcmlzZSIpCiAgICAgICAgCiAgICAgICAgcmV0dXJuKGVtb3Rpb25fdmVjKQp9CmBgYAoKYGBge3J9CnVybCA8LSAiaHR0cHM6Ly9hcGl2Mi5pbmRpY28uaW8vZW1vdGlvbiIKCm1lc3NhZ2VfZW1vdGlvbnMgPC0gZGF0YS5mcmFtZShhbmdlciA9IDAsIGZlYXIgPSAwLCBqb3kgPSAwLCBzYWRuZXNzID0gMCwKICAgICAgICBzdXJwcmlzZSA9IDApCgpmb3IgKHJlY29yZCBpbiAxOm5yb3coZW1wbG95ZWVzX3dpdGhfdGVhbXNfZmVlZGJhY2tzKSkgewogICAgICAgIHJlc3VsdCA8LSBhcGlfZmV0Y2hlcih1cmwsIGluZGljb19hcGlfa2V5LAogICAgICAgICAgICAgICAgZW1wbG95ZWVzX3dpdGhfdGVhbXNfZmVlZGJhY2tzW3JlY29yZCwgIm1lc3NhZ2UiXSkKICAgICAgICAKICAgICAgICByZXN1bHRfdmVjdG9yIDwtIHJlc3BvbnNlX3VucGFja2VyKHJlc3VsdCkKICAgICAgICAKICAgICAgICBtZXNzYWdlX2Vtb3Rpb25zIDwtIHJiaW5kKG1lc3NhZ2VfZW1vdGlvbnMsIHJlc3VsdF92ZWN0b3IpCn0KCm1lc3NhZ2VfZW1vdGlvbnMgPC0gbWVzc2FnZV9lbW90aW9uc1stMSwgXQpgYGAKCmBgYHtyfQplbXBsb3llZXNfd2l0aF90ZWFtc19mZWVkYmFja3MgPC0gY2JpbmQoZW1wbG95ZWVzX3dpdGhfdGVhbXNfZmVlZGJhY2tzLAogICAgICAgIG1lc3NhZ2VfZW1vdGlvbnMpCgp3cml0ZS5jc3YoZW1wbG95ZWVzX3dpdGhfdGVhbXNfZmVlZGJhY2tzLAogICAgICAgICJkYXRhL3Byb2Nlc3NlZC9lbXBsb3llZXNfd2l0aF90ZWFtc19mZWVkYmFja3MuY3N2IikKYGBgCgpgYGB7cn0KI0Nsb3NlIGRhdGFiYXNlIGNvbm5lY3Rpb24KZGJEaXNjb25uZWN0KGNvbm4gPSBkYl9jb25uZWN0aW9uKQpybShsaXN0ID0gbHMoKSkKYGBgCgo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQoyLgpgYGB7cn0KI1JlYWQgaW4gcHJvY2Vzc2VkIGRhdGEKcHJvY2Vzc2VkX2RhdGEgPC0KICAgICAgICByZWFkLmNzdigiLi9kYXRhL3Byb2Nlc3NlZC9lbXBsb3llZXNfd2l0aF90ZWFtc19mZWVkYmFja3MuY3N2IikKYGBgCgpgYGB7cn0KI1doaWNoIG9mIG91ciB0ZWFtcyBoYXMgdGhlIGFuZ3JpZXN0IGVtcGxveWVlPwplbXBsb3llZXNfd2l0aF90ZWFtc19mZWVkYmFja3NbZW1wbG95ZWVzX3dpdGhfdGVhbXNfZmVlZGJhY2tzJGFuZ2VyID09CiAgICAgICAgbWF4KGVtcGxveWVlc193aXRoX3RlYW1zX2ZlZWRiYWNrcyRhbmdlciksIF0KYGBgCgpgYGB7cn0KI0NhbiB5b3UgdGVsbCB1cyB0aGUgZW1vdGlvbmFsIHN0YXRlIG9mIGVhY2ggb2Ygb3VyIHRlYW1zIGZvciB3aGljaCB3ZSBoYXZlCiNmZWVkYmFja3M/CmFnZ3JlZ2F0ZWRfYnlfdGVhbSA8LSBlbXBsb3llZXNfd2l0aF90ZWFtc19mZWVkYmFja3NbICwgYygiYW5nZXIiLCAiZmVhciIsCiAgICAgICAgImpveSIsICJzYWRuZXNzIiwgInN1cnByaXNlIildCgphZ2dyZWdhdGUoYWdncmVnYXRlZF9ieV90ZWFtLAogICAgICAgICAgYnkgPSBsaXN0KGVtcGxveWVlc193aXRoX3RlYW1zX2ZlZWRiYWNrcyR0ZWFtX25hbWUpLCBGVU4gPSBtZWFuKQpgYGAKCmBgYHtyfQojV2hpY2ggb2Ygb3VyIHRlYW1zIGlzIHRoZSBoYXBwaWVzdCBvdmVyYWxsPwphZ2dyZWdhdGVkX2J5X3RlYW0gPC0gZW1wbG95ZWVzX3dpdGhfdGVhbXNfZmVlZGJhY2tzWyAsICJqb3kiXQoKbWVhbl90ZWFtX2pveSA8LSBhZ2dyZWdhdGUoYWdncmVnYXRlZF9ieV90ZWFtLAogICAgICAgICAgYnkgPSBsaXN0KGVtcGxveWVlc193aXRoX3RlYW1zX2ZlZWRiYWNrcyR0ZWFtX25hbWUpLCBGVU4gPSBtZWFuKQoKbmFtZXMobWVhbl90ZWFtX2pveSkgPC0gYygidGVhbV9uYW1lIiwgImpveSIpCgptZWFuX3RlYW1fam95W21lYW5fdGVhbV9qb3kkam95ID09IG1heChtZWFuX3RlYW1fam95JGpveSksIF0KYGBgCg==</div>
 
 
 

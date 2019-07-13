@@ -1,0 +1,136 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+#Get database username and password
+keyring_unlock(keyring = "local")
+username <- key_get("postgresql_username", keyring = "local")
+password <- key_get("postgresql_password", keyring = "local")
+keyring_lock(keyring = "local")
+
+#Get indico api key
+keyring_unlock(keyring = "remote")
+indico_api_key <- key_get("indico_api_key", keyring = "remote")
+keyring_lock(keyring = "remote")
+```
+
+```{r}
+#Create local database connection
+db_connection <- dbConnect(drv = PostgreSQL(max.con = 1), user = username,
+        password = password, dbname = "acme_employees", host = "localhost")
+rm(list = c("password", "username"))
+```
+
+```{r}
+employees_with_teams_feedbacks <- dbGetQuery(db_connection,
+        "SELECT e.first_name
+                , e.last_name
+                , e.email
+                , t.name AS team_name
+                , f.message
+                , f.date AS message_date
+         FROM feedbacks AS f
+                JOIN employees AS e ON f.employee_id = e.id
+                JOIN teams AS T on e.team_id = t.id
+         WHERE f.date = (SELECT MAX(date) 
+                        FROM feedbacks
+                        WHERE feedbacks.employee_id = f.employee_id)
+         ORDER BY t.name, e.last_name"
+)
+```
+
+```{r}
+library(httr)
+library(purrr)
+```
+
+```{r}
+#Function to get message sentiment from indico
+api_fetcher <- function(url, api_key, message) {
+        params <- list(api_key = api_key, data = message)
+        
+        response <- POST(url, query = params)
+        
+        return(content(response))
+}
+```
+
+```{r}
+#Function to unpack response to a double vector
+response_unpacker <- function(response_list) {
+        emotion_vec <- flatten_dbl(response_list$results)
+        names(emotion_vec) <- c("anger", "fear", "joy", "sadness", "surprise")
+        
+        return(emotion_vec)
+}
+```
+
+```{r}
+url <- "https://apiv2.indico.io/emotion"
+
+message_emotions <- data.frame(anger = 0, fear = 0, joy = 0, sadness = 0,
+        surprise = 0)
+
+for (record in 1:nrow(employees_with_teams_feedbacks)) {
+        result <- api_fetcher(url, indico_api_key,
+                employees_with_teams_feedbacks[record, "message"])
+        
+        result_vector <- response_unpacker(result)
+        
+        message_emotions <- rbind(message_emotions, result_vector)
+}
+
+message_emotions <- message_emotions[-1, ]
+```
+
+```{r}
+employees_with_teams_feedbacks <- cbind(employees_with_teams_feedbacks,
+        message_emotions)
+
+write.csv(employees_with_teams_feedbacks,
+        "data/processed/employees_with_teams_feedbacks.csv")
+```
+
+```{r}
+#Close database connection
+dbDisconnect(conn = db_connection)
+rm(list = ls())
+```
+
+================================================================================
+2.
+```{r}
+#Read in processed data
+processed_data <-
+        read.csv("./data/processed/employees_with_teams_feedbacks.csv")
+```
+
+```{r}
+#Which of our teams has the angriest employee?
+employees_with_teams_feedbacks[employees_with_teams_feedbacks$anger ==
+        max(employees_with_teams_feedbacks$anger), ]
+```
+
+```{r}
+#Can you tell us the emotional state of each of our teams for which we have
+#feedbacks?
+aggregated_by_team <- employees_with_teams_feedbacks[ , c("anger", "fear",
+        "joy", "sadness", "surprise")]
+
+aggregate(aggregated_by_team,
+          by = list(employees_with_teams_feedbacks$team_name), FUN = mean)
+```
+
+```{r}
+#Which of our teams is the happiest overall?
+aggregated_by_team <- employees_with_teams_feedbacks[ , "joy"]
+
+mean_team_joy <- aggregate(aggregated_by_team,
+          by = list(employees_with_teams_feedbacks$team_name), FUN = mean)
+
+names(mean_team_joy) <- c("team_name", "joy")
+
+mean_team_joy[mean_team_joy$joy == max(mean_team_joy$joy), ]
+```

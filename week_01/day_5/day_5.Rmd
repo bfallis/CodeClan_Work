@@ -1,0 +1,155 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+Beer 
+- A dataset with the brand, brewer, alcohol percentage, calories and grams of carbohydrates for 172 beers.
+
+Temp
+- A matrix which contains the maximum temperature for each month in Scotland over 106 years (1910 from 2015). Each row corresponds to a year and each column to a month (January to December).
+
+Game of Thrones
+- Data on about the book ‘A Game of Thrones’, including names and genders for all the characters.
+                        
+```{r}
+library(CodeClanData)
+library(purrr)
+```
+
+Correct errors in datasets.
+```{r}
+beer$calories <- as.numeric(beer$calories)
+```
+
+Give datasets more appropriate column/row names if needed.
+```{r}
+rownames(temp) <- c(1910:2015)
+```
+
+================================================================================
+
+1. Find at least two interesting facts for each dataset.
+
+beer
+
+Which brewery has the highest and lowest, mean percent alcohol, calories and
+carbohydrates?
+```{r}
+#subset columns and aggregate over the brewer
+beer_columns_to_keep <- c("percent", "calories", "carbohydrates")
+aggregated_beer <- aggregate(beer[ , beer_columns_to_keep], 
+        by = list(beer$brewer), FUN = mean)
+
+#order aggregated data by the 3 columns
+aggregated_beer[order(aggregated_beer$percent), ]
+aggregated_beer[order(aggregated_beer$calories), ]
+aggregated_beer[order(aggregated_beer$carbohydrates), ]
+
+```
+
+What beers have the lowest and highest percent alcohol, calories and
+carbohydrates?
+```{r}
+beer[beer$percent == min(beer$percent), c("brand", "brewer", "percent")]
+beer[beer$percent == max(beer$percent), c("brand", "brewer", "percent")]
+beer[beer$calories == min(beer$calories), c("brand", "brewer", "calories")]
+beer[beer$calories == max(beer$calories), c("brand", "brewer", "calories")]
+beer[beer$carbohydrates == min(beer$carbohydrates), c("brand", "brewer", "carbohydrates")]
+beer[beer$carbohydrates == max(beer$carbohydrates), c("brand", "brewer", "carbohydrates")]
+```
+
+================================================================================
+temp
+
+What are the coldest and hottest months in the dataset?
+```{r}
+#Coldest
+position <- which(temp == min(temp), arr.ind = TRUE)
+paste("The coldest temperature was",
+      temp[position[[1]], position[[2]]],
+      "in",
+      colnames(temp)[position[[2]]],
+      rownames(temp)[position[[1]]]
+)
+```
+
+```{r}
+#Hottest
+position <- which(temp == max(temp), arr.ind = TRUE)
+paste("The warmest temperature was",
+        temp[position[[1]], position[[2]]],
+        "in",
+        colnames(temp)[position[[2]]],
+        rownames(temp)[position[[1]]]
+)
+```
+
+What are the mean coldest and hottest years on record?
+```{r}
+yearly_temp <- rowMeans(temp)
+paste("The year with the lowest average temperature is",
+        names(yearly_temp[min(yearly_temp)]),
+        "at",
+        round(min(yearly_temp), digits = 2)
+)
+paste("The year with the highest average temperature is",
+        names(yearly_temp[max(yearly_temp)]),
+        "at",
+        round(max(yearly_temp), digits = 2)
+)
+```
+
+Plot of minimum and maximum temperatures by year
+```{r}
+plot(rownames(temp), apply(temp, 1, min), main = "Minimum temperature by year",
+        xlab = "Year", ylab = "Temperature in degrees")
+
+plot(rownames(temp), apply(temp, 1, max), main = "Maximum temperature by year",
+        xlab = "Year", ylab = "Temperature in degrees")
+```
+
+================================================================================
+
+game_of_thrones
+
+How many male and female characters are in the book?
+```{r}
+paste("There are",
+        sum(map(game_of_thrones$characters, "gender") == "Male"),
+        "male characters and",
+        sum(map(game_of_thrones$characters, "gender") == "Female"),
+        "female characters in",
+        game_of_thrones$name
+)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,154 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(prob)
+library(gtools)
+```
+
+1. If I roll a six-sided dice once, what is the probability of getting a number
+   less than 5?
+```{r}
+dice <- rolldie(1)
+less_than_5 <- subset(dice, X1 < 5)
+nrow(less_than_5) / nrow(dice)
+```
+
+2. How many outcomes are there in the sample space of an experiment in which we
+   toss three dice?
+```{r}
+three_dice <- rolldie(3, makespace = TRUE)
+nrow(three_dice)
+```
+
+3. Continuing with the three dice rolling experiment:
+   a. what is the probability of getting a total of the three dice equal to 5, 6
+      or 7?
+```{r}
+three_dice <- addrv(space = three_dice, FUN = sum, invars = c("X1", "X2", "X3"), name = "Total")
+total_equals_5_6_7 <- subset(three_dice, Total >= 5 & Total <= 7)
+nrow(total_equals_5_6_7) / nrow(three_dice)
+```
+   b. how many outcomes lie within this event total_equals_5_6_7 (i.e. how large
+      is the event space)?
+```{r}
+nrow(total_equals_5_6_7)
+```
+   c. We worked out the size of the sample space for this experiment in question
+      2. How do the sizes of the sample and event spaces relate to the
+      probability from part i?
+```{r, eval=FALSE}
+Event space is a subset of sample space.
+```
+   d. What assumptions do we apply in answering part iii?
+```{r, eval=FALSE}
+All outcomes have equal probability of happening.
+```
+
+4. Five chairs are in a room along with five people of differing height. The
+   people sit down randomly on the chairs. What is the probability that they sit
+   in order of decreasing height, left to right?
+```{r}
+people <- c("shortest", "shorter", "middle", "taller", "tallest")
+total <- permutations(n = 5, r = 5, v = people, repeats.allowed = FALSE)
+1 / nrow(total)
+```
+
+5. I roll six dice: 
+   a. what is the probability I see the numbers 6, 5, 4, 3, 2 and 1 in order on
+      the dice, left to right?
+```{r}
+six_dice_perm <- permutations(n = 6, r = 6, repeats.allowed = TRUE)
+1 / nrow(six_dice_perm)
+```
+   b. what is the probability I see one each of the numbers 6, 5, 4, 3, 2 and 1
+      on the dice regardless of order?
+```{r}
+six_dice_comb <- permutations(n = 6, r = 6, repeats.allowed = FALSE)
+nrow(six_dice_comb) / nrow(six_dice_perm)
+```
+
+6. If I draw a single card from a 52-card deck, and it is black, what is the
+   probability that its suit is spades?
+```{r}
+0.5
+```
+
+7. Eight patients: Alice, Bob, Carmen, Dinesh, Ella, Fergus, Gianna and Henry
+   are waiting to see a doctor, but only five appointment slots are left today.
+   a. In how many different orders can the doctor see patients today?
+```{r}
+patients <- c("Alice", "Bob", "Carmen", "Dinesh", "Ella", "Fergus", "Gianna"
+        , "Henry")
+patient_order <- permutations(n = 8, r = 5, v = patients,
+        repeats.allowed = FALSE)
+nrow(patient_order)
+```
+   b. What is the probability of Gianna and Danesh both being seen today?
+```{r}
+
+```
+   c. What is the probability of Gianna being seen before Dinesh today?
+```{r}
+
+```
+   d. Carmen and Henry have now been triaged as high priority and will be seen
+      in the first two available slots, although their order hasn’t yet been
+      determined. In how many different orders can the patients now be seen?
+```{r}
+patients <- c("Alice", "Bob", "Dinesh", "Ella", "Fergus", "Gianna")
+patient_order <- permutations(n = 6, r = 3, v = patients,
+        repeats.allowed = FALSE)
+nrow(patient_order) * 2
+```
+      
+8. If order is not significant, how many ways are there to select a 5 student
+   quiz team from a group of 8 students?
+```{r}
+team <- combinations(n = 8, r = 5, repeats.allowed = FALSE)
+nrow(team)
+```
+
+9. How would your answer above change if a team captain had to be selected for
+   each team?
+```{r}
+team <- combinations(n = 7, r = 4, repeats.allowed = FALSE)
+nrow(team)
+```
+
+10. The following data from a sample of 120 families shows the record of
+    university attendance by mothers and their eldest sons.
+    - in 32 families, both the mother and son attended university; 
+    - in 31 families, neither the mother nor the son attended university 
+    - in 22 families, the mother attended university while the son did not 
+    - in 35 families, the son attended university while the mother did not.
+    
+    Arrange the data above in a convenient dataframe and answer the following
+    questions:
+    ```{r}
+attendance <- data.frame(mother_yes = c(32, 22), mother_no = c(35, 31))
+attendance <- cbind(attendance, rowSums(attendance))
+attendance <- rbind(attendance, colSums(attendance))
+rownames(attendance) <- c("son_yes", "son_no", "sum")
+colnames(attendance) <- c("mother_yes", "mother_no", "sum")
+```
+    a. What is the probability that a son attended university given that his 
+       mother attended university?
+```{r}
+attendance["son_yes", "mother_yes"] / attendance["sum", "sum"]
+```
+    b. What is the probability that a son attended university given that his 
+       mother did not attend university?
+```{r}
+attendance["son_yes", "mother_no"] / attendance["sum", "sum"]
+```
+    c. Is attending university by the son independent of whether his mother
+       attended university?
+```{r}
+p_son_attends <- attendance["son_yes", "sum"] / attendance["sum", "sum"]
+p_mother_attends <- attendance["sum", "mother_yes"] / attendance["sum", "sum"]
+
+p_son_attends * p_mother_attends
+```

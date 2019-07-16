@@ -88,11 +88,25 @@ nrow(patient_order)
 ```
    b. What is the probability of Gianna and Danesh both being seen today?
 ```{r}
+p_gianna <- as.data.frame(patient_order)
+names(p_gianna) <- c("x1", "x2", "x3", "x4", "x5")
+p_gianna <- p_gianna[p_gianna$x1 == "Gianna" | p_gianna$x2 == "Gianna"
+        | p_gianna$x3 == "Gianna" | p_gianna$x4 == "Gianna"
+        | p_gianna$x5 == "Gianna", ]
+p_gianna <- nrow(p_gianna) / nrow(patient_order)
 
+p_dinesh <- as.data.frame(patient_order)
+names(p_dinesh) <- c("x1", "x2", "x3", "x4", "x5")
+p_dinesh <- p_dinesh[p_dinesh$x1 == "Dinesh" | p_dinesh$x2 == "Dinesh"
+        | p_dinesh$x3 == "Dinesh" | p_dinesh$x4 == "Dinesh"
+        | p_dinesh$x5 == "Dinesh", ]
+p_dinesh <- nrow(p_dinesh) / nrow(patient_order)
+
+intersect(p_gianna, p_dinesh)
 ```
    c. What is the probability of Gianna being seen before Dinesh today?
 ```{r}
-
+intersect(p_gianna, p_dinesh) / p_dinesh
 ```
    d. Carmen and Henry have now been triaged as high priority and will be seen
       in the first two available slots, although their order hasn’t yet been
@@ -115,7 +129,7 @@ nrow(team)
    each team?
 ```{r}
 team <- combinations(n = 7, r = 4, repeats.allowed = FALSE)
-nrow(team)
+nrow(team) * 8
 ```
 
 10. The following data from a sample of 120 families shows the record of

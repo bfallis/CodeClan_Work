@@ -1,0 +1,69 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+1
+```{r}
+library(prob)
+data(anscombe)
+str(anscombe)
+anscombe
+```
+x1 to 4
+y1 to 4
+
+2. 
+```{r}
+attach(anscombe)
+```
+
+```{r}
+means <- colMeans(anscombe)
+means
+variance <- sapply(anscombe, FUN = var)
+variance
+```
+
+3.
+Datasets look identical.
+
+4.
+```{r}
+boxplot(anscombe)
+```
+
+```{r}
+iqr_values <- NULL
+skew_values <- NULL
+for (column_name in c("x1", "x2", "x3", "x4", "y1", "y2", "y3", "y4")) {
+        iqr_values <- c(iqr_values, IQR(anscombe[ , column_name]))
+        skew_values<- c(skew_values, skewness(anscombe[ , column_name]))
+}
+names(iqr_values) <- c("x1", "x2", "x3", "x4", "y1", "y2", "y3", "y4")
+iqr_values
+names(skew_values) <- c("x1", "x2", "x3", "x4", "y1", "y2", "y3", "y4")
+skew_values
+```
+
+5.
+```{r}
+plot(x1, y1)
+plot(x2, y2)
+plot(x3, y3)
+plot(x4, y4)
+```
+
+6.
+```{r}
+cor(x1, y1, method = ("pearson"))
+cor(x2, y2, method = ("pearson"))
+cor(x3, y3, method = ("pearson"))
+cor(x4, y4, method = ("pearson"))
+```
+identical positive values close to 1 indicate a strong positive correlation
+=> linear relationship between x and y for all data sets.
+
+```{r}
+detach(anscombe)
+```

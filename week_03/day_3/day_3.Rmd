@@ -1,0 +1,36 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+What is a weapon of maths destruction?
+- algorithm that is
+  - important
+    - widespread, used on a lot of people for important life decisions.
+  - secretive
+    - general population don't know about them or how they work.
+  - destructive
+    - no algorithm is perfect so they negatively affect people's lives.
+
+
+What kind of decisions could it be used for?
+- credit card applications, insurance, prisoner parole, continued employment
+
+
+How are they making negative feedback loops?
+- the alorithm is undermining the original goal of the algorithm
+
+
+What do we mean by one variable being a proxy for another?
+- if that variable is overrepresented in one part of the population versus
+  another part of the population
+
+
+What level of understanding should a decision-maker have about a weapon of maths
+destruction before deciding to implement it?
+- determine who is being harmed by the algorithm and how
+
+
+What sort of regulation could be put in place to increase “fairness”?
+- auditing
+

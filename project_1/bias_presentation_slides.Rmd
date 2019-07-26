@@ -1,0 +1,135 @@
+---
+title: "How do we avoid bias in machine learning algorithms?"
+author: "Blair"
+date: "26/07/2019"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+##
+
+```{r, out.width = "100%", out.height = "100%"}
+knitr::include_graphics("bias_presentation_slides_files/google_photos_1.png")
+```
+
+##
+
+```{r, out.width = "100%", out.height = "100%"}
+knitr::include_graphics("bias_presentation_slides_files/google_photos_2.png")
+```
+
+##
+
+```{r, out.width = "100%", out.height = "100%"}
+knitr::include_graphics("bias_presentation_slides_files/google_photos_3.png")
+```
+
+##
+
+```{r, out.width = "100%", out.height = "100%"}
+knitr::include_graphics("bias_presentation_slides_files/google_photos_4.png")
+```
+
+##
+
+```{r, out.width = "100%", out.height = "100%"}
+knitr::include_graphics("bias_presentation_slides_files/google_photos_5.png")
+```
+
+## 
+
+```{r, out.width = "100%", out.height = "100%"}
+knitr::include_graphics("bias_presentation_slides_files/google_photos_6.png")
+```
+
+## 
+
+```{r, fig.align="center"}
+knitr::include_graphics("bias_presentation_slides_files/google_photos_7.png")
+```
+
+## Tay
+
+```{r, fig.align="center", out.width="75%"}
+knitr::include_graphics("bias_presentation_slides_files/tay_bot_1.png")
+```
+
+## Tay, the white supremacist
+
+![](bias_presentation_slides_files/tay_bot_2.png){ width=50% }![](bias_presentation_slides_files/tay_bot_3.png){ width=50% }![](bias_presentation_slides_files/tay_bot_4.png){ width=50% }![](bias_presentation_slides_files/tay_bot_5.png){ width=50% }
+
+## Meet Steve
+
+```{r, out.width="50%", out.height="75%", fig.align="center"}
+knitr::include_graphics("bias_presentation_slides_files/steve_talley.jpg")
+```
+
+## Other uses of machine learning in society
+
+* HART (Harm Assessment Risk Tool)
+* COMPAS (Correctional Offender Management Profiling for Alternative Sanctions)
+* IBM Green Horizon
+* Tesla self driving cars
+* Virtual assisants
+* AlphaGo
+
+## Sample bias
+* collected data doesn’t accurately represent the environment the program is
+expected to run into.
+    - self selection
+    - undercoverage
+    - survivorship
+    - response
+
+## Sample bias - overcoming
+* stratification
+* weighting
+
+## Exclusion bias
+* result of excluding some features from our dataset usually under the umbrella of cleaning our data
+
+## Exclusion bias - overcoming
+* thoroughly investigating the features/groups we're thinking of excluding beforehand
+* having colleagues cast an eye over variables
+* using the packages such as caret to calculate the relative feature importance
+
+## Observer bias
+* tendency to see what we expect to see, or what we want to see 
+
+## Observer bias - overcoming
+* randomized controlled trials
+* double blind trials
+* train people as observers who have little or no stake in the outcome of the experiment
+
+## Prejudice bias
+* result of cultural influences or stereotypes.
+
+## Prejudice bias - overcoming
+* culmination of previous techniques to overcome
+    - double blind trials
+    - stratification
+    - having people who aren't the experiment designer do the sampling and others do the testing
+
+## Measurement bias
+* an issue with the device used to observe or measure. 
+
+## Measurement bias - overcoming
+* multiple measuring devices
+* having trained people using the instruments
+
+## Identifying bias in training datasets
+* missing values
+* unexpected values
+* data skew
+
+## How to compensate for bias when building models
+* Lime
+* FairML
+* Google What/If...
+* IBM Bias assessment toolkit
+
+## How to monitor model for negative feedback
+* sister model for anomaly detection

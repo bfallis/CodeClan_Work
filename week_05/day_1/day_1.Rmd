@@ -1,0 +1,107 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(CodeClanData)
+library(ggplot2)
+```
+
+4.1. 
+
+Take the data in the dataset qb_revenue_breakdown and make a stacked bar chart 
+showing the sources of revenue across the two years in the dataset.
+```{r}
+ggplot(qb_revenue_breakdown) +
+        aes(x = Year, y = Revenue, fill = Product) +
+        geom_bar(stat = "identity") +
+        labs(title = "Revenue per Source by Year\n")
+```
+
+Make a line chart showing monthly sales of the “flagship product” - the KwikBit 
+Unit1 - over the last year. 
+```{r}
+ggplot(qb_monthly_sales[qb_monthly_sales$Cashflow == "Kwikbit Unit 1 Sales", ]) +
+        aes(x = Date, y = Amount) +
+        geom_line() +
+        geom_point() +
+        labs(title = "Sales by Date\n")
+```
+
+Make a line chart showing monthly revenue and costs over the last year.
+```{r}
+ggplot(qb_monthly_sales[qb_monthly_sales$Cashflow != "Kwikbit Unit 1 Sales", ]) +
+        aes(x = Date, y = Amount, colour = Cashflow) +
+        geom_line() +
+        labs(title = "Revenue and Costs by Date\n")
+```
+
+4.2.
+
+Show annual sales of personal fitness trackers over the last 5 years broken down
+by company as a ribbon plot.
+```{r}
+ggplot(qb_competitors) +
+        aes(x = Year, y = Revenue, fill = Company) +
+        geom_area(alpha = 0.25) +
+        labs(title = "Annual Revenue by Company\n")
+```
+
+Now show the sales from the 5 competitors as a line graph. Include an extra 
+layer that shows the data points used to make the lines.
+```{r}
+ggplot(qb_competitors) +
+        aes(x = Year, y = Revenue, colour = Company) +
+        geom_line() +
+        geom_point() +
+        labs(title = "Revenue by Year\n")
+```
+
+5.
+
+Try out different ways of plotting these three datasets. Which graphs do you 
+think are particularly effective at showing QikBit’s success?
+
+qb_revenue_breakdown
+- bar makes most sense since there's only 2 points for year for each product.
+
+line chart
+```{r}
+ggplot(qb_revenue_breakdown) +
+        aes(x = Year, y = Revenue, group = Product, colour = Product) +
+        geom_line() +
+        labs(title = "Revenue per Product by Year\n")
+```
+
+```{r}
+ggplot(qb_revenue_breakdown) +
+        aes(x = Product, y = Revenue, fill = Year) +
+        geom_bar(stat = "identity") +
+        labs(title = "Revenue per Year by Product")
+```
+
+qb_monthly_sales
+
+```{r}
+ggplot(qb_monthly_sales) +
+        aes(x = Date, y = Amount, fill = Cashflow) +
+        geom_bar(stat = "identity") +
+        labs(title = "Amount per Cashflow by Date\n")
+```
+
+```{r}
+ggplot(qb_monthly_sales) +
+        aes(x = Cashflow, y = Amount, fill = Cashflow, colour = Date) +
+        geom_bar(stat = "identity") +
+        labs(title = "Amount per Date by Cashflow\n")
+```
+
+qb_competitors
+
+```{r}
+ggplot(qb_competitors) +
+        aes(x = Year, y = Revenue, fill = Company) +
+        geom_area(position = "fill", alpha = 0.25) +
+        labs(title = "Relative composition of Competitor Revenue by Year\n")
+```

@@ -1,0 +1,213 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(CodeClanData)
+library(ggplot2)
+```
+
+2.1
+
+Again you are going to work with QikBit datasets. They liked the plots that you
+produced yesterday, and now want you to polish them by:
+
+- Adding appropriate labels
+- Changing the scales and coordinates when appropriate.
+- Applying a unified theme, which is described below:
+
+- Graphs should have white backgrounds, and use colour sparingly.
+- Font sizes should be ~12pt although titles should be slightly larger and axis
+  labels can be slightly smaller.
+- All plots should use colours from the following company colour scheme:
+```{r}
+col_scheme <- c("#E89FE9", "#50434F", "#B6A7B5", "#F9A472", "#BD7040")
+```
+
+```{r}
+ggplot(qb_revenue_breakdown) +
+        aes(x = Year, y = Revenue, fill = Product) +
+        geom_bar(stat = "identity") +
+        scale_y_continuous(labels = scales::comma) +
+        scale_fill_manual(values = col_scheme) +
+        labs(title = "Revenue per Source by Year\n") +
+        theme(
+                panel.background = element_rect(fill = "white"),
+                plot.title = element_text(size = 14),
+                legend.text = element_text(size = 12),
+                axis.text = element_text(size = 8),
+                axis.title = element_text(size = 12)
+        )
+```
+
+```{r}
+ggplot(qb_monthly_sales[qb_monthly_sales$Cashflow == "Kwikbit Unit 1 Sales", ]) +
+        aes(x = Date, y = Amount) +
+        geom_line() +
+        scale_colour_manual(values = col_scheme) +
+        geom_point() +
+        labs(title = "Sales by Date\n") +
+        theme(
+                panel.background = element_rect(fill = "white"),
+                plot.title = element_text(size = 14),
+                legend.text = element_text(size = 12),
+                axis.text = element_text(size = 8),
+                axis.title = element_text(size = 12)
+        )
+```
+
+```{r}
+ggplot(qb_monthly_sales[qb_monthly_sales$Cashflow != "Kwikbit Unit 1 Sales", ]) +
+        aes(x = Date, y = Amount, colour = Cashflow) +
+        geom_line() +
+        scale_colour_manual(values = col_scheme) +
+        scale_y_continuous(labels = scales::comma) +
+        labs(title = "Revenue and Costs by Date\n") +
+        theme(
+                panel.background = element_rect(fill = "white"),
+                plot.title = element_text(size = 14),
+                legend.text = element_text(size = 12),
+                axis.text = element_text(size = 8),
+                axis.title = element_text(size = 12)
+        )
+```
+
+```{r}
+ggplot(qb_competitors) +
+        aes(x = Year, y = Revenue, fill = Company) +
+        geom_area(alpha = 0.25) +
+        scale_fill_manual(values = col_scheme) +
+        scale_y_continuous(labels = scales::dollar_format(prefix = "£")) +
+        labs(title = "Annual Revenue by Company\n") +
+        theme(
+                panel.background = element_rect(fill = "white"),
+                plot.title = element_text(size = 14),
+                legend.text = element_text(size = 12),
+                axis.text = element_text(size = 8),
+                axis.title = element_text(size = 12)
+        )
+```
+
+```{r}
+ggplot(qb_competitors) +
+        aes(x = Year, y = Revenue, colour = Company) +
+        geom_line() +
+        geom_point() +
+        scale_colour_manual(values = col_scheme) +
+        scale_y_continuous(labels = scales::dollar_format(prefix = "£")) +
+        labs(title = "Revenue by Year\n") +
+        theme(
+                panel.background = element_rect(fill = "white"),
+                plot.title = element_text(size = 14),
+                legend.text = element_text(size = 12),
+                axis.text = element_text(size = 8),
+                axis.title = element_text(size = 12)
+        )
+```
+
+2.2
+
+Now the company wants to compare the number of steps that their device counts
+vs. their competitors. Make a line graph of the number of steps throughout time,
+and use faceting to compare between individuals and people. Polish this plot 
+like the others.
+```{r}
+aggregated <- aggregate(qb_device_data[ , -4]$counts,
+        by  = list(qb_device_data$device, qb_device_data$id, qb_device_data$hours),
+        FUN = sum
+)
+names(aggregated) <- c("device", "id", "hours", "counts")
+
+aggregated <- aggregated[order(aggregated$device, aggregated$id, aggregated$hours), ]
+```
+
+```{r}
+ggplot(aggregated) +
+        aes(x = hours, y = counts, colour = device) +
+        geom_line() +
+        facet_wrap(~ id, ncol = 3) +
+        scale_colour_manual(values = col_scheme) +
+        scale_y_continuous(labels = scales::comma) +
+        labs(title = "Hourly step count per user per device\n") +
+        theme(
+                panel.background = element_rect(fill = "white"),
+                plot.title = element_text(size = 14),
+                legend.text = element_text(size = 12),
+                axis.text = element_text(size = 8),
+                axis.title = element_text(size = 12)
+        )
+```
+
+3.
+
+Extend Q2 to include projected sales for the next 3 years on the assumption 
+sales increase at 10% pa each year from 1st August. You may assume sales in 
+other months can be interpolated (i.e. straight line between Augusts).
+
+You must ensure projections are clearly distinguished from realised sales (e.g.
+dotted line used for projections, and a clear legend explaining the 
+distinction). Again, make this graph polished according to the companies
+specifications.
+```{r}
+#Question feels too ambiguous to answer. Which plot from part 2/yesterday?
+```
+
+The results of our study comparing KwikBit to it’s competitors are proprietary
+and we would prefer they were not shared with our competitors. Impose over the 
+plot you made in part 2 a transparent piece of text at 15 degrees stating “Not 
+for redistribution.”
+```{r}
+label_position <- data.frame(xpos = 13, ypos = 45000)
+
+ggplot(aggregated) +
+        aes(x = hours, y = counts, colour = device) +
+        geom_line() +
+        facet_wrap(~ id, ncol = 3) +
+        scale_colour_manual(values = col_scheme) +
+        scale_y_continuous(labels = scales::comma) +
+        labs(title = "Hourly step count per user per device\n") +
+        theme(
+                panel.background = element_rect(fill = "white"),
+                plot.title = element_text(size = 14),
+                legend.text = element_text(size = 12),
+                axis.text = element_text(size = 8),
+                axis.title = element_text(size = 12)
+        ) +
+        geom_text(data = label_position,
+                aes(x = xpos, y = ypos, colour = NULL),
+                label = "Not for redistribution",
+                alpha = 0.4,
+                angle = 15,
+                show.legend = FALSE
+        )
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -47,7 +47,7 @@ ggplot(qb_monthly_sales[qb_monthly_sales$Cashflow == "Kwikbit Unit 1 Sales", ]) 
         geom_line() +
         scale_colour_manual(values = col_scheme) +
         geom_point() +
-        labs(title = "Sales by Date\n") +
+        labs(title = "Sales by Date (£)\n") +
         theme(
                 panel.background = element_rect(fill = "white"),
                 plot.title = element_text(size = 14),
@@ -182,32 +182,4 @@ ggplot(aggregated) +
                 show.legend = FALSE
         )
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

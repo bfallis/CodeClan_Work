@@ -1729,7 +1729,7 @@ $(document).ready(function () {
 </style>
 <script>
 $(document).ready(function () {
-  window.initializeSourceEmbed("day_2.Rmd");
+  window.initializeSourceEmbed("day_5.Rmd");
   window.initializeCodeFolding("show" === "show");
 });
 </script>
@@ -1767,117 +1767,237 @@ $(document).ready(function () {
 
 
 <!-- rnb-text-begin -->
+<p>Create at least one plot for each sheet in the dataset. Use a variety of different plot types. Add labels to make the plots stand on their own. Use a consistent colour scheme throughout the plots</p>
+<p>Display the same data in multiple ways, for at least some of the datasets Create your own theme and use it consistently throughout the data. Use some of our ggplot2 extensions.</p>
+<p>Load libraries needed</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxubGlicmFyeShDb2RlQ2xhbkRhdGEpXG5saWJyYXJ5KGdncGxvdDIpXG5gYGBcbmBgYCJ9 -->
-<p><code>r</code>r library(CodeClanData) library(ggplot2)</p>
-<pre><code></code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShyZWFkeGwpXG5saWJyYXJ5KGdncGxvdDIpXG5saWJyYXJ5KGdnd29yZGNsb3VkKVxuYGBgIn0= -->
+<pre class="r"><code>library(readxl)
+library(ggplot2)
+library(ggwordcloud)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>4.1.</p>
-<p>Take the data in the dataset qb_revenue_breakdown and make a stacked bar chart showing the sources of revenue across the two years in the dataset.</p>
+<p>Read data in</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuZ2dwbG90KHFiX3JldmVudWVfYnJlYWtkb3duKSArXG4gICAgICAgIGFlcyh4ID0gWWVhciwgeSA9IFJldmVudWUsIGZpbGwgPSBQcm9kdWN0KSArXG4gICAgICAgIGdlb21fYmFyKHN0YXQgPSBcXGlkZW50aXR5XFwpICtcbiAgICAgICAgbGFicyh0aXRsZSA9IFxcUmV2ZW51ZSBwZXIgU291cmNlIGJ5IFllYXJcXG5cXClcbmBgYFxuYGBgIn0= -->
-<p><code>r</code>r ggplot(qb_revenue_breakdown) + aes(x = Year, y = Revenue, fill = Product) + geom_bar(stat = ) + labs(title = per Source by Year)</p>
-<pre><code></code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Make a line chart showing monthly sales of the “flagship product” - the KwikBit Unit1 - over the last year.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2dwbG90KHFiX21vbnRobHlfc2FsZXNbcWJfbW9udGhseV9zYWxlcyRDYXNoZmxvdyA9PSBcIkt3aWtiaXQgVW5pdCAxIFNhbGVzXCIsIF0pICtcbiAgICAgICAgYWVzKHggPSBEYXRlLCB5ID0gQW1vdW50KSArXG4gICAgICAgIGdlb21fbGluZSgpICtcbiAgICAgICAgZ2VvbV9wb2ludCgpICtcbiAgICAgICAgbGFicyh0aXRsZSA9IFwiU2FsZXMgYnkgRGF0ZVxcblwiKVxuYGBgIn0= -->
-<pre class="r"><code>ggplot(qb_monthly_sales[qb_monthly_sales$Cashflow == &quot;Kwikbit Unit 1 Sales&quot;, ]) +
-        aes(x = Date, y = Amount) +
-        geom_line() +
-        geom_point() +
-        labs(title = &quot;Sales by Date\n&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Make a line chart showing monthly revenue and costs over the last year.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuYGBgclxuZ2dwbG90KHFiX21vbnRobHlfc2FsZXNbcWJfbW9udGhseV9zYWxlcyRDYXNoZmxvdyAhPSBcXEt3aWtiaXQgVW5pdCAxIFNhbGVzXFwsIF0pICtcbiAgICAgICAgYWVzKHggPSBEYXRlLCB5ID0gQW1vdW50LCBjb2xvdXIgPSBDYXNoZmxvdykgK1xuICAgICAgICBnZW9tX2xpbmUoKSArXG4gICAgICAgIGxhYnModGl0bGUgPSBcXFJldmVudWUgYW5kIENvc3RzIGJ5IERhdGVcXG5cXClcbmBgYFxuYGBgXG5gYGAifQ== -->
-<p><code>r</code>r</p>
-<pre class="r"><code>ggplot(qb_monthly_sales[qb_monthly_sales$Cashflow != \Kwikbit Unit 1 Sales\, ]) +
-        aes(x = Date, y = Amount, colour = Cashflow) +
-        geom_line() +
-        labs(title = \Revenue and Costs by Date\n\)</code></pre>
-<pre><code></code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>4.2.</p>
-<p>Show annual sales of personal fitness trackers over the last 5 years broken down by company as a ribbon plot.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuZ2dwbG90KHFiX2NvbXBldGl0b3JzKSArXG4gICAgICAgIGFlcyh4ID0gWWVhciwgeSA9IFJldmVudWUsIGZpbGwgPSBDb21wYW55KSArXG4gICAgICAgIGdlb21fYXJlYShhbHBoYSA9IDAuMjUpICtcbiAgICAgICAgbGFicyh0aXRsZSA9IFxcQW5udWFsIFJldmVudWUgYnkgQ29tcGFueVxcblxcKVxuYGBgXG5gYGAifQ== -->
-<p><code>r</code>r ggplot(qb_competitors) + aes(x = Year, y = Revenue, fill = Company) + geom_area(alpha = 0.25) + labs(title = Revenue by Company)</p>
-<pre><code></code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Now show the sales from the 5 competitors as a line graph. Include an extra layer that shows the data points used to make the lines.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuZ2dwbG90KHFiX2NvbXBldGl0b3JzKSArXG4gICAgICAgIGFlcyh4ID0gWWVhciwgeSA9IFJldmVudWUsIGNvbG91ciA9IENvbXBhbnkpICtcbiAgICAgICAgZ2VvbV9saW5lKCkgK1xuICAgICAgICBnZW9tX3BvaW50KCkgK1xuICAgICAgICBsYWJzKHRpdGxlID0gXFxSZXZlbnVlIGJ5IFllYXJcXG5cXClcbmBgYFxuYGBgIn0= -->
-<p><code>r</code>r ggplot(qb_competitors) + aes(x = Year, y = Revenue, colour = Company) + geom_line() + geom_point() + labs(title = by Year)</p>
-<pre><code></code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<ol start="5" style="list-style-type: decimal">
-<li></li>
-</ol>
-<p>Try out different ways of plotting these three datasets. Which graphs do you think are particularly effective at showing QikBit’s success?</p>
-<p>qb_revenue_breakdown - bar makes most sense since there’s only 2 points for year for each product.</p>
-<p>line chart</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuZ2dwbG90KHFiX3JldmVudWVfYnJlYWtkb3duKSArXG4gICAgICAgIGFlcyh4ID0gWWVhciwgeSA9IFJldmVudWUsIGdyb3VwID0gUHJvZHVjdCwgY29sb3VyID0gUHJvZHVjdCkgK1xuICAgICAgICBnZW9tX2xpbmUoKSArXG4gICAgICAgIGxhYnModGl0bGUgPSBcXFJldmVudWUgcGVyIFByb2R1Y3QgYnkgWWVhclxcblxcKVxuYGBgXG5gYGAifQ== -->
-<p><code>r</code>r ggplot(qb_revenue_breakdown) + aes(x = Year, y = Revenue, group = Product, colour = Product) + geom_line() + labs(title = per Product by Year)</p>
-<pre><code></code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuZ2dwbG90KHFiX3JldmVudWVfYnJlYWtkb3duKSArXG4gICAgICAgIGFlcyh4ID0gUHJvZHVjdCwgeSA9IFJldmVudWUsIGZpbGwgPSBZZWFyKSArXG4gICAgICAgIGdlb21fYmFyKHN0YXQgPSBcXGlkZW50aXR5XFwpICtcbiAgICAgICAgbGFicyh0aXRsZSA9IFxcUmV2ZW51ZSBwZXIgWWVhciBieSBQcm9kdWN0XFwpXG5gYGBcbmBgYCJ9 -->
-<p><code>r</code>r ggplot(qb_revenue_breakdown) + aes(x = Product, y = Revenue, fill = Year) + geom_bar(stat = ) + labs(title = per Year by Product)</p>
-<pre><code></code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>qb_monthly_sales</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuZ2dwbG90KHFiX21vbnRobHlfc2FsZXMpICtcbiAgICAgICAgYWVzKHggPSBEYXRlLCB5ID0gQW1vdW50LCBmaWxsID0gQ2FzaGZsb3cpICtcbiAgICAgICAgZ2VvbV9iYXIoc3RhdCA9IFxcaWRlbnRpdHlcXCkgK1xuICAgICAgICBsYWJzKHRpdGxlID0gXFxBbW91bnQgcGVyIENhc2hmbG93IGJ5IERhdGVcXG5cXClcbmBgYFxuYGBgIn0= -->
-<p><code>r</code>r ggplot(qb_monthly_sales) + aes(x = Date, y = Amount, fill = Cashflow) + geom_bar(stat = ) + labs(title = per Cashflow by Date)</p>
-<pre><code></code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuZ2dwbG90KHFiX21vbnRobHlfc2FsZXMpICtcbiAgICAgICAgYWVzKHggPSBDYXNoZmxvdywgeSA9IEFtb3VudCwgZmlsbCA9IENhc2hmbG93LCBjb2xvdXIgPSBEYXRlKSArXG4gICAgICAgIGdlb21fYmFyKHN0YXQgPSBcXGlkZW50aXR5XFwpICtcbiAgICAgICAgbGFicyh0aXRsZSA9IFxcQW1vdW50IHBlciBEYXRlIGJ5IENhc2hmbG93XFxuXFwpXG5gYGBcbmBgYCJ9 -->
-<p><code>r</code>r ggplot(qb_monthly_sales) + aes(x = Cashflow, y = Amount, fill = Cashflow, colour = Date) + geom_bar(stat = ) + labs(title = per Date by Cashflow)</p>
-<pre><code></code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>qb_competitors</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuZ2dwbG90KHFiX2NvbXBldGl0b3JzKSArXG4gICAgICAgIGFlcyh4ID0gWWVhciwgeSA9IFJldmVudWUsIGZpbGwgPSBDb21wYW55KSArXG4gICAgICAgIGdlb21fYXJlYShwb3NpdGlvbiA9IFxcZmlsbFxcLCBhbHBoYSA9IDAuMjUpICtcbiAgICAgICAgbGFicyh0aXRsZSA9IFxcUmVsYXRpdmUgY29tcG9zaXRpb24gb2YgQ29tcGV0aXRvciBSZXZlbnVlIGJ5IFllYXJcXG5cXClcbmBgYFxuYGBgIn0= -->
-<p><code>r</code>r ggplot(qb_competitors) + aes(x = Year, y = Revenue, fill = Company) + geom_area(position = , alpha = 0.25) + labs(title = composition of Competitor Revenue by Year)</p>
-<pre><code></code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZmlsZW5hbWUgPC0gXCJ+L2RlMV9jbGFzc25vdGVzL3dlZWtfMDUvZGF5XzUvNF93ZWVrZW5kX2hvbWV3b3JrL2dyZWVuX2JpbmRsZV9jb25zdWx0aW5nLnhsc3hcIlxuXG5zaGVldHMgPC0gZXhjZWxfc2hlZXRzKGZpbGVuYW1lKVxuXG5mdWxsX2xpc3QgPC0gbGFwcGx5KHNoZWV0cywgZnVuY3Rpb24oeCkge3JlYWRfZXhjZWwoZmlsZW5hbWUsIHNoZWV0ID0geCl9KVxuYGBgIn0= -->
+<pre class="r"><code>filename &lt;- &quot;~/de1_classnotes/week_05/day_5/4_weekend_homework/green_bindle_consulting.xlsx&quot;
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKYGBge3J9CmxpYnJhcnkoQ29kZUNsYW5EYXRhKQpsaWJyYXJ5KGdncGxvdDIpCmBgYAoKNC4xLiAKClRha2UgdGhlIGRhdGEgaW4gdGhlIGRhdGFzZXQgcWJfcmV2ZW51ZV9icmVha2Rvd24gYW5kIG1ha2UgYSBzdGFja2VkIGJhciBjaGFydCAKc2hvd2luZyB0aGUgc291cmNlcyBvZiByZXZlbnVlIGFjcm9zcyB0aGUgdHdvIHllYXJzIGluIHRoZSBkYXRhc2V0LgpgYGB7cn0KZ2dwbG90KHFiX3JldmVudWVfYnJlYWtkb3duKSArCiAgICAgICAgYWVzKHggPSBZZWFyLCB5ID0gUmV2ZW51ZSwgZmlsbCA9IFByb2R1Y3QpICsKICAgICAgICBnZW9tX2JhcihzdGF0ID0gImlkZW50aXR5IikgKwogICAgICAgIGxhYnModGl0bGUgPSAiUmV2ZW51ZSBwZXIgU291cmNlIGJ5IFllYXJcbiIpCmBgYAoKTWFrZSBhIGxpbmUgY2hhcnQgc2hvd2luZyBtb250aGx5IHNhbGVzIG9mIHRoZSDigJxmbGFnc2hpcCBwcm9kdWN04oCdIC0gdGhlIEt3aWtCaXQgClVuaXQxIC0gb3ZlciB0aGUgbGFzdCB5ZWFyLiAKYGBge3J9CmdncGxvdChxYl9tb250aGx5X3NhbGVzW3FiX21vbnRobHlfc2FsZXMkQ2FzaGZsb3cgPT0gIkt3aWtiaXQgVW5pdCAxIFNhbGVzIiwgXSkgKwogICAgICAgIGFlcyh4ID0gRGF0ZSwgeSA9IEFtb3VudCkgKwogICAgICAgIGdlb21fbGluZSgpICsKICAgICAgICBnZW9tX3BvaW50KCkgKwogICAgICAgIGxhYnModGl0bGUgPSAiU2FsZXMgYnkgRGF0ZVxuIikKYGBgCgpNYWtlIGEgbGluZSBjaGFydCBzaG93aW5nIG1vbnRobHkgcmV2ZW51ZSBhbmQgY29zdHMgb3ZlciB0aGUgbGFzdCB5ZWFyLgpgYGB7cn0KZ2dwbG90KHFiX21vbnRobHlfc2FsZXNbcWJfbW9udGhseV9zYWxlcyRDYXNoZmxvdyAhPSAiS3dpa2JpdCBVbml0IDEgU2FsZXMiLCBdKSArCiAgICAgICAgYWVzKHggPSBEYXRlLCB5ID0gQW1vdW50LCBjb2xvdXIgPSBDYXNoZmxvdykgKwogICAgICAgIGdlb21fbGluZSgpICsKICAgICAgICBsYWJzKHRpdGxlID0gIlJldmVudWUgYW5kIENvc3RzIGJ5IERhdGVcbiIpCmBgYAoKNC4yLgoKU2hvdyBhbm51YWwgc2FsZXMgb2YgcGVyc29uYWwgZml0bmVzcyB0cmFja2VycyBvdmVyIHRoZSBsYXN0IDUgeWVhcnMgYnJva2VuIGRvd24KYnkgY29tcGFueSBhcyBhIHJpYmJvbiBwbG90LgpgYGB7cn0KZ2dwbG90KHFiX2NvbXBldGl0b3JzKSArCiAgICAgICAgYWVzKHggPSBZZWFyLCB5ID0gUmV2ZW51ZSwgZmlsbCA9IENvbXBhbnkpICsKICAgICAgICBnZW9tX2FyZWEoYWxwaGEgPSAwLjI1KSArCiAgICAgICAgbGFicyh0aXRsZSA9ICJBbm51YWwgUmV2ZW51ZSBieSBDb21wYW55XG4iKQpgYGAKCk5vdyBzaG93IHRoZSBzYWxlcyBmcm9tIHRoZSA1IGNvbXBldGl0b3JzIGFzIGEgbGluZSBncmFwaC4gSW5jbHVkZSBhbiBleHRyYSAKbGF5ZXIgdGhhdCBzaG93cyB0aGUgZGF0YSBwb2ludHMgdXNlZCB0byBtYWtlIHRoZSBsaW5lcy4KYGBge3J9CmdncGxvdChxYl9jb21wZXRpdG9ycykgKwogICAgICAgIGFlcyh4ID0gWWVhciwgeSA9IFJldmVudWUsIGNvbG91ciA9IENvbXBhbnkpICsKICAgICAgICBnZW9tX2xpbmUoKSArCiAgICAgICAgZ2VvbV9wb2ludCgpICsKICAgICAgICBsYWJzKHRpdGxlID0gIlJldmVudWUgYnkgWWVhclxuIikKYGBgCgo1LgoKVHJ5IG91dCBkaWZmZXJlbnQgd2F5cyBvZiBwbG90dGluZyB0aGVzZSB0aHJlZSBkYXRhc2V0cy4gV2hpY2ggZ3JhcGhzIGRvIHlvdSAKdGhpbmsgYXJlIHBhcnRpY3VsYXJseSBlZmZlY3RpdmUgYXQgc2hvd2luZyBRaWtCaXTigJlzIHN1Y2Nlc3M/CgpxYl9yZXZlbnVlX2JyZWFrZG93bgotIGJhciBtYWtlcyBtb3N0IHNlbnNlIHNpbmNlIHRoZXJlJ3Mgb25seSAyIHBvaW50cyBmb3IgeWVhciBmb3IgZWFjaCBwcm9kdWN0LgoKbGluZSBjaGFydApgYGB7cn0KZ2dwbG90KHFiX3JldmVudWVfYnJlYWtkb3duKSArCiAgICAgICAgYWVzKHggPSBZZWFyLCB5ID0gUmV2ZW51ZSwgZ3JvdXAgPSBQcm9kdWN0LCBjb2xvdXIgPSBQcm9kdWN0KSArCiAgICAgICAgZ2VvbV9saW5lKCkgKwogICAgICAgIGxhYnModGl0bGUgPSAiUmV2ZW51ZSBwZXIgUHJvZHVjdCBieSBZZWFyXG4iKQpgYGAKCmBgYHtyfQpnZ3Bsb3QocWJfcmV2ZW51ZV9icmVha2Rvd24pICsKICAgICAgICBhZXMoeCA9IFByb2R1Y3QsIHkgPSBSZXZlbnVlLCBmaWxsID0gWWVhcikgKwogICAgICAgIGdlb21fYmFyKHN0YXQgPSAiaWRlbnRpdHkiKSArCiAgICAgICAgbGFicyh0aXRsZSA9ICJSZXZlbnVlIHBlciBZZWFyIGJ5IFByb2R1Y3QiKQpgYGAKCnFiX21vbnRobHlfc2FsZXMKCmBgYHtyfQpnZ3Bsb3QocWJfbW9udGhseV9zYWxlcykgKwogICAgICAgIGFlcyh4ID0gRGF0ZSwgeSA9IEFtb3VudCwgZmlsbCA9IENhc2hmbG93KSArCiAgICAgICAgZ2VvbV9iYXIoc3RhdCA9ICJpZGVudGl0eSIpICsKICAgICAgICBsYWJzKHRpdGxlID0gIkFtb3VudCBwZXIgQ2FzaGZsb3cgYnkgRGF0ZVxuIikKYGBgCgpgYGB7cn0KZ2dwbG90KHFiX21vbnRobHlfc2FsZXMpICsKICAgICAgICBhZXMoeCA9IENhc2hmbG93LCB5ID0gQW1vdW50LCBmaWxsID0gQ2FzaGZsb3csIGNvbG91ciA9IERhdGUpICsKICAgICAgICBnZW9tX2JhcihzdGF0ID0gImlkZW50aXR5IikgKwogICAgICAgIGxhYnModGl0bGUgPSAiQW1vdW50IHBlciBEYXRlIGJ5IENhc2hmbG93XG4iKQpgYGAKCnFiX2NvbXBldGl0b3JzCgpgYGB7cn0KZ2dwbG90KHFiX2NvbXBldGl0b3JzKSArCiAgICAgICAgYWVzKHggPSBZZWFyLCB5ID0gUmV2ZW51ZSwgZmlsbCA9IENvbXBhbnkpICsKICAgICAgICBnZW9tX2FyZWEocG9zaXRpb24gPSAiZmlsbCIsIGFscGhhID0gMC4yNSkgKwogICAgICAgIGxhYnModGl0bGUgPSAiUmVsYXRpdmUgY29tcG9zaXRpb24gb2YgQ29tcGV0aXRvciBSZXZlbnVlIGJ5IFllYXJcbiIpCmBgYAo=</div>
+sheets &lt;- excel_sheets(filename)
+
+full_list &lt;- lapply(sheets, function(x) {read_excel(filename, sheet = x)})</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Create a colour scheme and theme</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY29sX3NjaGVtZSA8LSBjKFwiI0U4OUZFOVwiLCBcIiM1MDQzNEZcIiwgXCIjQjZBN0I1XCIsIFwiI0Y5QTQ3MlwiLCBcIiNCRDcwNDBcIilcblxubXlfdGhlbWUgPC0gZnVuY3Rpb24oc2l6ZSA9IDEyKSB7XG4gICAgICAgIHRoZW1lX21pbmltYWwoKSAlK3JlcGxhY2UlXG4gICAgICAgIHRoZW1lKFxuICAgICAgICAgICAgICAgIHBhbmVsLmJhY2tncm91bmQgPSBlbGVtZW50X2JsYW5rKCksXG4gICAgICAgICAgICAgICAgcGxvdC50aXRsZSA9IGVsZW1lbnRfdGV4dChzaXplID0gc2l6ZSArIDIsIGhqdXN0ID0gMCksXG4gICAgICAgICAgICAgICAgbGVnZW5kLnRleHQgPSBlbGVtZW50X3RleHQoc2l6ZSA9IHNpemUgLSA0KSxcbiAgICAgICAgICAgICAgICBheGlzLnRleHQgPSBlbGVtZW50X3RleHQoc2l6ZSA9IHNpemUgLSA0KSxcbiAgICAgICAgICAgICAgICBheGlzLnRpdGxlID0gZWxlbWVudF90ZXh0KHNpemUgPSBzaXplKSxcbiAgICAgICAgKVxufVxuYGBgIn0= -->
+<pre class="r"><code>col_scheme &lt;- c(&quot;#E89FE9&quot;, &quot;#50434F&quot;, &quot;#B6A7B5&quot;, &quot;#F9A472&quot;, &quot;#BD7040&quot;)
+
+my_theme &lt;- function(size = 12) {
+        theme_minimal() %+replace%
+        theme(
+                panel.background = element_blank(),
+                plot.title = element_text(size = size + 2, hjust = 0),
+                legend.text = element_text(size = size - 4),
+                axis.text = element_text(size = size - 4),
+                axis.title = element_text(size = size),
+        )
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Data1</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2dwbG90KGFzLmRhdGEuZnJhbWUoZnVsbF9saXN0WzFdKSkgK1xuICAgICAgICBhZXMoeCA9IFllYXIsIHkgPSBWYWx1ZSwgZmlsbCA9IEl0ZW0pICtcbiAgICAgICAgZ2VvbV9iYXIoc3RhdCA9IFwiaWRlbnRpdHlcIiwgcG9zaXRpb24gPSBcImRvZGdlXCIpICtcbiAgICAgICAgbGFicyhcbiAgICAgICAgICAgICAgICB0aXRsZSA9IFwiVmFsdWUgb2YgdmFyaW91cyBJdGVtcyBieSBZZWFyXCIsXG4gICAgICAgICAgICAgICAgc3VidGl0bGUgPSBcIkFzc2V0cyBhbmQgTGlhYmlsaXRpZXMgb2YgR3JlZW4tQmluZGxlIENvbnN1bHRpbmcgTExQXFxuXCIsXG4gICAgICAgICAgICAgICAgeCA9IFwiXFxuWWVhclwiLFxuICAgICAgICAgICAgICAgIHkgPSBcIlZhbHVlXFxuXCJcbiAgICAgICAgKSArXG4gICAgICAgIHNjYWxlX2ZpbGxfbWFudWFsKHZhbHVlcyA9IGNvbF9zY2hlbWUpICtcbiAgICAgICAgbXlfdGhlbWUoKVxuYGBgIn0= -->
+<pre class="r"><code>ggplot(as.data.frame(full_list[1])) +
+        aes(x = Year, y = Value, fill = Item) +
+        geom_bar(stat = &quot;identity&quot;, position = &quot;dodge&quot;) +
+        labs(
+                title = &quot;Value of various Items by Year&quot;,
+                subtitle = &quot;Assets and Liabilities of Green-Bindle Consulting LLP\n&quot;,
+                x = &quot;\nYear&quot;,
+                y = &quot;Value\n&quot;
+        ) +
+        scale_fill_manual(values = col_scheme) +
+        my_theme()</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2dwbG90KGFzLmRhdGEuZnJhbWUoZnVsbF9saXN0WzFdKSkgK1xuICAgICAgICBhZXMoeCA9IFllYXIsIHkgPSBWYWx1ZSwgY29sb3VyID0gSXRlbSkgK1xuICAgICAgICBnZW9tX2xpbmUoKSArXG4gICAgICAgIGxhYnMoXG4gICAgICAgICAgICAgICAgdGl0bGUgPSBcIlZhbHVlIG9mIHZhcmlvdXMgSXRlbXMgYnkgWWVhclwiLFxuICAgICAgICAgICAgICAgIHN1YnRpdGxlID0gXCJBc3NldHMgYW5kIExpYWJpbGl0aWVzIG9mIEdyZWVuLUJpbmRsZSBDb25zdWx0aW5nIExMUFxcblwiLFxuICAgICAgICAgICAgICAgIHggPSBcIlxcblllYXJcIixcbiAgICAgICAgICAgICAgICB5ID0gXCJWYWx1ZVxcblwiXG4gICAgICAgICkgK1xuICAgICAgICBzY2FsZV9jb2xvdXJfbWFudWFsKHZhbHVlcyA9IGNvbF9zY2hlbWUpICtcbiAgICAgICAgbXlfdGhlbWUoKVxuYGBgIn0= -->
+<pre class="r"><code>ggplot(as.data.frame(full_list[1])) +
+        aes(x = Year, y = Value, colour = Item) +
+        geom_line() +
+        labs(
+                title = &quot;Value of various Items by Year&quot;,
+                subtitle = &quot;Assets and Liabilities of Green-Bindle Consulting LLP\n&quot;,
+                x = &quot;\nYear&quot;,
+                y = &quot;Value\n&quot;
+        ) +
+        scale_colour_manual(values = col_scheme) +
+        my_theme()</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Data2</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2dwbG90KGFzLmRhdGEuZnJhbWUoZnVsbF9saXN0WzJdKSkgK1xuICAgICAgICBhZXMoeCA9IFllYXIsIHkgPSBWYWx1ZSwgZmlsbCA9IFN0YXR1cykgK1xuICAgICAgICBnZW9tX2JhcihzdGF0ID0gXCJpZGVudGl0eVwiLCBwb3NpdGlvbiA9IFwiZG9kZ2VcIikgK1xuICAgICAgICBsYWJzKFxuICAgICAgICAgICAgICAgIHRpdGxlID0gXCJWYWx1ZSBvZiBTdGF0dXNlcyBieSBZZWFyXCIsXG4gICAgICAgICAgICAgICAgc3VidGl0bGUgPSBcIkdyZWVuLUJpbmRsZSBDb25zdWx0aW5nIExMUFxcblwiLFxuICAgICAgICAgICAgICAgIHggPSBcIlxcblllYXJcIixcbiAgICAgICAgICAgICAgICB5ID0gXCJTdGF0dXNcXG5cIlxuICAgICAgICApICtcbiAgICAgICAgc2NhbGVfZmlsbF9tYW51YWwodmFsdWVzID0gY29sX3NjaGVtZSkgK1xuICAgICAgICBteV90aGVtZSgpXG5gYGAifQ== -->
+<pre class="r"><code>ggplot(as.data.frame(full_list[2])) +
+        aes(x = Year, y = Value, fill = Status) +
+        geom_bar(stat = &quot;identity&quot;, position = &quot;dodge&quot;) +
+        labs(
+                title = &quot;Value of Statuses by Year&quot;,
+                subtitle = &quot;Green-Bindle Consulting LLP\n&quot;,
+                x = &quot;\nYear&quot;,
+                y = &quot;Status\n&quot;
+        ) +
+        scale_fill_manual(values = col_scheme) +
+        my_theme()</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Data3</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGF0YTMgPC0gYXMuZGF0YS5mcmFtZShmdWxsX2xpc3RbM10pXG5cbmRhdGEzJEl0ZW0gPC0gZmFjdG9yKGRhdGEzJEl0ZW0sIGxldmVscyA9IHJldihkYXRhMyRJdGVtKSlcblxuZ2dwbG90KGRhdGEzKSArXG4gICAgICAgIGFlcyh4ID0gSXRlbSwgeSA9IFZhbHVlLCBmaWxsID0gVmFsdWUpICtcbiAgICAgICAgZ2VvbV9iYXIoc3RhdCA9IFwiaWRlbnRpdHlcIikgK1xuICAgICAgICBsYWJzKFxuICAgICAgICAgICAgICAgIHRpdGxlID0gXCJBY2NvdW50IEJhbGFuY2VcIixcbiAgICAgICAgICAgICAgICBzdWJ0aXRsZSA9IFwiQ3JlZGl0cy9EZWJpdHMgdG8gR3JlZW4tQmluZGxlIENvbnN1bHRpbmcgTExQXFxuXCIsXG4gICAgICAgICAgICAgICAgeCA9IFwiSXRlbVxcblwiLFxuICAgICAgICAgICAgICAgIHkgPSBcIlxcblZhbHVlXCJcbiAgICAgICAgKSArXG4gICAgICAgIHNjYWxlX2ZpbGxfZ3JhZGllbnQobG93ID0gXCIjQjZBN0I1XCIsIGhpZ2ggPSBcIiNFODlGRTlcIikgK1xuICAgICAgICBjb29yZF9mbGlwKCkgK1xuICAgICAgICBteV90aGVtZSgpXG5gYGAifQ== -->
+<pre class="r"><code>data3 &lt;- as.data.frame(full_list[3])
+
+data3$Item &lt;- factor(data3$Item, levels = rev(data3$Item))
+
+ggplot(data3) +
+        aes(x = Item, y = Value, fill = Value) +
+        geom_bar(stat = &quot;identity&quot;) +
+        labs(
+                title = &quot;Account Balance&quot;,
+                subtitle = &quot;Credits/Debits to Green-Bindle Consulting LLP\n&quot;,
+                x = &quot;Item\n&quot;,
+                y = &quot;\nValue&quot;
+        ) +
+        scale_fill_gradient(low = &quot;#B6A7B5&quot;, high = &quot;#E89FE9&quot;) +
+        coord_flip() +
+        my_theme()</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Data4</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2dwbG90KGFzLmRhdGEuZnJhbWUoZnVsbF9saXN0WzRdKSkgK1xuICAgICAgICBhZXMoeCA9IERhdGUsIHkgPSBBbGxvY2F0aW9uLCBmaWxsID0gUmVnaW9uKSArXG4gICAgICAgIGdlb21fYmFyKHN0YXQgPSBcImlkZW50aXR5XCIpICtcbiAgICAgICAgZmFjZXRfd3JhcCh+IFB1cnBvc2UgKyBBc3NldF9DbGFzcykgK1xuICAgICAgICBsYWJzKFxuICAgICAgICAgICAgICAgIHRpdGxlID0gXCJBbGxvY2F0aW9ucyBwZXIgRGF0ZSBieSBSZWdpb24gZm9yIGRpZmZlcmVudCBQdXJwb3NlcyBhbmQgQXNzZXQgQ2xhc3Nlc1wiLFxuICAgICAgICAgICAgICAgIHN1YnRpdGxlID0gXCJHcmVlbi1CaW5kbGUgQ29uc3VsdGluZyBMTFBcXG5cIixcbiAgICAgICAgICAgICAgICB4ID0gXCJcXG5EYXRlXCIsXG4gICAgICAgICAgICAgICAgeSA9IFwiQWxsb2NhdGlvblxcblwiXG4gICAgICAgICkgK1xuICAgICAgICBzY2FsZV9maWxsX21hbnVhbCh2YWx1ZXMgPSBjb2xfc2NoZW1lKSArXG4gICAgICAgIG15X3RoZW1lKClcbmBgYCJ9 -->
+<pre class="r"><code>ggplot(as.data.frame(full_list[4])) +
+        aes(x = Date, y = Allocation, fill = Region) +
+        geom_bar(stat = &quot;identity&quot;) +
+        facet_wrap(~ Purpose + Asset_Class) +
+        labs(
+                title = &quot;Allocations per Date by Region for different Purposes and Asset Classes&quot;,
+                subtitle = &quot;Green-Bindle Consulting LLP\n&quot;,
+                x = &quot;\nDate&quot;,
+                y = &quot;Allocation\n&quot;
+        ) +
+        scale_fill_manual(values = col_scheme) +
+        my_theme()</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Data5</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2dwbG90KGFzLmRhdGEuZnJhbWUoZnVsbF9saXN0WzVdKSkgK1xuICAgICAgICBhZXMoeCA9IEl0ZW0sIHkgPSBUUHMsIGZpbGwgPSBCYXNpcykgK1xuICAgICAgICBnZW9tX2JhcihzdGF0ID0gXCJpZGVudGl0eVwiKSArXG4gICAgICAgIGxhYnMoXG4gICAgICAgICAgICAgICAgdGl0bGUgPSBcIkFsbG9jYXRpb25zIGZvciBkaWZmZXJlbnQgQmFzaXMgcGVyIEFzc2V0IENsYXNzXCIsXG4gICAgICAgICAgICAgICAgc3VidGl0bGUgPSBcIkdyZWVuLUJpbmRsZSBDb25zdWx0aW5nIExMUFxcblwiLFxuICAgICAgICAgICAgICAgIHggPSBcIlxcbkl0ZW1cIixcbiAgICAgICAgICAgICAgICB5ID0gXCJUUHNcXG5cIlxuICAgICAgICApICtcbiAgICAgICAgc2NhbGVfZmlsbF9tYW51YWwodmFsdWVzID0gY29sX3NjaGVtZSkgK1xuICAgICAgICBteV90aGVtZSgpXG5gYGAifQ== -->
+<pre class="r"><code>ggplot(as.data.frame(full_list[5])) +
+        aes(x = Item, y = TPs, fill = Basis) +
+        geom_bar(stat = &quot;identity&quot;) +
+        labs(
+                title = &quot;Allocations for different Basis per Asset Class&quot;,
+                subtitle = &quot;Green-Bindle Consulting LLP\n&quot;,
+                x = &quot;\nItem&quot;,
+                y = &quot;TPs\n&quot;
+        ) +
+        scale_fill_manual(values = col_scheme) +
+        my_theme()</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Data6</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2dwbG90KGFzLmRhdGEuZnJhbWUoZnVsbF9saXN0WzZdKSkgK1xuICAgICAgICBhZXMoeCA9IFNjZW5hcmlvLCB5ID0gQmFsYW5jZSwgY29sb3VyID0gQmFsYW5jZSkgK1xuICAgICAgICBnZW9tX3BvaW50KCkgK1xuICAgICAgICBsYWJzKFxuICAgICAgICAgICAgICAgIHRpdGxlID0gXCJCYWxhbmNlIHZzIGEgcmFuZ2Ugb2YgcG9zc2libGUgc2NlbmFyaW9zXCIsXG4gICAgICAgICAgICAgICAgc3VidGl0bGUgPSBcIkdyZWVuLUJpbmRsZSBDb25zdWx0aW5nIExMUFxcblwiLFxuICAgICAgICAgICAgICAgIHggPSBcIlxcblNjZW5hcmlvXCIsXG4gICAgICAgICAgICAgICAgeSA9IFwiQmFsYW5jZVxcblwiXG4gICAgICAgICkgK1xuICAgICAgICBzY2FsZV9jb2xvcl9ncmFkaWVudChsb3cgPSBcIiNCNkE3QjVcIiwgaGlnaCA9IFwiI0U4OUZFOVwiKSArXG4gICAgICAgIG15X3RoZW1lKClcbmBgYCJ9 -->
+<pre class="r"><code>ggplot(as.data.frame(full_list[6])) +
+        aes(x = Scenario, y = Balance, colour = Balance) +
+        geom_point() +
+        labs(
+                title = &quot;Balance vs a range of possible scenarios&quot;,
+                subtitle = &quot;Green-Bindle Consulting LLP\n&quot;,
+                x = &quot;\nScenario&quot;,
+                y = &quot;Balance\n&quot;
+        ) +
+        scale_color_gradient(low = &quot;#B6A7B5&quot;, high = &quot;#E89FE9&quot;) +
+        my_theme()</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Data7</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2dwbG90KGFzLmRhdGEuZnJhbWUoZnVsbF9saXN0WzddKSkgK1xuICAgICAgICBhZXMoeCA9IFllYXIsIHkgPSBDYXNoZmxvdywgY29sb3VyID0gU3RhdHVzKSArXG4gICAgICAgIGdlb21fbGluZSgpICtcbiAgICAgICAgbGFicyhcbiAgICAgICAgICAgICAgICB0aXRsZSA9IFwiVmFsdWUgb2YgdmFyaW91cyBJdGVtcyBieSBZZWFyXCIsXG4gICAgICAgICAgICAgICAgc3VidGl0bGUgPSBcIkFzc2V0cyBhbmQgTGlhYmlsaXRpZXMgb2YgR3JlZW4tQmluZGxlIENvbnN1bHRpbmcgTExQXFxuXCIsXG4gICAgICAgICAgICAgICAgeCA9IFwiXFxuWWVhclwiLFxuICAgICAgICAgICAgICAgIHkgPSBcIkNhc2hmbG93XFxuXCJcbiAgICAgICAgKSArXG4gICAgICAgIHNjYWxlX2NvbG91cl9tYW51YWwodmFsdWVzID0gY29sX3NjaGVtZSkgK1xuICAgICAgICBteV90aGVtZSgpXG5gYGAifQ== -->
+<pre class="r"><code>ggplot(as.data.frame(full_list[7])) +
+        aes(x = Year, y = Cashflow, colour = Status) +
+        geom_line() +
+        labs(
+                title = &quot;Value of various Items by Year&quot;,
+                subtitle = &quot;Assets and Liabilities of Green-Bindle Consulting LLP\n&quot;,
+                x = &quot;\nYear&quot;,
+                y = &quot;Cashflow\n&quot;
+        ) +
+        scale_colour_manual(values = col_scheme) +
+        my_theme()</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Data8</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2dwbG90KGFzLmRhdGEuZnJhbWUoZnVsbF9saXN0WzhdKSkgK1xuICAgICAgICBhZXMobGFiZWwgPSBXb3JkLCBzaXplID0gU2l6ZSwgY29sb3VyID0gU2l6ZSkgK1xuICAgICAgICBnZW9tX3RleHRfd29yZGNsb3VkKCkgK1xuICAgICAgICBsYWJzKFxuICAgICAgICAgICAgICAgIHRpdGxlID0gXCJGcmVxdWVuY3kgb2YgV29yZHMgVXNlZCBCeSBTdGFmZlwiLFxuICAgICAgICAgICAgICAgIHN1YnRpdGxlID0gXCIgQXQgR3JlZW4tQmluZGxlIENvbnN1bHRpbmcgTExQXFxuXCIsXG4gICAgICAgICAgICAgICAgY2FwdGlvbiA9IFwiXFxuU2l6ZSBvZiB3b3JkIGNvcnJlc3BvbmRzIHRvIGZyZXFlbmN5XCJcbiAgICAgICAgKSArXG4gICAgICAgIHNjYWxlX3NpemVfYXJlYShtYXhfc2l6ZSA9IDEyKSArXG4gICAgICAgIHNjYWxlX2NvbG9yX2dyYWRpZW50KGxvdyA9IFwiI0I2QTdCNVwiLCBoaWdoID0gXCIjRTg5RkU5XCIpICtcbiAgICAgICAgbXlfdGhlbWUoKVxuYGBgIn0= -->
+<pre class="r"><code>ggplot(as.data.frame(full_list[8])) +
+        aes(label = Word, size = Size, colour = Size) +
+        geom_text_wordcloud() +
+        labs(
+                title = &quot;Frequency of Words Used By Staff&quot;,
+                subtitle = &quot; At Green-Bindle Consulting LLP\n&quot;,
+                caption = &quot;\nSize of word corresponds to freqency&quot;
+        ) +
+        scale_size_area(max_size = 12) +
+        scale_color_gradient(low = &quot;#B6A7B5&quot;, high = &quot;#E89FE9&quot;) +
+        my_theme()</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2dwbG90KGFzLmRhdGEuZnJhbWUoZnVsbF9saXN0WzhdKSkgK1xuICAgICAgICBhZXMoeCA9IFdvcmQsIHkgPSBTaXplLCBmaWxsID0gU2l6ZSkgK1xuICAgICAgICBnZW9tX2JhcihzdGF0ID0gXCJpZGVudGl0eVwiKSArXG4gICAgICAgIGxhYnMoXG4gICAgICAgICAgICAgICAgdGl0bGUgPSBcIkZyZXF1ZW5jeSBvZiBXb3JkcyBVc2VkIEJ5IFN0YWZmXCIsXG4gICAgICAgICAgICAgICAgc3VidGl0bGUgPSBcIiBBdCBHcmVlbi1CaW5kbGUgQ29uc3VsdGluZyBMTFBcXG5cIixcbiAgICAgICAgICAgICAgICB4ID0gXCJXb3JkXCIsXG4gICAgICAgICAgICAgICAgeSA9IFwiRnJlcXVlbmN5XCJcbiAgICAgICAgKSArXG4gICAgICAgIGNvb3JkX2ZsaXAoKSArXG4gICAgICAgIHNjYWxlX2ZpbGxfZ3JhZGllbnQobG93ID0gXCIjQjZBN0I1XCIsIGhpZ2ggPSBcIiNFODlGRTlcIikgK1xuICAgICAgICBteV90aGVtZSgpXG5gYGAifQ== -->
+<pre class="r"><code>ggplot(as.data.frame(full_list[8])) +
+        aes(x = Word, y = Size, fill = Size) +
+        geom_bar(stat = &quot;identity&quot;) +
+        labs(
+                title = &quot;Frequency of Words Used By Staff&quot;,
+                subtitle = &quot; At Green-Bindle Consulting LLP\n&quot;,
+                x = &quot;Word&quot;,
+                y = &quot;Frequency&quot;
+        ) +
+        coord_flip() +
+        scale_fill_gradient(low = &quot;#B6A7B5&quot;, high = &quot;#E89FE9&quot;) +
+        my_theme()</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKQ3JlYXRlIGF0IGxlYXN0IG9uZSBwbG90IGZvciBlYWNoIHNoZWV0IGluIHRoZSBkYXRhc2V0LgpVc2UgYSB2YXJpZXR5IG9mIGRpZmZlcmVudCBwbG90IHR5cGVzLgpBZGQgbGFiZWxzIHRvIG1ha2UgdGhlIHBsb3RzIHN0YW5kIG9uIHRoZWlyIG93bi4KVXNlIGEgY29uc2lzdGVudCBjb2xvdXIgc2NoZW1lIHRocm91Z2hvdXQgdGhlIHBsb3RzCgpEaXNwbGF5IHRoZSBzYW1lIGRhdGEgaW4gbXVsdGlwbGUgd2F5cywgZm9yIGF0IGxlYXN0IHNvbWUgb2YgdGhlIGRhdGFzZXRzCkNyZWF0ZSB5b3VyIG93biB0aGVtZSBhbmQgdXNlIGl0IGNvbnNpc3RlbnRseSB0aHJvdWdob3V0IHRoZSBkYXRhLgpVc2Ugc29tZSBvZiBvdXIgZ2dwbG90MiBleHRlbnNpb25zLgoKTG9hZCBsaWJyYXJpZXMgbmVlZGVkCmBgYHtyfQpsaWJyYXJ5KHJlYWR4bCkKbGlicmFyeShnZ3Bsb3QyKQpsaWJyYXJ5KGdnd29yZGNsb3VkKQpgYGAKClJlYWQgZGF0YSBpbgpgYGB7cn0KZmlsZW5hbWUgPC0gIn4vZGUxX2NsYXNzbm90ZXMvd2Vla18wNS9kYXlfNS80X3dlZWtlbmRfaG9tZXdvcmsvZ3JlZW5fYmluZGxlX2NvbnN1bHRpbmcueGxzeCIKCnNoZWV0cyA8LSBleGNlbF9zaGVldHMoZmlsZW5hbWUpCgpmdWxsX2xpc3QgPC0gbGFwcGx5KHNoZWV0cywgZnVuY3Rpb24oeCkge3JlYWRfZXhjZWwoZmlsZW5hbWUsIHNoZWV0ID0geCl9KQpgYGAKCkNyZWF0ZSBhIGNvbG91ciBzY2hlbWUgYW5kIHRoZW1lCmBgYHtyfQpjb2xfc2NoZW1lIDwtIGMoIiNFODlGRTkiLCAiIzUwNDM0RiIsICIjQjZBN0I1IiwgIiNGOUE0NzIiLCAiI0JENzA0MCIpCgpteV90aGVtZSA8LSBmdW5jdGlvbihzaXplID0gMTIpIHsKICAgICAgICB0aGVtZV9taW5pbWFsKCkgJStyZXBsYWNlJQogICAgICAgIHRoZW1lKAogICAgICAgICAgICAgICAgcGFuZWwuYmFja2dyb3VuZCA9IGVsZW1lbnRfYmxhbmsoKSwKICAgICAgICAgICAgICAgIHBsb3QudGl0bGUgPSBlbGVtZW50X3RleHQoc2l6ZSA9IHNpemUgKyAyLCBoanVzdCA9IDApLAogICAgICAgICAgICAgICAgbGVnZW5kLnRleHQgPSBlbGVtZW50X3RleHQoc2l6ZSA9IHNpemUgLSA0KSwKICAgICAgICAgICAgICAgIGF4aXMudGV4dCA9IGVsZW1lbnRfdGV4dChzaXplID0gc2l6ZSAtIDQpLAogICAgICAgICAgICAgICAgYXhpcy50aXRsZSA9IGVsZW1lbnRfdGV4dChzaXplID0gc2l6ZSksCiAgICAgICAgKQp9CmBgYAoKRGF0YTEKYGBge3J9CmdncGxvdChhcy5kYXRhLmZyYW1lKGZ1bGxfbGlzdFsxXSkpICsKICAgICAgICBhZXMoeCA9IFllYXIsIHkgPSBWYWx1ZSwgZmlsbCA9IEl0ZW0pICsKICAgICAgICBnZW9tX2JhcihzdGF0ID0gImlkZW50aXR5IiwgcG9zaXRpb24gPSAiZG9kZ2UiKSArCiAgICAgICAgbGFicygKICAgICAgICAgICAgICAgIHRpdGxlID0gIlZhbHVlIG9mIHZhcmlvdXMgSXRlbXMgYnkgWWVhciIsCiAgICAgICAgICAgICAgICBzdWJ0aXRsZSA9ICJBc3NldHMgYW5kIExpYWJpbGl0aWVzIG9mIEdyZWVuLUJpbmRsZSBDb25zdWx0aW5nIExMUFxuIiwKICAgICAgICAgICAgICAgIHggPSAiXG5ZZWFyIiwKICAgICAgICAgICAgICAgIHkgPSAiVmFsdWVcbiIKICAgICAgICApICsKICAgICAgICBzY2FsZV9maWxsX21hbnVhbCh2YWx1ZXMgPSBjb2xfc2NoZW1lKSArCiAgICAgICAgbXlfdGhlbWUoKQpgYGAKCmBgYHtyfQpnZ3Bsb3QoYXMuZGF0YS5mcmFtZShmdWxsX2xpc3RbMV0pKSArCiAgICAgICAgYWVzKHggPSBZZWFyLCB5ID0gVmFsdWUsIGNvbG91ciA9IEl0ZW0pICsKICAgICAgICBnZW9tX2xpbmUoKSArCiAgICAgICAgbGFicygKICAgICAgICAgICAgICAgIHRpdGxlID0gIlZhbHVlIG9mIHZhcmlvdXMgSXRlbXMgYnkgWWVhciIsCiAgICAgICAgICAgICAgICBzdWJ0aXRsZSA9ICJBc3NldHMgYW5kIExpYWJpbGl0aWVzIG9mIEdyZWVuLUJpbmRsZSBDb25zdWx0aW5nIExMUFxuIiwKICAgICAgICAgICAgICAgIHggPSAiXG5ZZWFyIiwKICAgICAgICAgICAgICAgIHkgPSAiVmFsdWVcbiIKICAgICAgICApICsKICAgICAgICBzY2FsZV9jb2xvdXJfbWFudWFsKHZhbHVlcyA9IGNvbF9zY2hlbWUpICsKICAgICAgICBteV90aGVtZSgpCmBgYAoKRGF0YTIKYGBge3J9CmdncGxvdChhcy5kYXRhLmZyYW1lKGZ1bGxfbGlzdFsyXSkpICsKICAgICAgICBhZXMoeCA9IFllYXIsIHkgPSBWYWx1ZSwgZmlsbCA9IFN0YXR1cykgKwogICAgICAgIGdlb21fYmFyKHN0YXQgPSAiaWRlbnRpdHkiLCBwb3NpdGlvbiA9ICJkb2RnZSIpICsKICAgICAgICBsYWJzKAogICAgICAgICAgICAgICAgdGl0bGUgPSAiVmFsdWUgb2YgU3RhdHVzZXMgYnkgWWVhciIsCiAgICAgICAgICAgICAgICBzdWJ0aXRsZSA9ICJHcmVlbi1CaW5kbGUgQ29uc3VsdGluZyBMTFBcbiIsCiAgICAgICAgICAgICAgICB4ID0gIlxuWWVhciIsCiAgICAgICAgICAgICAgICB5ID0gIlN0YXR1c1xuIgogICAgICAgICkgKwogICAgICAgIHNjYWxlX2ZpbGxfbWFudWFsKHZhbHVlcyA9IGNvbF9zY2hlbWUpICsKICAgICAgICBteV90aGVtZSgpCmBgYAoKRGF0YTMKYGBge3J9CmRhdGEzIDwtIGFzLmRhdGEuZnJhbWUoZnVsbF9saXN0WzNdKQoKZGF0YTMkSXRlbSA8LSBmYWN0b3IoZGF0YTMkSXRlbSwgbGV2ZWxzID0gcmV2KGRhdGEzJEl0ZW0pKQoKZ2dwbG90KGRhdGEzKSArCiAgICAgICAgYWVzKHggPSBJdGVtLCB5ID0gVmFsdWUsIGZpbGwgPSBWYWx1ZSkgKwogICAgICAgIGdlb21fYmFyKHN0YXQgPSAiaWRlbnRpdHkiKSArCiAgICAgICAgbGFicygKICAgICAgICAgICAgICAgIHRpdGxlID0gIkFjY291bnQgQmFsYW5jZSIsCiAgICAgICAgICAgICAgICBzdWJ0aXRsZSA9ICJDcmVkaXRzL0RlYml0cyB0byBHcmVlbi1CaW5kbGUgQ29uc3VsdGluZyBMTFBcbiIsCiAgICAgICAgICAgICAgICB4ID0gIkl0ZW1cbiIsCiAgICAgICAgICAgICAgICB5ID0gIlxuVmFsdWUiCiAgICAgICAgKSArCiAgICAgICAgc2NhbGVfZmlsbF9ncmFkaWVudChsb3cgPSAiI0I2QTdCNSIsIGhpZ2ggPSAiI0U4OUZFOSIpICsKICAgICAgICBjb29yZF9mbGlwKCkgKwogICAgICAgIG15X3RoZW1lKCkKYGBgCgpEYXRhNApgYGB7cn0KZ2dwbG90KGFzLmRhdGEuZnJhbWUoZnVsbF9saXN0WzRdKSkgKwogICAgICAgIGFlcyh4ID0gRGF0ZSwgeSA9IEFsbG9jYXRpb24sIGZpbGwgPSBSZWdpb24pICsKICAgICAgICBnZW9tX2JhcihzdGF0ID0gImlkZW50aXR5IikgKwogICAgICAgIGZhY2V0X3dyYXAofiBQdXJwb3NlICsgQXNzZXRfQ2xhc3MpICsKICAgICAgICBsYWJzKAogICAgICAgICAgICAgICAgdGl0bGUgPSAiQWxsb2NhdGlvbnMgcGVyIERhdGUgYnkgUmVnaW9uIGZvciBkaWZmZXJlbnQgUHVycG9zZXMgYW5kIEFzc2V0IENsYXNzZXMiLAogICAgICAgICAgICAgICAgc3VidGl0bGUgPSAiR3JlZW4tQmluZGxlIENvbnN1bHRpbmcgTExQXG4iLAogICAgICAgICAgICAgICAgeCA9ICJcbkRhdGUiLAogICAgICAgICAgICAgICAgeSA9ICJBbGxvY2F0aW9uXG4iCiAgICAgICAgKSArCiAgICAgICAgc2NhbGVfZmlsbF9tYW51YWwodmFsdWVzID0gY29sX3NjaGVtZSkgKwogICAgICAgIG15X3RoZW1lKCkKYGBgCgpEYXRhNQpgYGB7cn0KZ2dwbG90KGFzLmRhdGEuZnJhbWUoZnVsbF9saXN0WzVdKSkgKwogICAgICAgIGFlcyh4ID0gSXRlbSwgeSA9IFRQcywgZmlsbCA9IEJhc2lzKSArCiAgICAgICAgZ2VvbV9iYXIoc3RhdCA9ICJpZGVudGl0eSIpICsKICAgICAgICBsYWJzKAogICAgICAgICAgICAgICAgdGl0bGUgPSAiQWxsb2NhdGlvbnMgZm9yIGRpZmZlcmVudCBCYXNpcyBwZXIgQXNzZXQgQ2xhc3MiLAogICAgICAgICAgICAgICAgc3VidGl0bGUgPSAiR3JlZW4tQmluZGxlIENvbnN1bHRpbmcgTExQXG4iLAogICAgICAgICAgICAgICAgeCA9ICJcbkl0ZW0iLAogICAgICAgICAgICAgICAgeSA9ICJUUHNcbiIKICAgICAgICApICsKICAgICAgICBzY2FsZV9maWxsX21hbnVhbCh2YWx1ZXMgPSBjb2xfc2NoZW1lKSArCiAgICAgICAgbXlfdGhlbWUoKQpgYGAKCkRhdGE2CmBgYHtyfQpnZ3Bsb3QoYXMuZGF0YS5mcmFtZShmdWxsX2xpc3RbNl0pKSArCiAgICAgICAgYWVzKHggPSBTY2VuYXJpbywgeSA9IEJhbGFuY2UsIGNvbG91ciA9IEJhbGFuY2UpICsKICAgICAgICBnZW9tX3BvaW50KCkgKwogICAgICAgIGxhYnMoCiAgICAgICAgICAgICAgICB0aXRsZSA9ICJCYWxhbmNlIHZzIGEgcmFuZ2Ugb2YgcG9zc2libGUgc2NlbmFyaW9zIiwKICAgICAgICAgICAgICAgIHN1YnRpdGxlID0gIkdyZWVuLUJpbmRsZSBDb25zdWx0aW5nIExMUFxuIiwKICAgICAgICAgICAgICAgIHggPSAiXG5TY2VuYXJpbyIsCiAgICAgICAgICAgICAgICB5ID0gIkJhbGFuY2VcbiIKICAgICAgICApICsKICAgICAgICBzY2FsZV9jb2xvcl9ncmFkaWVudChsb3cgPSAiI0I2QTdCNSIsIGhpZ2ggPSAiI0U4OUZFOSIpICsKICAgICAgICBteV90aGVtZSgpCmBgYAoKRGF0YTcKYGBge3J9CmdncGxvdChhcy5kYXRhLmZyYW1lKGZ1bGxfbGlzdFs3XSkpICsKICAgICAgICBhZXMoeCA9IFllYXIsIHkgPSBDYXNoZmxvdywgY29sb3VyID0gU3RhdHVzKSArCiAgICAgICAgZ2VvbV9saW5lKCkgKwogICAgICAgIGxhYnMoCiAgICAgICAgICAgICAgICB0aXRsZSA9ICJWYWx1ZSBvZiB2YXJpb3VzIEl0ZW1zIGJ5IFllYXIiLAogICAgICAgICAgICAgICAgc3VidGl0bGUgPSAiQXNzZXRzIGFuZCBMaWFiaWxpdGllcyBvZiBHcmVlbi1CaW5kbGUgQ29uc3VsdGluZyBMTFBcbiIsCiAgICAgICAgICAgICAgICB4ID0gIlxuWWVhciIsCiAgICAgICAgICAgICAgICB5ID0gIkNhc2hmbG93XG4iCiAgICAgICAgKSArCiAgICAgICAgc2NhbGVfY29sb3VyX21hbnVhbCh2YWx1ZXMgPSBjb2xfc2NoZW1lKSArCiAgICAgICAgbXlfdGhlbWUoKQpgYGAKCkRhdGE4CmBgYHtyfQpnZ3Bsb3QoYXMuZGF0YS5mcmFtZShmdWxsX2xpc3RbOF0pKSArCiAgICAgICAgYWVzKGxhYmVsID0gV29yZCwgc2l6ZSA9IFNpemUsIGNvbG91ciA9IFNpemUpICsKICAgICAgICBnZW9tX3RleHRfd29yZGNsb3VkKCkgKwogICAgICAgIGxhYnMoCiAgICAgICAgICAgICAgICB0aXRsZSA9ICJGcmVxdWVuY3kgb2YgV29yZHMgVXNlZCBCeSBTdGFmZiIsCiAgICAgICAgICAgICAgICBzdWJ0aXRsZSA9ICIgQXQgR3JlZW4tQmluZGxlIENvbnN1bHRpbmcgTExQXG4iLAogICAgICAgICAgICAgICAgY2FwdGlvbiA9ICJcblNpemUgb2Ygd29yZCBjb3JyZXNwb25kcyB0byBmcmVxZW5jeSIKICAgICAgICApICsKICAgICAgICBzY2FsZV9zaXplX2FyZWEobWF4X3NpemUgPSAxMikgKwogICAgICAgIHNjYWxlX2NvbG9yX2dyYWRpZW50KGxvdyA9ICIjQjZBN0I1IiwgaGlnaCA9ICIjRTg5RkU5IikgKwogICAgICAgIG15X3RoZW1lKCkKYGBgCgpgYGB7cn0KZ2dwbG90KGFzLmRhdGEuZnJhbWUoZnVsbF9saXN0WzhdKSkgKwogICAgICAgIGFlcyh4ID0gV29yZCwgeSA9IFNpemUsIGZpbGwgPSBTaXplKSArCiAgICAgICAgZ2VvbV9iYXIoc3RhdCA9ICJpZGVudGl0eSIpICsKICAgICAgICBsYWJzKAogICAgICAgICAgICAgICAgdGl0bGUgPSAiRnJlcXVlbmN5IG9mIFdvcmRzIFVzZWQgQnkgU3RhZmYiLAogICAgICAgICAgICAgICAgc3VidGl0bGUgPSAiIEF0IEdyZWVuLUJpbmRsZSBDb25zdWx0aW5nIExMUFxuIiwKICAgICAgICAgICAgICAgIHggPSAiV29yZCIsCiAgICAgICAgICAgICAgICB5ID0gIkZyZXF1ZW5jeSIKICAgICAgICApICsKICAgICAgICBjb29yZF9mbGlwKCkgKwogICAgICAgIHNjYWxlX2ZpbGxfZ3JhZGllbnQobG93ID0gIiNCNkE3QjUiLCBoaWdoID0gIiNFODlGRTkiKSArCiAgICAgICAgbXlfdGhlbWUoKQpgYGAKCg==</div>
 
 
 

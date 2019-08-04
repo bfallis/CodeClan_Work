@@ -1,0 +1,201 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+Create at least one plot for each sheet in the dataset.
+Use a variety of different plot types.
+Add labels to make the plots stand on their own.
+Use a consistent colour scheme throughout the plots
+
+Display the same data in multiple ways, for at least some of the datasets
+Create your own theme and use it consistently throughout the data.
+Use some of our ggplot2 extensions.
+
+Load libraries needed
+```{r}
+library(readxl)
+library(ggplot2)
+library(ggwordcloud)
+```
+
+Read data in
+```{r}
+filename <- "~/de1_classnotes/week_05/day_5/4_weekend_homework/green_bindle_consulting.xlsx"
+
+sheets <- excel_sheets(filename)
+
+full_list <- lapply(sheets, function(x) {read_excel(filename, sheet = x)})
+```
+
+Create a colour scheme and theme
+```{r}
+col_scheme <- c("#E89FE9", "#50434F", "#B6A7B5", "#F9A472", "#BD7040")
+
+my_theme <- function(size = 12) {
+        theme_minimal() %+replace%
+        theme(
+                panel.background = element_blank(),
+                plot.title = element_text(size = size + 2, hjust = 0),
+                legend.text = element_text(size = size - 4),
+                axis.text = element_text(size = size - 4),
+                axis.title = element_text(size = size),
+        )
+}
+```
+
+Data1
+```{r}
+ggplot(as.data.frame(full_list[1])) +
+        aes(x = Year, y = Value, fill = Item) +
+        geom_bar(stat = "identity", position = "dodge") +
+        labs(
+                title = "Value of various Items by Year",
+                subtitle = "Assets and Liabilities of Green-Bindle Consulting LLP\n",
+                x = "\nYear",
+                y = "Value\n"
+        ) +
+        scale_fill_manual(values = col_scheme) +
+        my_theme()
+```
+
+```{r}
+ggplot(as.data.frame(full_list[1])) +
+        aes(x = Year, y = Value, colour = Item) +
+        geom_line() +
+        labs(
+                title = "Value of various Items by Year",
+                subtitle = "Assets and Liabilities of Green-Bindle Consulting LLP\n",
+                x = "\nYear",
+                y = "Value\n"
+        ) +
+        scale_colour_manual(values = col_scheme) +
+        my_theme()
+```
+
+Data2
+```{r}
+ggplot(as.data.frame(full_list[2])) +
+        aes(x = Year, y = Value, fill = Status) +
+        geom_bar(stat = "identity", position = "dodge") +
+        labs(
+                title = "Value of Statuses by Year",
+                subtitle = "Green-Bindle Consulting LLP\n",
+                x = "\nYear",
+                y = "Status\n"
+        ) +
+        scale_fill_manual(values = col_scheme) +
+        my_theme()
+```
+
+Data3
+```{r}
+data3 <- as.data.frame(full_list[3])
+
+data3$Item <- factor(data3$Item, levels = rev(data3$Item))
+
+ggplot(data3) +
+        aes(x = Item, y = Value, fill = Value) +
+        geom_bar(stat = "identity") +
+        labs(
+                title = "Account Balance",
+                subtitle = "Credits/Debits to Green-Bindle Consulting LLP\n",
+                x = "Item\n",
+                y = "\nValue"
+        ) +
+        scale_fill_gradient(low = "#B6A7B5", high = "#E89FE9") +
+        coord_flip() +
+        my_theme()
+```
+
+Data4
+```{r}
+ggplot(as.data.frame(full_list[4])) +
+        aes(x = Date, y = Allocation, fill = Region) +
+        geom_bar(stat = "identity") +
+        facet_wrap(~ Purpose + Asset_Class) +
+        labs(
+                title = "Allocations per Date by Region for different Purposes and Asset Classes",
+                subtitle = "Green-Bindle Consulting LLP\n",
+                x = "\nDate",
+                y = "Allocation\n"
+        ) +
+        scale_fill_manual(values = col_scheme) +
+        my_theme()
+```
+
+Data5
+```{r}
+ggplot(as.data.frame(full_list[5])) +
+        aes(x = Item, y = TPs, fill = Basis) +
+        geom_bar(stat = "identity") +
+        labs(
+                title = "Allocations for different Basis per Asset Class",
+                subtitle = "Green-Bindle Consulting LLP\n",
+                x = "\nItem",
+                y = "TPs\n"
+        ) +
+        scale_fill_manual(values = col_scheme) +
+        my_theme()
+```
+
+Data6
+```{r}
+ggplot(as.data.frame(full_list[6])) +
+        aes(x = Scenario, y = Balance, colour = Balance) +
+        geom_point() +
+        labs(
+                title = "Balance vs a range of possible scenarios",
+                subtitle = "Green-Bindle Consulting LLP\n",
+                x = "\nScenario",
+                y = "Balance\n"
+        ) +
+        scale_color_gradient(low = "#B6A7B5", high = "#E89FE9") +
+        my_theme()
+```
+
+Data7
+```{r}
+ggplot(as.data.frame(full_list[7])) +
+        aes(x = Year, y = Cashflow, colour = Status) +
+        geom_line() +
+        labs(
+                title = "Value of various Items by Year",
+                subtitle = "Assets and Liabilities of Green-Bindle Consulting LLP\n",
+                x = "\nYear",
+                y = "Cashflow\n"
+        ) +
+        scale_colour_manual(values = col_scheme) +
+        my_theme()
+```
+
+Data8
+```{r}
+ggplot(as.data.frame(full_list[8])) +
+        aes(label = Word, size = Size, colour = Size) +
+        geom_text_wordcloud() +
+        labs(
+                title = "Frequency of Words Used By Staff",
+                subtitle = " At Green-Bindle Consulting LLP\n",
+                caption = "\nSize of word corresponds to freqency"
+        ) +
+        scale_size_area(max_size = 12) +
+        scale_color_gradient(low = "#B6A7B5", high = "#E89FE9") +
+        my_theme()
+```
+
+```{r}
+ggplot(as.data.frame(full_list[8])) +
+        aes(x = Word, y = Size, fill = Size) +
+        geom_bar(stat = "identity") +
+        labs(
+                title = "Frequency of Words Used By Staff",
+                subtitle = " At Green-Bindle Consulting LLP\n",
+                x = "Word",
+                y = "Frequency"
+        ) +
+        coord_flip() +
+        scale_fill_gradient(low = "#B6A7B5", high = "#E89FE9") +
+        my_theme()
+```
+

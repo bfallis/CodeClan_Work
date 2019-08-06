@@ -119,7 +119,7 @@ called drinks_ranked.
 ```{r}
 drinks_ranked <- drinks_grouped %>%
         group_by(Beverage) %>%
-        mutate(rank = min_rank(Calories))
+        mutate(ranking = min_rank(Calories))
 ```
 
 Using the drinks_grouped data, apply the cume_dist function to get the top 25% 
@@ -127,5 +127,5 @@ of Calorie drinks within each group. Save this in a new tibble called
 drinks_distribution.
 ```{r}
 drinks_distribution <- drinks_grouped %>%
-        filter(cume_dist(Calories) < 0.25)
+        filter(cume_dist(desc(Calories)) < 0.25)
 ```

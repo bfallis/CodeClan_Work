@@ -1,0 +1,160 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(dplyr)
+library(dbplyr)
+library(lubridate)
+library(RSQLite)
+library(DBI)
+```
+
+```{r}
+date1 <- ymd_hms("2017-04-22 22:01:18")
+date2 <- ymd_hms("2001-11-07 10:09:56")
+
+mammals <- dbConnect(SQLite(), "~/de1_classnotes/week_06/day_2/5_homework/mammals.sqlite")
+
+plots   <- tbl(mammals, sql("SELECT * FROM plots"))
+species <- tbl(mammals, sql("SELECT * FROM species"))
+surveys <- tbl(mammals, sql("SELECT * FROM surveys"))
+```
+
+MVP
+
+Extract the different components (year, month, mday, yday, wday) from the 
+variable date1. Add the labels to the month and do not abbreviate the month 
+labels.
+```{r}
+year(date1)
+month(date1, label = TRUE, abbr = FALSE)
+mday(date1)
+yday(date1)
+wday(date1)
+```
+
+Add 14 days to your date1 variable and store it in a variable called 
+next_fortnight. Take away 10 years from your date2 variable, and store it in
+previous_decade.
+```{r}
+next_fortnight <- date1 + weeks(2)
+previous_decade <- next_fortnight - years(2)
+```
+
+Create a variable called this_year which contains today’s date. Then create an
+interval object which uses this_year and the previous_decade variable you made
+above. Store it in interval_years.
+```{r}
+this_year <- today()
+interval_years <- interval(this_year, previous_decade)
+```
+
+Change the time zone of both your date variables to “America/New_York”, and call
+them nyc_date1 and nyc_date2.
+```{r}
+nyc_date1 <- with_tz(date1, tzone = "America/New_York")
+nyc_date2 <- with_tz(date2, tzone = "America/New_York")
+```
+
+Let’s move on to using the data from our database.
+
+Create a tibble called survey_tibble. Use the make_datetime function to create a
+new column within that tibble called full_date. 
+```{r}
+survey_tibble <- surveys %>%
+        collect() %>%
+        mutate(full_date = make_datetime(year = 2019L, month = 8L, day = 6L))
+```
+
+Check what type the new full_date variable is.
+```{r}
+class(survey_tibble$full_date)
+```
+
+Convert the sex variable within survey_tibble to a logical variable. Save it in
+surveyor_sex.
+```{r}
+survey_tibble <- survey_tibble %>%
+        mutate(surveyor_sex = sex == "M")
+```
+
+Using the dbplyr package, join the species and surveys table, so that only those
+species who were surveyed are kept. Save it in a new tibble called all_species.
+```{r}
+all_species <- inner_join(surveys, species, by = "species_id")
+```
+
+Using the dpblyr package, implement a query (in R) that joins the species and
+survey tables together, and that returns the number of birds observed in each
+plot, each year. 
+```{r}
+all_species %>%
+        filter(taxa == "Bird") %>%
+        group_by(year) %>%
+        summarise(count = n())
+```
+
+What would the equivalent query be in SQL?
+```{r, eval = FALSE}
+SELECT su.year
+        , COUNT(su.id)
+FROM surveys AS su
+        JOIN species AS sp ON su.species_id = sp.species_id
+WHERE sp.taxa = "Bird"
+GROUP BY su.year
+```
+
+Extensions
+
+```{r}
+library(nycflights13)
+```
+
+Make a date-time column called departure_date from the year, month, day, hour, 
+and minute variables in the flights tibble.
+```{r}
+flights <- flights %>%
+        mutate(departure_date = ymd_hm(paste0(year, "-", month, "-", day, " ", hour, ":", minute)))
+```
+
+Add the weather to the flights data by city of origin.
+```{r}
+flights <- inner_join(
+        flights, 
+        weather, 
+        by = c("origin" = "origin", "time_hour" = "time_hour")
+)
+```
+
+```{r}
+flights
+airports[ , c("faa", "lat", "lon")]
+```
+
+Add the location of the origin and destination (i.e. the lat and lon) to 
+flights. Only keep those that have a location.
+```{r}
+inner_join(flights, airports[ , c("faa", "lat", "lon")], by = c("origin" = "faa"))
+```
+
+Write a query which shows the mean delay of flights for each tailnumber and 
+airline carrier, where the arrival delay was greater than 100 minutes.
+```{r}
+flights %>%
+        filter(arr_delay > 100) %>%
+        group_by(tailnum, carrier) %>%
+        summarise(mean(arr_delay))
+```
+
+Find the 10 most popular destinations to fly to, and then perform a join to find
+which flight went with those top 10 destinations.
+```{r}
+flights %>%
+        group_by(dest) %>%
+        summarise(count = n()) %>%
+        arrange(desc(count)) %>%
+        top_n(10) %>%
+        inner_join(flights, by = "dest")
+```

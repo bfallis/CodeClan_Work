@@ -1729,7 +1729,7 @@ $(document).ready(function () {
 </style>
 <script>
 $(document).ready(function () {
-  window.initializeSourceEmbed("day_1.Rmd");
+  window.initializeSourceEmbed("day_2.Rmd");
   window.initializeCodeFolding("show" === "show");
 });
 </script>
@@ -1769,150 +1769,199 @@ $(document).ready(function () {
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG5saWJyYXJ5KHJlYWR4bClcbmxpYnJhcnkoZ2dwbG90MilcbmBgYCJ9 -->
-<pre class="r"><code>library(tidyverse)
-library(readxl)
-library(ggplot2)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShkcGx5cilcbmxpYnJhcnkoZGJwbHlyKVxubGlicmFyeShsdWJyaWRhdGUpXG5saWJyYXJ5KFJTUUxpdGUpXG5saWJyYXJ5KERCSSlcbmBgYCJ9 -->
+<pre class="r"><code>library(dplyr)
+library(dbplyr)
+library(lubridate)
+library(RSQLite)
+library(DBI)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<ol style="list-style-type: decimal">
-<li></li>
-</ol>
-<p>Load in the dataset and call it drinks_content, eyeball it by printing it out (first 5 rows, last 5 rows, and then all of the data) and find out the dimensions (number of rows/columns) and variable names.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZmlsZW5hbWUgPC0gXCJ+L2RlMV9jbGFzc25vdGVzL3dlZWtfMDYvZGF5XzEvNl9kcGx5cl9ob21ld29yay9kYXRhL3N0YXJidWNrc19kcmlua01lbnVfZXhwYW5kZWQuY3N2XCJcblxuZHJpbmtzX2NvbnRlbnQgPC0gcmVhZF9jc3YoZmlsZW5hbWUpXG5cbmhlYWQoZHJpbmtzX2NvbnRlbnQsIG4gPSA1KVxudGFpbChkcmlua3NfY29udGVudCwgbiA9IDUpXG5kcmlua3NfY29udGVudFxuXG5kaW0oZHJpbmtzX2NvbnRlbnQpXG5uYW1lcyhkcmlua3NfY29udGVudClcbmBgYCJ9 -->
-<pre class="r"><code>filename &lt;- &quot;~/de1_classnotes/week_06/day_1/6_dplyr_homework/data/starbucks_drinkMenu_expanded.csv&quot;
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGF0ZTEgPC0geW1kX2htcyhcIjIwMTctMDQtMjIgMjI6MDE6MThcIilcbmRhdGUyIDwtIHltZF9obXMoXCIyMDAxLTExLTA3IDEwOjA5OjU2XCIpXG5cbm1hbW1hbHMgPC0gZGJDb25uZWN0KFNRTGl0ZSgpLCBcIn4vZGUxX2NsYXNzbm90ZXMvd2Vla18wNi9kYXlfMi81X2hvbWV3b3JrL21hbW1hbHMuc3FsaXRlXCIpXG5cbnBsb3RzICAgPC0gdGJsKG1hbW1hbHMsIHNxbChcIlNFTEVDVCAqIEZST00gcGxvdHNcIikpXG5zcGVjaWVzIDwtIHRibChtYW1tYWxzLCBzcWwoXCJTRUxFQ1QgKiBGUk9NIHNwZWNpZXNcIikpXG5zdXJ2ZXlzIDwtIHRibChtYW1tYWxzLCBzcWwoXCJTRUxFQ1QgKiBGUk9NIHN1cnZleXNcIikpXG5gYGAifQ== -->
+<pre class="r"><code>date1 &lt;- ymd_hms(&quot;2017-04-22 22:01:18&quot;)
+date2 &lt;- ymd_hms(&quot;2001-11-07 10:09:56&quot;)
 
-drinks_content &lt;- read_csv(filename)
+mammals &lt;- dbConnect(SQLite(), &quot;~/de1_classnotes/week_06/day_2/5_homework/mammals.sqlite&quot;)
 
-head(drinks_content, n = 5)
-tail(drinks_content, n = 5)
-drinks_content
+plots   &lt;- tbl(mammals, sql(&quot;SELECT * FROM plots&quot;))
+species &lt;- tbl(mammals, sql(&quot;SELECT * FROM species&quot;))
+surveys &lt;- tbl(mammals, sql(&quot;SELECT * FROM surveys&quot;))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>MVP</p>
+<p>Extract the different components (year, month, mday, yday, wday) from the variable date1. Add the labels to the month and do not abbreviate the month labels.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxueWVhcihkYXRlMSlcbm1vbnRoKGRhdGUxLCBsYWJlbCA9IFRSVUUsIGFiYnIgPSBGQUxTRSlcbm1kYXkoZGF0ZTEpXG55ZGF5KGRhdGUxKVxud2RheShkYXRlMSlcbmBgYCJ9 -->
+<pre class="r"><code>year(date1)
+month(date1, label = TRUE, abbr = FALSE)
+mday(date1)
+yday(date1)
+wday(date1)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Add 14 days to your date1 variable and store it in a variable called next_fortnight. Take away 10 years from your date2 variable, and store it in previous_decade.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubmV4dF9mb3J0bmlnaHQgPC0gZGF0ZTEgKyB3ZWVrcygyKVxucHJldmlvdXNfZGVjYWRlIDwtIG5leHRfZm9ydG5pZ2h0IC0geWVhcnMoMilcbmBgYCJ9 -->
+<pre class="r"><code>next_fortnight &lt;- date1 + weeks(2)
+previous_decade &lt;- next_fortnight - years(2)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Create a variable called this_year which contains today’s date. Then create an interval object which uses this_year and the previous_decade variable you made above. Store it in interval_years.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGhpc195ZWFyIDwtIHRvZGF5KClcbmludGVydmFsX3llYXJzIDwtIGludGVydmFsKHRoaXNfeWVhciwgcHJldmlvdXNfZGVjYWRlKVxuYGBgIn0= -->
+<pre class="r"><code>this_year &lt;- today()
+interval_years &lt;- interval(this_year, previous_decade)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Change the time zone of both your date variables to “America/New_York”, and call them nyc_date1 and nyc_date2.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubnljX2RhdGUxIDwtIHdpdGhfdHooZGF0ZTEsIHR6b25lID0gXCJBbWVyaWNhL05ld19Zb3JrXCIpXG5ueWNfZGF0ZTIgPC0gd2l0aF90eihkYXRlMiwgdHpvbmUgPSBcIkFtZXJpY2EvTmV3X1lvcmtcIilcbmBgYCJ9 -->
+<pre class="r"><code>nyc_date1 &lt;- with_tz(date1, tzone = &quot;America/New_York&quot;)
+nyc_date2 &lt;- with_tz(date2, tzone = &quot;America/New_York&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Let’s move on to using the data from our database.</p>
+<p>Create a tibble called survey_tibble. Use the make_datetime function to create a new column within that tibble called full_date.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VydmV5X3RpYmJsZSA8LSBzdXJ2ZXlzICU+JVxuICAgICAgICBjb2xsZWN0KCkgJT4lXG4gICAgICAgIG11dGF0ZShmdWxsX2RhdGUgPSBtYWtlX2RhdGV0aW1lKHllYXIgPSAyMDE5TCwgbW9udGggPSA4TCwgZGF5ID0gNkwpKVxuYGBgIn0= -->
+<pre class="r"><code>survey_tibble &lt;- surveys %&gt;%
+        collect() %&gt;%
+        mutate(full_date = make_datetime(year = 2019L, month = 8L, day = 6L))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Check what type the new full_date variable is.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2xhc3Moc3VydmV5X3RpYmJsZSRmdWxsX2RhdGUpXG5gYGAifQ== -->
+<pre class="r"><code>class(survey_tibble$full_date)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Convert the sex variable within survey_tibble to a logical variable. Save it in surveyor_sex.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VydmV5X3RpYmJsZSA8LSBzdXJ2ZXlfdGliYmxlICU+JVxuICAgICAgICBtdXRhdGUoc3VydmV5b3Jfc2V4ID0gc2V4ID09IFwiTVwiKVxuYGBgIn0= -->
+<pre class="r"><code>survey_tibble &lt;- survey_tibble %&gt;%
+        mutate(surveyor_sex = sex == &quot;M&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Using the dbplyr package, join the species and surveys table, so that only those species who were surveyed are kept. Save it in a new tibble called all_species.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYWxsX3NwZWNpZXMgPC0gaW5uZXJfam9pbihzdXJ2ZXlzLCBzcGVjaWVzLCBieSA9IFwic3BlY2llc19pZFwiKVxuYGBgIn0= -->
+<pre class="r"><code>all_species &lt;- inner_join(surveys, species, by = &quot;species_id&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Using the dpblyr package, implement a query (in R) that joins the species and survey tables together, and that returns the number of birds observed in each plot, each year.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYWxsX3NwZWNpZXMgJT4lXG4gICAgICAgIGZpbHRlcih0YXhhID09IFwiQmlyZFwiKSAlPiVcbiAgICAgICAgZ3JvdXBfYnkoeWVhcikgJT4lXG4gICAgICAgIHN1bW1hcmlzZShjb3VudCA9IG4oKSlcbmBgYCJ9 -->
+<pre class="r"><code>all_species %&gt;%
+        filter(taxa == &quot;Bird&quot;) %&gt;%
+        group_by(year) %&gt;%
+        summarise(count = n())</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>What would the equivalent query be in SQL?</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjpbIlNFTEVDVCBzdS55ZWFyIiwiICAgICAgICAsIENPVU5UKHN1LmlkKSIsIkZST00gc3VydmV5cyBBUyBzdSIsIiAgICAgICAgSk9JTiBzcGVjaWVzIEFTIHNwIE9OIHN1LnNwZWNpZXNfaWQgPSBzcC5zcGVjaWVzX2lkIiwiV0hFUkUgc3AudGF4YSA9IFwiQmlyZFwiIiwiR1JPVVAgQlkgc3UueWVhciJdfQ== -->
+<pre class="r"><code>SELECT su.year
+        , COUNT(su.id)
+FROM surveys AS su
+        JOIN species AS sp ON su.species_id = sp.species_id
+WHERE sp.taxa = &quot;Bird&quot;
+GROUP BY su.year</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Extensions</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShueWNmbGlnaHRzMTMpXG5gYGAifQ== -->
+<pre class="r"><code>library(nycflights13)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Make a date-time column called departure_date from the year, month, day, hour, and minute variables in the flights tibble.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZmxpZ2h0cyA8LSBmbGlnaHRzICU+JVxuICAgICAgICBtdXRhdGUoZGVwYXJ0dXJlX2RhdGUgPSB5bWRfaG0ocGFzdGUwKHllYXIsIFwiLVwiLCBtb250aCwgXCItXCIsIGRheSwgXCIgXCIsIGhvdXIsIFwiOlwiLCBtaW51dGUpKSlcbmBgYCJ9 -->
+<pre class="r"><code>flights &lt;- flights %&gt;%
+        mutate(departure_date = ymd_hm(paste0(year, &quot;-&quot;, month, &quot;-&quot;, day, &quot; &quot;, hour, &quot;:&quot;, minute)))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Add the weather to the flights data by city of origin.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZmxpZ2h0cyA8LSBpbm5lcl9qb2luKFxuICAgICAgICBmbGlnaHRzLCBcbiAgICAgICAgd2VhdGhlciwgXG4gICAgICAgIGJ5ID0gYyhcIm9yaWdpblwiID0gXCJvcmlnaW5cIiwgXCJ0aW1lX2hvdXJcIiA9IFwidGltZV9ob3VyXCIpXG4pXG5gYGAifQ== -->
+<pre class="r"><code>flights &lt;- inner_join(
+        flights, 
+        weather, 
+        by = c(&quot;origin&quot; = &quot;origin&quot;, &quot;time_hour&quot; = &quot;time_hour&quot;)
+)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZmxpZ2h0c1xuYWlycG9ydHNbICwgYyhcImZhYVwiLCBcImxhdFwiLCBcImxvblwiKV1cbmBgYCJ9 -->
+<pre class="r"><code>flights
+airports[ , c(&quot;faa&quot;, &quot;lat&quot;, &quot;lon&quot;)]</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Add the location of the origin and destination (i.e. the lat and lon) to flights. Only keep those that have a location.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaW5uZXJfam9pbihmbGlnaHRzLCBhaXJwb3J0c1sgLCBjKFwiZmFhXCIsIFwibGF0XCIsIFwibG9uXCIpXSwgYnkgPSBjKFwib3JpZ2luXCIgPSBcImZhYVwiKSlcbmBgYCJ9 -->
+<pre class="r"><code>inner_join(flights, airports[ , c(&quot;faa&quot;, &quot;lat&quot;, &quot;lon&quot;)], by = c(&quot;origin&quot; = &quot;faa&quot;))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Write a query which shows the mean delay of flights for each tailnumber and airline carrier, where the arrival delay was greater than 100 minutes.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZmxpZ2h0cyAlPiVcbiAgICAgICAgZmlsdGVyKGFycl9kZWxheSA+IDEwMCkgJT4lXG4gICAgICAgIGdyb3VwX2J5KHRhaWxudW0sIGNhcnJpZXIpICU+JVxuICAgICAgICBzdW1tYXJpc2UobWVhbihhcnJfZGVsYXkpKVxuYGBgIn0= -->
+<pre class="r"><code>flights %&gt;%
+        filter(arr_delay &gt; 100) %&gt;%
+        group_by(tailnum, carrier) %&gt;%
+        summarise(mean(arr_delay))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Find the 10 most popular destinations to fly to, and then perform a join to find which flight went with those top 10 destinations.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZmxpZ2h0cyAlPiVcbiAgICAgICAgZ3JvdXBfYnkoZGVzdCkgJT4lXG4gICAgICAgIHN1bW1hcmlzZShjb3VudCA9IG4oKSkgJT4lXG4gICAgICAgIGFycmFuZ2UoZGVzYyhjb3VudCkpICU+JVxuICAgICAgICB0b3BfbigxMCkgJT4lXG4gICAgICAgIGlubmVyX2pvaW4oZmxpZ2h0cywgYnkgPSBcImRlc3RcIilcbmBgYCJ9 -->
+<pre class="r"><code>flights %&gt;%
+        group_by(dest) %&gt;%
+        summarise(count = n()) %&gt;%
+        arrange(desc(count)) %&gt;%
+        top_n(10) %&gt;%
+        inner_join(flights, by = &quot;dest&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
 
-dim(drinks_content)
-names(drinks_content)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Calculate some quick summary statistics to check the mean, the variance, and the normality of this variable.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtbWFyeShkcmlua3NfY29udGVudCRDYWxvcmllcylcblxuZ2dwbG90KGRyaW5rc19jb250ZW50KSArXG4gICAgICAgIGFlcyh4ID0gQ2Fsb3JpZXMpICtcbiAgICAgICAgZ2VvbV9oaXN0b2dyYW0oKVxuYGBgIn0= -->
-<pre class="r"><code>summary(drinks_content$Calories)
-
-ggplot(drinks_content) +
-        aes(x = Calories) +
-        geom_histogram()</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Check if you have any outliers in the Calories variable by creating a boxplot. Then get the actual values of any outliers you have. Finally remove the outliers and save the new tibble as drinks_content_nooutlier.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYm94cGxvdChkcmlua3NfY29udGVudCRDYWxvcmllcylcblxub3V0bGllcnMgPC0gYm94cGxvdChkcmlua3NfY29udGVudCRDYWxvcmllcywgcGxvdD1GQUxTRSkkb3V0XG5cbmRyaW5rc19jb250ZW50X25vb3V0bGllcnMgPC0gXG4gICAgICAgIGRyaW5rc19jb250ZW50Wy13aGljaChkcmlua3NfY29udGVudCRDYWxvcmllcyAlaW4lIG91dGxpZXJzKSwgXVxuYGBgIn0= -->
-<pre class="r"><code>boxplot(drinks_content$Calories)
-
-outliers &lt;- boxplot(drinks_content$Calories, plot=FALSE)$out
-
-drinks_content_nooutliers &lt;- 
-        drinks_content[-which(drinks_content$Calories %in% outliers), ]</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Select the variables beverage_category, beverage, beverage prep and calories from the data (drinks_content_nooutlier), and assign it to a new tibble called drinks. Since we are interested in the calorie content, check if there are any NA values in the data, and drop them if there are.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZHJpbmtzIDwtIHNlbGVjdChkcm9wX25hKGRyaW5rc19jb250ZW50X25vb3V0bGllcnMpLCBCZXZlcmFnZV9jYXRlZ29yeTpDYWxvcmllcylcbmBgYCJ9 -->
-<pre class="r"><code>drinks &lt;- select(drop_na(drinks_content_nooutliers), Beverage_category:Calories)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Filter the data so we only take “classic espresso drinks”, and save this in a new tibble called espresso_drinks.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZXNwcmVzc29fZHJpbmtzIDwtIGZpbHRlcihkcmlua3MsIEJldmVyYWdlX2NhdGVnb3J5ID09IFwiQ2xhc3NpYyBFc3ByZXNzbyBEcmlua3NcIilcbmBgYCJ9 -->
-<pre class="r"><code>espresso_drinks &lt;- filter(drinks, Beverage_category == &quot;Classic Espresso Drinks&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Create a new tibble called drink_calories which contains a variable called calorie_diff. calorie_diff should store the difference between 135 calories (135 calories = 10 cubes of sugar!) and the calories in each drink.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZHJpbmtfY2Fsb3JpZXMgPC0gbXV0YXRlKGVzcHJlc3NvX2RyaW5rcywgY2Fsb3JpZV9kaWZmID0gMTM1IC0gQ2Fsb3JpZXMpXG5gYGAifQ== -->
-<pre class="r"><code>drink_calories &lt;- mutate(espresso_drinks, calorie_diff = 135 - Calories)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Create a new tibble called drinks_grouped where you group your data by the type of beverage prep. Then summarise the mean calories in each drink (by group) in a variable called mean_cal, and save it to drinks_summary. Finally arrange this summary data in descending order of mean calories.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZHJpbmtzX2dyb3VwZWQgPC0gZ3JvdXBfYnkoZHJpbmtfY2Fsb3JpZXMsIEJldmVyYWdlX3ByZXApXG5kcmlua3Nfc3VtbWFyeSA8LSBzdW1tYXJpc2UoZHJpbmtzX2dyb3VwZWQsIG1lYW5fY2FsID0gbWVhbihDYWxvcmllcykpXG5hcnJhbmdlKGRyaW5rc19zdW1tYXJ5LCBkZXNjKG1lYW5fY2FsKSlcbmBgYCJ9 -->
-<pre class="r"><code>drinks_grouped &lt;- group_by(drink_calories, Beverage_prep)
-drinks_summary &lt;- summarise(drinks_grouped, mean_cal = mean(Calories))
-arrange(drinks_summary, desc(mean_cal))</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Finish up by using the %&gt;% operator to put all the answers you’ve got from questions 4-7 into one pipe. You don’t need to include the check for NA values in this, as you’d typically check that before you start doing any analysis.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZHJpbmtzX2NvbnRlbnQgJT4lXG4gICAgICAgIGRyb3BfbmEoKSAlPiVcbiAgICAgICAgc2VsZWN0KEJldmVyYWdlX2NhdGVnb3J5OkNhbG9yaWVzKSAlPiVcbiAgICAgICAgZmlsdGVyKEJldmVyYWdlX2NhdGVnb3J5ID09IFwiQ2xhc3NpYyBFc3ByZXNzbyBEcmlua3NcIikgJT4lXG4gICAgICAgIG11dGF0ZShjYWxvcmllX2RpZmYgPSAxMzUgLSBDYWxvcmllcykgJT4lXG4gICAgICAgIGdyb3VwX2J5KEJldmVyYWdlX3ByZXApICU+JVxuICAgICAgICBzdW1tYXJpc2UobWVhbl9jYWwgPSBtZWFuKENhbG9yaWVzKSkgJT4lXG4gICAgICAgIGFycmFuZ2UoZGVzYyhtZWFuX2NhbCkpXG5gYGAifQ== -->
-<pre class="r"><code>drinks_content %&gt;%
-        drop_na() %&gt;%
-        select(Beverage_category:Calories) %&gt;%
-        filter(Beverage_category == &quot;Classic Espresso Drinks&quot;) %&gt;%
-        mutate(calorie_diff = 135 - Calories) %&gt;%
-        group_by(Beverage_prep) %&gt;%
-        summarise(mean_cal = mean(Calories)) %&gt;%
-        arrange(desc(mean_cal))</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<ol start="2" style="list-style-type: decimal">
-<li></li>
-</ol>
-<p>Use the drink_calories data, and for each drink, use the min_rank function to find the two drinks (Beverage) with most Calories. Save this in a new tibble called most_calories.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubW9zdF9jYWxvcmllcyA8LSBkcmlua19jYWxvcmllcyAlPiVcbiAgICAgICAgbXV0YXRlKFJhbmsgPSBtaW5fcmFuayhDYWxvcmllcykpICU+JVxuICAgICAgICBhcnJhbmdlKGRlc2MoUmFuaykpICU+JVxuICAgICAgICB0b3BfbigyKVxuYGBgIn0= -->
-<pre class="r"><code>most_calories &lt;- drink_calories %&gt;%
-        mutate(Rank = min_rank(Calories)) %&gt;%
-        arrange(desc(Rank)) %&gt;%
-        top_n(2)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>For each drink in the drinks_grouped data, find all drinks which more calories than the average drink. Save this in a new tibble called above_average_calories.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuYWJvdmVfYXZlcmFnZV9jYWxvcmllcyA8LSBkcmlua3NfZ3JvdXBlZCAlPiVcbiAgICAgICAgZmlsdGVyKENhbG9yaWVzID4gbWVhbihkcmlua3NfZ3JvdXBlZCRDYWxvcmllcykpXG5gYGBcbmBgYCJ9 -->
-<p><code>r</code>r above_average_calories &lt;- drinks_grouped %&gt;% filter(Calories &gt; mean(drinks_grouped$Calories))</p>
-<pre><code></code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Within each drink group, rank each beverage by the number of calories. Save this ranking in a new column called ranking. Save the new output in a new tibble called drinks_ranked.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZHJpbmtzX3JhbmtlZCA8LSBkcmlua3NfZ3JvdXBlZCAlPiVcbiAgICAgICAgZ3JvdXBfYnkoQmV2ZXJhZ2UpICU+JVxuICAgICAgICBtdXRhdGUocmFua2luZyA9IG1pbl9yYW5rKENhbG9yaWVzKSlcbmBgYCJ9 -->
-<pre class="r"><code>drinks_ranked &lt;- drinks_grouped %&gt;%
-        group_by(Beverage) %&gt;%
-        mutate(ranking = min_rank(Calories))</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Using the drinks_grouped data, apply the cume_dist function to get the top 25% of Calorie drinks within each group. Save this in a new tibble called drinks_distribution.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZHJpbmtzX2Rpc3RyaWJ1dGlvbiA8LSBkcmlua3NfZ3JvdXBlZCAlPiVcbiAgICAgICAgZmlsdGVyKGN1bWVfZGlzdChkZXNjKENhbG9yaWVzKSkgPCAwLjI1KVxuYGBgIn0= -->
-<pre class="r"><code>drinks_distribution &lt;- drinks_grouped %&gt;%
-        filter(cume_dist(desc(Calories)) &lt; 0.25)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKYGBge3J9CmxpYnJhcnkodGlkeXZlcnNlKQpsaWJyYXJ5KHJlYWR4bCkKbGlicmFyeShnZ3Bsb3QyKQpgYGAKCjEuCgpMb2FkIGluIHRoZSBkYXRhc2V0IGFuZCBjYWxsIGl0IGRyaW5rc19jb250ZW50LCBleWViYWxsIGl0IGJ5IHByaW50aW5nIGl0IG91dAooZmlyc3QgNSByb3dzLCBsYXN0IDUgcm93cywgYW5kIHRoZW4gYWxsIG9mIHRoZSBkYXRhKSBhbmQgZmluZCBvdXQgdGhlIApkaW1lbnNpb25zIChudW1iZXIgb2Ygcm93cy9jb2x1bW5zKSBhbmQgdmFyaWFibGUgbmFtZXMuCmBgYHtyfQpmaWxlbmFtZSA8LSAifi9kZTFfY2xhc3Nub3Rlcy93ZWVrXzA2L2RheV8xLzZfZHBseXJfaG9tZXdvcmsvZGF0YS9zdGFyYnVja3NfZHJpbmtNZW51X2V4cGFuZGVkLmNzdiIKCmRyaW5rc19jb250ZW50IDwtIHJlYWRfY3N2KGZpbGVuYW1lKQoKaGVhZChkcmlua3NfY29udGVudCwgbiA9IDUpCnRhaWwoZHJpbmtzX2NvbnRlbnQsIG4gPSA1KQpkcmlua3NfY29udGVudAoKZGltKGRyaW5rc19jb250ZW50KQpuYW1lcyhkcmlua3NfY29udGVudCkKYGBgCgpDYWxjdWxhdGUgc29tZSBxdWljayBzdW1tYXJ5IHN0YXRpc3RpY3MgdG8gY2hlY2sgdGhlIG1lYW4sIHRoZSB2YXJpYW5jZSwgYW5kIHRoZQpub3JtYWxpdHkgb2YgdGhpcyB2YXJpYWJsZS4KYGBge3J9CnN1bW1hcnkoZHJpbmtzX2NvbnRlbnQkQ2Fsb3JpZXMpCgpnZ3Bsb3QoZHJpbmtzX2NvbnRlbnQpICsKICAgICAgICBhZXMoeCA9IENhbG9yaWVzKSArCiAgICAgICAgZ2VvbV9oaXN0b2dyYW0oKQpgYGAKCkNoZWNrIGlmIHlvdSBoYXZlIGFueSBvdXRsaWVycyBpbiB0aGUgQ2Fsb3JpZXMgdmFyaWFibGUgYnkgY3JlYXRpbmcgYSBib3hwbG90LgpUaGVuIGdldCB0aGUgYWN0dWFsIHZhbHVlcyBvZiBhbnkgb3V0bGllcnMgeW91IGhhdmUuIEZpbmFsbHkgcmVtb3ZlIHRoZSBvdXRsaWVycwphbmQgc2F2ZSB0aGUgbmV3IHRpYmJsZSBhcyBkcmlua3NfY29udGVudF9ub291dGxpZXIuCmBgYHtyfQpib3hwbG90KGRyaW5rc19jb250ZW50JENhbG9yaWVzKQoKb3V0bGllcnMgPC0gYm94cGxvdChkcmlua3NfY29udGVudCRDYWxvcmllcywgcGxvdD1GQUxTRSkkb3V0Cgpkcmlua3NfY29udGVudF9ub291dGxpZXJzIDwtIAogICAgICAgIGRyaW5rc19jb250ZW50Wy13aGljaChkcmlua3NfY29udGVudCRDYWxvcmllcyAlaW4lIG91dGxpZXJzKSwgXQpgYGAKClNlbGVjdCB0aGUgdmFyaWFibGVzIGJldmVyYWdlX2NhdGVnb3J5LCBiZXZlcmFnZSwgYmV2ZXJhZ2UgcHJlcCBhbmQgY2Fsb3JpZXMKZnJvbSB0aGUgZGF0YSAoZHJpbmtzX2NvbnRlbnRfbm9vdXRsaWVyKSwgYW5kIGFzc2lnbiBpdCB0byBhIG5ldyB0aWJibGUgY2FsbGVkCmRyaW5rcy4gU2luY2Ugd2UgYXJlIGludGVyZXN0ZWQgaW4gdGhlIGNhbG9yaWUgY29udGVudCwgY2hlY2sgaWYgdGhlcmUgYXJlIGFueQpOQSB2YWx1ZXMgaW4gdGhlIGRhdGEsIGFuZCBkcm9wIHRoZW0gaWYgdGhlcmUgYXJlLgpgYGB7cn0KZHJpbmtzIDwtIHNlbGVjdChkcm9wX25hKGRyaW5rc19jb250ZW50X25vb3V0bGllcnMpLCBCZXZlcmFnZV9jYXRlZ29yeTpDYWxvcmllcykKYGBgCgpGaWx0ZXIgdGhlIGRhdGEgc28gd2Ugb25seSB0YWtlIOKAnGNsYXNzaWMgZXNwcmVzc28gZHJpbmtz4oCdLCBhbmQgc2F2ZSB0aGlzIGluIGEgCm5ldyB0aWJibGUgY2FsbGVkIGVzcHJlc3NvX2RyaW5rcy4KYGBge3J9CmVzcHJlc3NvX2RyaW5rcyA8LSBmaWx0ZXIoZHJpbmtzLCBCZXZlcmFnZV9jYXRlZ29yeSA9PSAiQ2xhc3NpYyBFc3ByZXNzbyBEcmlua3MiKQpgYGAKCkNyZWF0ZSBhIG5ldyB0aWJibGUgY2FsbGVkIGRyaW5rX2NhbG9yaWVzIHdoaWNoIGNvbnRhaW5zIGEgdmFyaWFibGUgY2FsbGVkIApjYWxvcmllX2RpZmYuIGNhbG9yaWVfZGlmZiBzaG91bGQgc3RvcmUgdGhlIGRpZmZlcmVuY2UgYmV0d2VlbiAxMzUgY2Fsb3JpZXMgCigxMzUgY2Fsb3JpZXMgPSAxMCBjdWJlcyBvZiBzdWdhciEpIGFuZCB0aGUgY2Fsb3JpZXMgaW4gZWFjaCBkcmluay4KYGBge3J9CmRyaW5rX2NhbG9yaWVzIDwtIG11dGF0ZShlc3ByZXNzb19kcmlua3MsIGNhbG9yaWVfZGlmZiA9IDEzNSAtIENhbG9yaWVzKQpgYGAKCkNyZWF0ZSBhIG5ldyB0aWJibGUgY2FsbGVkIGRyaW5rc19ncm91cGVkIHdoZXJlIHlvdSBncm91cCB5b3VyIGRhdGEgYnkgdGhlIHR5cGUKb2YgYmV2ZXJhZ2UgcHJlcC4gVGhlbiBzdW1tYXJpc2UgdGhlIG1lYW4gY2Fsb3JpZXMgaW4gZWFjaCBkcmluayAoYnkgZ3JvdXApIGluIGEKdmFyaWFibGUgY2FsbGVkIG1lYW5fY2FsLCBhbmQgc2F2ZSBpdCB0byBkcmlua3Nfc3VtbWFyeS4gRmluYWxseSBhcnJhbmdlIHRoaXMKc3VtbWFyeSBkYXRhIGluIGRlc2NlbmRpbmcgb3JkZXIgb2YgbWVhbiBjYWxvcmllcy4KYGBge3J9CmRyaW5rc19ncm91cGVkIDwtIGdyb3VwX2J5KGRyaW5rX2NhbG9yaWVzLCBCZXZlcmFnZV9wcmVwKQpkcmlua3Nfc3VtbWFyeSA8LSBzdW1tYXJpc2UoZHJpbmtzX2dyb3VwZWQsIG1lYW5fY2FsID0gbWVhbihDYWxvcmllcykpCmFycmFuZ2UoZHJpbmtzX3N1bW1hcnksIGRlc2MobWVhbl9jYWwpKQpgYGAKCkZpbmlzaCB1cCBieSB1c2luZyB0aGUgJT4lIG9wZXJhdG9yIHRvIHB1dCBhbGwgdGhlIGFuc3dlcnMgeW914oCZdmUgZ290IGZyb20gCnF1ZXN0aW9ucyA0LTcgaW50byBvbmUgcGlwZS4gWW91IGRvbuKAmXQgbmVlZCB0byBpbmNsdWRlIHRoZSBjaGVjayBmb3IgTkEgdmFsdWVzIAppbiB0aGlzLCBhcyB5b3XigJlkIHR5cGljYWxseSBjaGVjayB0aGF0IGJlZm9yZSB5b3Ugc3RhcnQgZG9pbmcgYW55IGFuYWx5c2lzLgpgYGB7cn0KZHJpbmtzX2NvbnRlbnQgJT4lCiAgICAgICAgZHJvcF9uYSgpICU+JQogICAgICAgIHNlbGVjdChCZXZlcmFnZV9jYXRlZ29yeTpDYWxvcmllcykgJT4lCiAgICAgICAgZmlsdGVyKEJldmVyYWdlX2NhdGVnb3J5ID09ICJDbGFzc2ljIEVzcHJlc3NvIERyaW5rcyIpICU+JQogICAgICAgIG11dGF0ZShjYWxvcmllX2RpZmYgPSAxMzUgLSBDYWxvcmllcykgJT4lCiAgICAgICAgZ3JvdXBfYnkoQmV2ZXJhZ2VfcHJlcCkgJT4lCiAgICAgICAgc3VtbWFyaXNlKG1lYW5fY2FsID0gbWVhbihDYWxvcmllcykpICU+JQogICAgICAgIGFycmFuZ2UoZGVzYyhtZWFuX2NhbCkpCmBgYAoKMi4KClVzZSB0aGUgZHJpbmtfY2Fsb3JpZXMgZGF0YSwgYW5kIGZvciBlYWNoIGRyaW5rLCB1c2UgdGhlIG1pbl9yYW5rIGZ1bmN0aW9uIHRvCmZpbmQgdGhlIHR3byBkcmlua3MgKEJldmVyYWdlKSB3aXRoIG1vc3QgQ2Fsb3JpZXMuIFNhdmUgdGhpcyBpbiBhIG5ldyB0aWJibGUgCmNhbGxlZCBtb3N0X2NhbG9yaWVzLgpgYGB7cn0KbW9zdF9jYWxvcmllcyA8LSBkcmlua19jYWxvcmllcyAlPiUKICAgICAgICBtdXRhdGUoUmFuayA9IG1pbl9yYW5rKENhbG9yaWVzKSkgJT4lCiAgICAgICAgYXJyYW5nZShkZXNjKFJhbmspKSAlPiUKICAgICAgICB0b3BfbigyKQpgYGAKCkZvciBlYWNoIGRyaW5rIGluIHRoZSBkcmlua3NfZ3JvdXBlZCBkYXRhLCBmaW5kIGFsbCBkcmlua3Mgd2hpY2ggbW9yZSBjYWxvcmllcwp0aGFuIHRoZSBhdmVyYWdlIGRyaW5rLiBTYXZlIHRoaXMgaW4gYSBuZXcgdGliYmxlIGNhbGxlZCBhYm92ZV9hdmVyYWdlX2NhbG9yaWVzLgpgYGB7cn0KYWJvdmVfYXZlcmFnZV9jYWxvcmllcyA8LSBkcmlua3NfZ3JvdXBlZCAlPiUKICAgICAgICBmaWx0ZXIoQ2Fsb3JpZXMgPiBtZWFuKGRyaW5rc19ncm91cGVkJENhbG9yaWVzKSkKYGBgCgpXaXRoaW4gZWFjaCBkcmluayBncm91cCwgcmFuayBlYWNoIGJldmVyYWdlIGJ5IHRoZSBudW1iZXIgb2YgY2Fsb3JpZXMuIFNhdmUgdGhpcwpyYW5raW5nIGluIGEgbmV3IGNvbHVtbiBjYWxsZWQgcmFua2luZy4gU2F2ZSB0aGUgbmV3IG91dHB1dCBpbiBhIG5ldyB0aWJibGUgCmNhbGxlZCBkcmlua3NfcmFua2VkLgpgYGB7cn0KZHJpbmtzX3JhbmtlZCA8LSBkcmlua3NfZ3JvdXBlZCAlPiUKICAgICAgICBncm91cF9ieShCZXZlcmFnZSkgJT4lCiAgICAgICAgbXV0YXRlKHJhbmtpbmcgPSBtaW5fcmFuayhDYWxvcmllcykpCmBgYAoKVXNpbmcgdGhlIGRyaW5rc19ncm91cGVkIGRhdGEsIGFwcGx5IHRoZSBjdW1lX2Rpc3QgZnVuY3Rpb24gdG8gZ2V0IHRoZSB0b3AgMjUlIApvZiBDYWxvcmllIGRyaW5rcyB3aXRoaW4gZWFjaCBncm91cC4gU2F2ZSB0aGlzIGluIGEgbmV3IHRpYmJsZSBjYWxsZWQgCmRyaW5rc19kaXN0cmlidXRpb24uCmBgYHtyfQpkcmlua3NfZGlzdHJpYnV0aW9uIDwtIGRyaW5rc19ncm91cGVkICU+JQogICAgICAgIGZpbHRlcihjdW1lX2Rpc3QoZGVzYyhDYWxvcmllcykpIDwgMC4yNSkKYGBgCg==</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKYGBge3J9CmxpYnJhcnkoZHBseXIpCmxpYnJhcnkoZGJwbHlyKQpsaWJyYXJ5KGx1YnJpZGF0ZSkKbGlicmFyeShSU1FMaXRlKQpsaWJyYXJ5KERCSSkKYGBgCgpgYGB7cn0KZGF0ZTEgPC0geW1kX2htcygiMjAxNy0wNC0yMiAyMjowMToxOCIpCmRhdGUyIDwtIHltZF9obXMoIjIwMDEtMTEtMDcgMTA6MDk6NTYiKQoKbWFtbWFscyA8LSBkYkNvbm5lY3QoU1FMaXRlKCksICJ+L2RlMV9jbGFzc25vdGVzL3dlZWtfMDYvZGF5XzIvNV9ob21ld29yay9tYW1tYWxzLnNxbGl0ZSIpCgpwbG90cyAgIDwtIHRibChtYW1tYWxzLCBzcWwoIlNFTEVDVCAqIEZST00gcGxvdHMiKSkKc3BlY2llcyA8LSB0YmwobWFtbWFscywgc3FsKCJTRUxFQ1QgKiBGUk9NIHNwZWNpZXMiKSkKc3VydmV5cyA8LSB0YmwobWFtbWFscywgc3FsKCJTRUxFQ1QgKiBGUk9NIHN1cnZleXMiKSkKYGBgCgpNVlAKCkV4dHJhY3QgdGhlIGRpZmZlcmVudCBjb21wb25lbnRzICh5ZWFyLCBtb250aCwgbWRheSwgeWRheSwgd2RheSkgZnJvbSB0aGUgCnZhcmlhYmxlIGRhdGUxLiBBZGQgdGhlIGxhYmVscyB0byB0aGUgbW9udGggYW5kIGRvIG5vdCBhYmJyZXZpYXRlIHRoZSBtb250aCAKbGFiZWxzLgpgYGB7cn0KeWVhcihkYXRlMSkKbW9udGgoZGF0ZTEsIGxhYmVsID0gVFJVRSwgYWJiciA9IEZBTFNFKQptZGF5KGRhdGUxKQp5ZGF5KGRhdGUxKQp3ZGF5KGRhdGUxKQpgYGAKCkFkZCAxNCBkYXlzIHRvIHlvdXIgZGF0ZTEgdmFyaWFibGUgYW5kIHN0b3JlIGl0IGluIGEgdmFyaWFibGUgY2FsbGVkIApuZXh0X2ZvcnRuaWdodC4gVGFrZSBhd2F5IDEwIHllYXJzIGZyb20geW91ciBkYXRlMiB2YXJpYWJsZSwgYW5kIHN0b3JlIGl0IGluCnByZXZpb3VzX2RlY2FkZS4KYGBge3J9Cm5leHRfZm9ydG5pZ2h0IDwtIGRhdGUxICsgd2Vla3MoMikKcHJldmlvdXNfZGVjYWRlIDwtIG5leHRfZm9ydG5pZ2h0IC0geWVhcnMoMikKYGBgCgpDcmVhdGUgYSB2YXJpYWJsZSBjYWxsZWQgdGhpc195ZWFyIHdoaWNoIGNvbnRhaW5zIHRvZGF54oCZcyBkYXRlLiBUaGVuIGNyZWF0ZSBhbgppbnRlcnZhbCBvYmplY3Qgd2hpY2ggdXNlcyB0aGlzX3llYXIgYW5kIHRoZSBwcmV2aW91c19kZWNhZGUgdmFyaWFibGUgeW91IG1hZGUKYWJvdmUuIFN0b3JlIGl0IGluIGludGVydmFsX3llYXJzLgpgYGB7cn0KdGhpc195ZWFyIDwtIHRvZGF5KCkKaW50ZXJ2YWxfeWVhcnMgPC0gaW50ZXJ2YWwodGhpc195ZWFyLCBwcmV2aW91c19kZWNhZGUpCmBgYAoKQ2hhbmdlIHRoZSB0aW1lIHpvbmUgb2YgYm90aCB5b3VyIGRhdGUgdmFyaWFibGVzIHRvIOKAnEFtZXJpY2EvTmV3X1lvcmvigJ0sIGFuZCBjYWxsCnRoZW0gbnljX2RhdGUxIGFuZCBueWNfZGF0ZTIuCmBgYHtyfQpueWNfZGF0ZTEgPC0gd2l0aF90eihkYXRlMSwgdHpvbmUgPSAiQW1lcmljYS9OZXdfWW9yayIpCm55Y19kYXRlMiA8LSB3aXRoX3R6KGRhdGUyLCB0em9uZSA9ICJBbWVyaWNhL05ld19Zb3JrIikKYGBgCgpMZXTigJlzIG1vdmUgb24gdG8gdXNpbmcgdGhlIGRhdGEgZnJvbSBvdXIgZGF0YWJhc2UuCgpDcmVhdGUgYSB0aWJibGUgY2FsbGVkIHN1cnZleV90aWJibGUuIFVzZSB0aGUgbWFrZV9kYXRldGltZSBmdW5jdGlvbiB0byBjcmVhdGUgYQpuZXcgY29sdW1uIHdpdGhpbiB0aGF0IHRpYmJsZSBjYWxsZWQgZnVsbF9kYXRlLiAKYGBge3J9CnN1cnZleV90aWJibGUgPC0gc3VydmV5cyAlPiUKICAgICAgICBjb2xsZWN0KCkgJT4lCiAgICAgICAgbXV0YXRlKGZ1bGxfZGF0ZSA9IG1ha2VfZGF0ZXRpbWUoeWVhciA9IDIwMTlMLCBtb250aCA9IDhMLCBkYXkgPSA2TCkpCmBgYAoKQ2hlY2sgd2hhdCB0eXBlIHRoZSBuZXcgZnVsbF9kYXRlIHZhcmlhYmxlIGlzLgpgYGB7cn0KY2xhc3Moc3VydmV5X3RpYmJsZSRmdWxsX2RhdGUpCmBgYAoKQ29udmVydCB0aGUgc2V4IHZhcmlhYmxlIHdpdGhpbiBzdXJ2ZXlfdGliYmxlIHRvIGEgbG9naWNhbCB2YXJpYWJsZS4gU2F2ZSBpdCBpbgpzdXJ2ZXlvcl9zZXguCmBgYHtyfQpzdXJ2ZXlfdGliYmxlIDwtIHN1cnZleV90aWJibGUgJT4lCiAgICAgICAgbXV0YXRlKHN1cnZleW9yX3NleCA9IHNleCA9PSAiTSIpCmBgYAoKVXNpbmcgdGhlIGRicGx5ciBwYWNrYWdlLCBqb2luIHRoZSBzcGVjaWVzIGFuZCBzdXJ2ZXlzIHRhYmxlLCBzbyB0aGF0IG9ubHkgdGhvc2UKc3BlY2llcyB3aG8gd2VyZSBzdXJ2ZXllZCBhcmUga2VwdC4gU2F2ZSBpdCBpbiBhIG5ldyB0aWJibGUgY2FsbGVkIGFsbF9zcGVjaWVzLgpgYGB7cn0KYWxsX3NwZWNpZXMgPC0gaW5uZXJfam9pbihzdXJ2ZXlzLCBzcGVjaWVzLCBieSA9ICJzcGVjaWVzX2lkIikKYGBgCgpVc2luZyB0aGUgZHBibHlyIHBhY2thZ2UsIGltcGxlbWVudCBhIHF1ZXJ5IChpbiBSKSB0aGF0IGpvaW5zIHRoZSBzcGVjaWVzIGFuZApzdXJ2ZXkgdGFibGVzIHRvZ2V0aGVyLCBhbmQgdGhhdCByZXR1cm5zIHRoZSBudW1iZXIgb2YgYmlyZHMgb2JzZXJ2ZWQgaW4gZWFjaApwbG90LCBlYWNoIHllYXIuIApgYGB7cn0KYWxsX3NwZWNpZXMgJT4lCiAgICAgICAgZmlsdGVyKHRheGEgPT0gIkJpcmQiKSAlPiUKICAgICAgICBncm91cF9ieSh5ZWFyKSAlPiUKICAgICAgICBzdW1tYXJpc2UoY291bnQgPSBuKCkpCmBgYAoKV2hhdCB3b3VsZCB0aGUgZXF1aXZhbGVudCBxdWVyeSBiZSBpbiBTUUw/CmBgYHtyLCBldmFsID0gRkFMU0V9ClNFTEVDVCBzdS55ZWFyCiAgICAgICAgLCBDT1VOVChzdS5pZCkKRlJPTSBzdXJ2ZXlzIEFTIHN1CiAgICAgICAgSk9JTiBzcGVjaWVzIEFTIHNwIE9OIHN1LnNwZWNpZXNfaWQgPSBzcC5zcGVjaWVzX2lkCldIRVJFIHNwLnRheGEgPSAiQmlyZCIKR1JPVVAgQlkgc3UueWVhcgpgYGAKCkV4dGVuc2lvbnMKCmBgYHtyfQpsaWJyYXJ5KG55Y2ZsaWdodHMxMykKYGBgCgpNYWtlIGEgZGF0ZS10aW1lIGNvbHVtbiBjYWxsZWQgZGVwYXJ0dXJlX2RhdGUgZnJvbSB0aGUgeWVhciwgbW9udGgsIGRheSwgaG91ciwgCmFuZCBtaW51dGUgdmFyaWFibGVzIGluIHRoZSBmbGlnaHRzIHRpYmJsZS4KYGBge3J9CmZsaWdodHMgPC0gZmxpZ2h0cyAlPiUKICAgICAgICBtdXRhdGUoZGVwYXJ0dXJlX2RhdGUgPSB5bWRfaG0ocGFzdGUwKHllYXIsICItIiwgbW9udGgsICItIiwgZGF5LCAiICIsIGhvdXIsICI6IiwgbWludXRlKSkpCmBgYAoKQWRkIHRoZSB3ZWF0aGVyIHRvIHRoZSBmbGlnaHRzIGRhdGEgYnkgY2l0eSBvZiBvcmlnaW4uCmBgYHtyfQpmbGlnaHRzIDwtIGlubmVyX2pvaW4oCiAgICAgICAgZmxpZ2h0cywgCiAgICAgICAgd2VhdGhlciwgCiAgICAgICAgYnkgPSBjKCJvcmlnaW4iID0gIm9yaWdpbiIsICJ0aW1lX2hvdXIiID0gInRpbWVfaG91ciIpCikKYGBgCgpgYGB7cn0KZmxpZ2h0cwphaXJwb3J0c1sgLCBjKCJmYWEiLCAibGF0IiwgImxvbiIpXQpgYGAKCkFkZCB0aGUgbG9jYXRpb24gb2YgdGhlIG9yaWdpbiBhbmQgZGVzdGluYXRpb24gKGkuZS4gdGhlIGxhdCBhbmQgbG9uKSB0byAKZmxpZ2h0cy4gT25seSBrZWVwIHRob3NlIHRoYXQgaGF2ZSBhIGxvY2F0aW9uLgpgYGB7cn0KaW5uZXJfam9pbihmbGlnaHRzLCBhaXJwb3J0c1sgLCBjKCJmYWEiLCAibGF0IiwgImxvbiIpXSwgYnkgPSBjKCJvcmlnaW4iID0gImZhYSIpKQpgYGAKCldyaXRlIGEgcXVlcnkgd2hpY2ggc2hvd3MgdGhlIG1lYW4gZGVsYXkgb2YgZmxpZ2h0cyBmb3IgZWFjaCB0YWlsbnVtYmVyIGFuZCAKYWlybGluZSBjYXJyaWVyLCB3aGVyZSB0aGUgYXJyaXZhbCBkZWxheSB3YXMgZ3JlYXRlciB0aGFuIDEwMCBtaW51dGVzLgpgYGB7cn0KZmxpZ2h0cyAlPiUKICAgICAgICBmaWx0ZXIoYXJyX2RlbGF5ID4gMTAwKSAlPiUKICAgICAgICBncm91cF9ieSh0YWlsbnVtLCBjYXJyaWVyKSAlPiUKICAgICAgICBzdW1tYXJpc2UobWVhbihhcnJfZGVsYXkpKQpgYGAKCkZpbmQgdGhlIDEwIG1vc3QgcG9wdWxhciBkZXN0aW5hdGlvbnMgdG8gZmx5IHRvLCBhbmQgdGhlbiBwZXJmb3JtIGEgam9pbiB0byBmaW5kCndoaWNoIGZsaWdodCB3ZW50IHdpdGggdGhvc2UgdG9wIDEwIGRlc3RpbmF0aW9ucy4KYGBge3J9CmZsaWdodHMgJT4lCiAgICAgICAgZ3JvdXBfYnkoZGVzdCkgJT4lCiAgICAgICAgc3VtbWFyaXNlKGNvdW50ID0gbigpKSAlPiUKICAgICAgICBhcnJhbmdlKGRlc2MoY291bnQpKSAlPiUKICAgICAgICB0b3BfbigxMCkgJT4lCiAgICAgICAgaW5uZXJfam9pbihmbGlnaHRzLCBieSA9ICJkZXN0IikKYGBgCg==</div>
 
 
 

@@ -25,7 +25,7 @@ filename <- "~/de1_classnotes/week_05/day_5/4_weekend_homework/green_bindle_cons
 
 sheets <- excel_sheets(filename)
 
-full_list <- lapply(sheets, function(x) {read_excel(filename, sheet = x)})
+full_list <- lapply(sheets, function(x) { read_excel(filename, sheet = x) })
 ```
 
 Create a colour scheme and theme

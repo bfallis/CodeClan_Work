@@ -1729,7 +1729,7 @@ $(document).ready(function () {
 </style>
 <script>
 $(document).ready(function () {
-  window.initializeSourceEmbed("day_2.Rmd");
+  window.initializeSourceEmbed("day_3.Rmd");
   window.initializeCodeFolding("show" === "show");
 });
 </script>
@@ -1769,180 +1769,140 @@ $(document).ready(function () {
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShkcGx5cilcbmxpYnJhcnkoZGJwbHlyKVxubGlicmFyeShsdWJyaWRhdGUpXG5saWJyYXJ5KFJTUUxpdGUpXG5saWJyYXJ5KERCSSlcbmBgYCJ9 -->
-<pre class="r"><code>library(dplyr)
-library(dbplyr)
-library(lubridate)
-library(RSQLite)
-library(DBI)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGF0ZTEgPC0geW1kX2htcyhcIjIwMTctMDQtMjIgMjI6MDE6MThcIilcbmRhdGUyIDwtIHltZF9obXMoXCIyMDAxLTExLTA3IDEwOjA5OjU2XCIpXG5cbm1hbW1hbHMgPC0gZGJDb25uZWN0KFNRTGl0ZSgpLCBcIn4vZGUxX2NsYXNzbm90ZXMvd2Vla18wNi9kYXlfMi81X2hvbWV3b3JrL21hbW1hbHMuc3FsaXRlXCIpXG5cbnBsb3RzICAgPC0gdGJsKG1hbW1hbHMsIHNxbChcIlNFTEVDVCAqIEZST00gcGxvdHNcIikpXG5zcGVjaWVzIDwtIHRibChtYW1tYWxzLCBzcWwoXCJTRUxFQ1QgKiBGUk9NIHNwZWNpZXNcIikpXG5zdXJ2ZXlzIDwtIHRibChtYW1tYWxzLCBzcWwoXCJTRUxFQ1QgKiBGUk9NIHN1cnZleXNcIikpXG5gYGAifQ== -->
-<pre class="r"><code>date1 &lt;- ymd_hms(&quot;2017-04-22 22:01:18&quot;)
-date2 &lt;- ymd_hms(&quot;2001-11-07 10:09:56&quot;)
-
-mammals &lt;- dbConnect(SQLite(), &quot;~/de1_classnotes/week_06/day_2/5_homework/mammals.sqlite&quot;)
-
-plots   &lt;- tbl(mammals, sql(&quot;SELECT * FROM plots&quot;))
-species &lt;- tbl(mammals, sql(&quot;SELECT * FROM species&quot;))
-surveys &lt;- tbl(mammals, sql(&quot;SELECT * FROM surveys&quot;))</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShDb2RlQ2xhbkRhdGEpXG5saWJyYXJ5KHRpZHl2ZXJzZSlcbmBgYCJ9 -->
+<pre class="r"><code>library(CodeClanData)
+library(tidyverse)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>MVP</p>
-<p>Extract the different components (year, month, mday, yday, wday) from the variable date1. Add the labels to the month and do not abbreviate the month labels.</p>
+<p>Use the stock prices data from the CodeClanData: IBM_stock_price and JNJ_stock_price</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxueWVhcihkYXRlMSlcbm1vbnRoKGRhdGUxLCBsYWJlbCA9IFRSVUUsIGFiYnIgPSBGQUxTRSlcbm1kYXkoZGF0ZTEpXG55ZGF5KGRhdGUxKVxud2RheShkYXRlMSlcbmBgYFxuYGBgIn0= -->
-<p><code>r</code>r year(date1) month(date1, label = TRUE, abbr = FALSE) mday(date1) yday(date1) wday(date1)</p>
-<pre><code></code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuSUJNX3N0b2NrX3ByaWNlXG5KTkpfc3RvY2tfcHJpY2VcbmBgYCJ9 -->
+<pre class="r"><code>IBM_stock_price
+JNJ_stock_price</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Add 14 days to your date1 variable and store it in a variable called next_fortnight. Take away 10 years from your date2 variable, and store it in previous_decade.</p>
+<p>Your JNJ data is in wide format. Reshape it so it is in long format. Create two columns: one called date and one called jnj_open (as it is open stock prices). Save it in a new tibble called JNJ_stock_price_gathered.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxubmV4dF9mb3J0bmlnaHQgPC0gZGF0ZTEgKyB3ZWVrcygyKVxucHJldmlvdXNfZGVjYWRlIDwtIG5leHRfZm9ydG5pZ2h0IC0geWVhcnMoMilcbmBgYFxuYGBgIn0= -->
-<p><code>r</code>r next_fortnight &lt;- date1 + weeks(2) previous_decade &lt;- next_fortnight - years(2)</p>
-<pre><code></code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuSk5KX3N0b2NrX3ByaWNlX2dhdGhlcmVkIDwtIGdhdGhlcihKTkpfc3RvY2tfcHJpY2UsXG4gICAgICAgIGtleSA9IGRhdGUsXG4gICAgICAgIHZhbHVlID0gam5qX29wZW4sXG4gICAgICAgIFwiMTIvMDQvMTdcIjpcIjEzLzAzLzE3XCJcbilcbmBgYCJ9 -->
+<pre class="r"><code>JNJ_stock_price_gathered &lt;- gather(JNJ_stock_price,
+        key = date,
+        value = jnj_open,
+        &quot;12/04/17&quot;:&quot;13/03/17&quot;
+)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Create a variable called this_year which contains today’s date. Then create an interval object which uses this_year and the previous_decade variable you made above. Store it in interval_years.</p>
+<p>Your IBM data has a variable called agents in it, which contains the initials of the two staff working. Separate out this column into two: agent1 and agent2. Save the output in a new tibble called IBM_agents.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxudGhpc195ZWFyIDwtIHRvZGF5KClcbmludGVydmFsX3llYXJzIDwtIGludGVydmFsKHRoaXNfeWVhciwgcHJldmlvdXNfZGVjYWRlKVxuYGBgXG5gYGAifQ== -->
-<p><code>r</code>r this_year &lt;- today() interval_years &lt;- interval(this_year, previous_decade)</p>
-<pre><code></code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuSUJNX2FnZW50cyA8LSBzZXBhcmF0ZShJQk1fc3RvY2tfcHJpY2UsXG4gICAgICAgIGNvbCA9IEFnZW50cyxcbiAgICAgICAgaW50byA9IGMoXCJhZ2VudDFcIiwgXCJhZ2VudDJcIiksXG4gICAgICAgIHNlcCA9IFwiXFxcXC9cIlxuKVxuYGBgIn0= -->
+<pre class="r"><code>IBM_agents &lt;- separate(IBM_stock_price,
+        col = Agents,
+        into = c(&quot;agent1&quot;, &quot;agent2&quot;),
+        sep = &quot;\\/&quot;
+)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Change the time zone of both your date variables to “America/New_York”, and call them nyc_date1 and nyc_date2.</p>
+<p>Use the unite function to unite the Agent ID columns (ID1,ID2) with the agent initials. Use a colon as a separator. Hint: you might need to use a pipe to do 2 unite functions. Select only the agent variables and save it in a tibble called IBM_agent_data.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxubnljX2RhdGUxIDwtIHdpdGhfdHooZGF0ZTEsIHR6b25lID0gXFxBbWVyaWNhL05ld19Zb3JrXFwpXG5ueWNfZGF0ZTIgPC0gd2l0aF90eihkYXRlMiwgdHpvbmUgPSBcXEFtZXJpY2EvTmV3X1lvcmtcXClcbmBgYFxuYGBgIn0= -->
-<p><code>r</code>r nyc_date1 &lt;- with_tz(date1, tzone = /New_York) nyc_date2 &lt;- with_tz(date2, tzone = /New_York)</p>
-<pre><code></code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuSUJNX2FnZW50X2RhdGEgPC0gSUJNX2FnZW50cyAlPiVcbiAgICAgICAgdW5pdGUoY29sID0gYWdlbnQxLCBjKFwiSUQxXCIsIFwiYWdlbnQxXCIpLCBzZXAgPSBcIjpcIikgJT4lXG4gICAgICAgIHVuaXRlKGNvbCA9IGFnZW50MiwgYyhcIklEMlwiLCBcImFnZW50MlwiKSwgc2VwID0gXCI6XCIpXG5cbmBgYCJ9 -->
+<pre class="r"><code>IBM_agent_data &lt;- IBM_agents %&gt;%
+        unite(col = agent1, c(&quot;ID1&quot;, &quot;agent1&quot;), sep = &quot;:&quot;) %&gt;%
+        unite(col = agent2, c(&quot;ID2&quot;, &quot;agent2&quot;), sep = &quot;:&quot;)
+</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Let’s move on to using the data from our database.</p>
-<p>Create a tibble called survey_tibble. Use the make_datetime function to create a new column within that tibble called full_date.</p>
+<p>Your JNJ data only has data for open stock. Therefore first thing to do is create a new tibble called IBM_data, which selects only the date and the open stock data from the IBM_stock_data tibble. Once you have that, use a full join to join the IBM_data and JNJ_data tibbles. Save it in a new tibble called open_stock_data.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VydmV5X3RpYmJsZSA8LSBzdXJ2ZXlzICU+JVxuICAgICAgICBjb2xsZWN0KCkgJT4lXG4gICAgICAgIG11dGF0ZShmdWxsX2RhdGUgPSBtYWtlX2RhdGV0aW1lKHllYXIsIG1vbnRoLCBkYXkpKVxuYGBgIn0= -->
-<pre class="r"><code>survey_tibble &lt;- surveys %&gt;%
-        collect() %&gt;%
-        mutate(full_date = make_datetime(year, month, day))</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuSUJNX2RhdGEgPC0gSUJNX3N0b2NrX3ByaWNlICU+JVxuICAgICAgICBzZWxlY3QoZGF0ZSwgb3Blbilcblxub3Blbl9zdG9ja19kYXRhIDwtIGZ1bGxfam9pbihJQk1fZGF0YSwgXG4gICAgICAgIEpOSl9zdG9ja19wcmljZV9nYXRoZXJlZCwgXG4gICAgICAgIGJ5ID0gXCJkYXRlXCJcbilcbmBgYCJ9 -->
+<pre class="r"><code>IBM_data &lt;- IBM_stock_price %&gt;%
+        select(date, open)
+
+open_stock_data &lt;- full_join(IBM_data, 
+        JNJ_stock_price_gathered, 
+        by = &quot;date&quot;
+)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Check what type the new full_date variable is.</p>
+<p>Write a for loop which calculates the mean of each variable in the open_stock dataset. Save the output in a vector called stock_mean_data.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2xhc3Moc3VydmV5X3RpYmJsZSRmdWxsX2RhdGUpXG5gYGAifQ== -->
-<pre class="r"><code>class(survey_tibble$full_date)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3RvY2tfbWVhbl9kYXRhIDwtIG51bWVyaWMobGVuZ3RoID0gbGVuZ3RoKG9wZW5fc3RvY2tfZGF0YSkgLTEgKVxuXG5mb3IgKGNvbHVtbiBpbiAyOmxlbmd0aChvcGVuX3N0b2NrX2RhdGEpKSB7XG4gICAgICAgIHN0b2NrX21lYW5fZGF0YVtbY29sdW1uIC0gMV1dIDwtIG1lYW4ob3Blbl9zdG9ja19kYXRhW1tjb2x1bW5dXSlcbn1cbmBgYCJ9 -->
+<pre class="r"><code>stock_mean_data &lt;- numeric(length = length(open_stock_data) -1 )
+
+for (column in 2:length(open_stock_data)) {
+        stock_mean_data[[column - 1]] &lt;- mean(open_stock_data[[column]])
+}</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Convert the sex variable within survey_tibble to a logical variable. Save it in surveyor_sex.</p>
+<p>Now do the same calculation with the appropriate map function.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VydmV5X3RpYmJsZSA8LSBzdXJ2ZXlfdGliYmxlICU+JVxuICAgICAgICBtdXRhdGUoc3VydmV5b3Jfc2V4ID0gc2V4ID09IFwiTVwiKVxuYGBgIn0= -->
-<pre class="r"><code>survey_tibble &lt;- survey_tibble %&gt;%
-        mutate(surveyor_sex = sex == &quot;M&quot;)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWFwX2RibChvcGVuX3N0b2NrX2RhdGFbICwgLTFdLCBtZWFuKVxuYGBgIn0= -->
+<pre class="r"><code>map_dbl(open_stock_data[ , -1], mean)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Using the dbplyr package, join the species and surveys table, so that only those species who were surveyed are kept. Save it in a new tibble called all_species.</p>
+<p>Extension</p>
+<p>Write a loop which calculates the length of each variable in open_stock</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYWxsX3NwZWNpZXMgPC0gaW5uZXJfam9pbihzdXJ2ZXlzLCBzcGVjaWVzLCBieSA9IFwic3BlY2llc19pZFwiKVxuYGBgIn0= -->
-<pre class="r"><code>all_species &lt;- inner_join(surveys, species, by = &quot;species_id&quot;)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZm9yIChjb2x1bW4gaW4gMTpsZW5ndGgob3Blbl9zdG9ja19kYXRhKSkge1xuICAgICAgICBwcmludChsZW5ndGgob3Blbl9zdG9ja19kYXRhW1tjb2x1bW5dXSkpXG59XG5gYGAifQ== -->
+<pre class="r"><code>for (column in 1:length(open_stock_data)) {
+        print(length(open_stock_data[[column]]))
+}</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Using the dpblyr package, implement a query (in R) that joins the species and survey tables together, and that returns the number of birds observed in each plot, each year.</p>
+<p>Write a loop which prints the type of each variable in open_stock</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYWxsX3NwZWNpZXMgJT4lXG4gICAgICAgIGZpbHRlcih0YXhhID09IFwiQmlyZFwiKSAlPiVcbiAgICAgICAgZ3JvdXBfYnkocGxvdCwgeWVhcikgJT4lXG4gICAgICAgIHN1bW1hcmlzZShjb3VudCA9IG4oKSlcbmBgYCJ9 -->
-<pre class="r"><code>all_species %&gt;%
-        filter(taxa == &quot;Bird&quot;) %&gt;%
-        group_by(plot, year) %&gt;%
-        summarise(count = n())</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZm9yIChjb2x1bW4gaW4gMTpsZW5ndGgob3Blbl9zdG9ja19kYXRhKSkge1xuICAgICAgICBwcmludChjbGFzcyhvcGVuX3N0b2NrX2RhdGFbW2NvbHVtbl1dKSlcbn1cbmBgYCJ9 -->
+<pre class="r"><code>for (column in 1:length(open_stock_data)) {
+        print(class(open_stock_data[[column]]))
+}</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>What would the equivalent query be in SQL?</p>
+<p>Use the map function to turn your date column in stock_data into datetimes.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjpbIlNFTEVDVCBzdS55ZWFyIiwiICAgICAgICAsIENPVU5UKHN1LmlkKSIsIkZST00gc3VydmV5cyBBUyBzdSIsIiAgICAgICAgSk9JTiBzcGVjaWVzIEFTIHNwIE9OIHN1LnNwZWNpZXNfaWQgPSBzcC5zcGVjaWVzX2lkIiwiV0hFUkUgc3AudGF4YSA9IFwiQmlyZFwiIiwiR1JPVVAgQlkgc3UueWVhciJdfQ== -->
-<pre class="r"><code>SELECT su.year
-        , COUNT(su.id)
-FROM surveys AS su
-        JOIN species AS sp ON su.species_id = sp.species_id
-WHERE sp.taxa = &quot;Bird&quot;
-GROUP BY su.year</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxub3Blbl9zdG9ja19kYXRhWyAsIDFdICU+JVxuICAgICAgICBtYXAoYXMuRGF0ZSwgZm9ybWF0ID0gXCIlZC8lbS8leVwiKVxuYGBgIn0= -->
+<pre class="r"><code>open_stock_data[ , 1] %&gt;%
+        map(as.Date, format = &quot;%d/%m/%y&quot;)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Extensions</p>
+<p>Use the map function to calculate the median of the stock price.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShueWNmbGlnaHRzMTMpXG5gYGAifQ== -->
-<pre class="r"><code>library(nycflights13)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxub3Blbl9zdG9ja19kYXRhWyAsIC0xXSAlPiVcbiAgICAgICAgbWFwX2RibChtZWRpYW4pXG5gYGAifQ== -->
+<pre class="r"><code>open_stock_data[ , -1] %&gt;%
+        map_dbl(median)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Make a date-time column called departure_date from the year, month, day, hour, and minute variables in the flights tibble.</p>
+<p>Calculate summary stats for all the numeric variables.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZmxpZ2h0cyA8LSBmbGlnaHRzICU+JVxuICAgICAgICBtdXRhdGUoZGVwYXJ0dXJlX2RhdGUgPSB5bWRfaG0ocGFzdGUwKHllYXIsIFwiLVwiLCBtb250aCwgXCItXCIsIGRheSwgXCIgXCIsIGhvdXIsIFwiOlwiLCBtaW51dGUpKSlcbmBgYCJ9 -->
-<pre class="r"><code>flights &lt;- flights %&gt;%
-        mutate(departure_date = ymd_hm(paste0(year, &quot;-&quot;, month, &quot;-&quot;, day, &quot; &quot;, hour, &quot;:&quot;, minute)))</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Add the weather to the flights data by city of origin.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuZmxpZ2h0cyA8LSBpbm5lcl9qb2luKFxuICAgICAgICBmbGlnaHRzLCBcbiAgICAgICAgd2VhdGhlciwgXG4gICAgICAgIGJ5ID0gYyhcXG9yaWdpblxcID0gXFxvcmlnaW5cXCwgXFx0aW1lX2hvdXJcXCA9IFxcdGltZV9ob3VyXFwpXG4pXG5gYGBcbmBgYCJ9 -->
-<p><code>r</code>r flights &lt;- inner_join( flights, weather, by = c( = , _hour = _hour) )</p>
-<pre><code></code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Add the location of the origin and destination (i.e. the lat and lon) to flights. Only keep those that have a location.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuaW5uZXJfam9pbihmbGlnaHRzLCBhaXJwb3J0c1sgLCBjKFxcZmFhXFwsIFxcbGF0XFwsIFxcbG9uXFwpXSwgYnkgPSBjKFxcb3JpZ2luXFwgPSBcXGZhYVxcKSlcbmBgYFxuYGBgIn0= -->
-<p><code>r</code>r inner_join(flights, airports[ , c(, , )], by = c( = ))</p>
-<pre><code></code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Write a query which shows the mean delay of flights for each tailnumber and airline carrier, where the arrival delay was greater than 100 minutes.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuZmxpZ2h0cyAlPiVcbiAgICAgICAgZmlsdGVyKGFycl9kZWxheSA+IDEwMCkgJT4lXG4gICAgICAgIGdyb3VwX2J5KHRhaWxudW0sIGNhcnJpZXIpICU+JVxuICAgICAgICBzdW1tYXJpc2UobWVhbihhcnJfZGVsYXkpKVxuYGBgXG5gYGAifQ== -->
-<p><code>r</code>r flights %&gt;% filter(arr_delay &gt; 100) %&gt;% group_by(tailnum, carrier) %&gt;% summarise(mean(arr_delay))</p>
-<pre><code></code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Find the 10 most popular destinations to fly to, and then perform a join to find which flight went with those top 10 destinations.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuZmxpZ2h0cyAlPiVcbiAgICAgICAgZ3JvdXBfYnkoZGVzdCkgJT4lXG4gICAgICAgIHN1bW1hcmlzZShjb3VudCA9IG4oKSkgJT4lXG4gICAgICAgIGFycmFuZ2UoZGVzYyhjb3VudCkpICU+JVxuICAgICAgICB0b3BfbigxMCkgJT4lXG4gICAgICAgIGlubmVyX2pvaW4oZmxpZ2h0cywgYnkgPSBcXGRlc3RcXClcbmBgYFxuYGBgIn0= -->
-<p><code>r</code>r flights %&gt;% group_by(dest) %&gt;% summarise(count = n()) %&gt;% arrange(desc(count)) %&gt;% top_n(10) %&gt;% inner_join(flights, by = )</p>
-<pre><code></code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxub3Blbl9zdG9ja19kYXRhWyAsIC0xXSAlPiVcbiAgICAgICAgbWFwKHN1bW1hcnkpXG5gYGAifQ== -->
+<pre class="r"><code>open_stock_data[ , -1] %&gt;%
+        map(summary)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKYGBge3J9CmxpYnJhcnkoZHBseXIpCmxpYnJhcnkoZGJwbHlyKQpsaWJyYXJ5KGx1YnJpZGF0ZSkKbGlicmFyeShSU1FMaXRlKQpsaWJyYXJ5KERCSSkKYGBgCgpgYGB7cn0KZGF0ZTEgPC0geW1kX2htcygiMjAxNy0wNC0yMiAyMjowMToxOCIpCmRhdGUyIDwtIHltZF9obXMoIjIwMDEtMTEtMDcgMTA6MDk6NTYiKQoKbWFtbWFscyA8LSBkYkNvbm5lY3QoU1FMaXRlKCksICJ+L2RlMV9jbGFzc25vdGVzL3dlZWtfMDYvZGF5XzIvNV9ob21ld29yay9tYW1tYWxzLnNxbGl0ZSIpCgpwbG90cyAgIDwtIHRibChtYW1tYWxzLCBzcWwoIlNFTEVDVCAqIEZST00gcGxvdHMiKSkKc3BlY2llcyA8LSB0YmwobWFtbWFscywgc3FsKCJTRUxFQ1QgKiBGUk9NIHNwZWNpZXMiKSkKc3VydmV5cyA8LSB0YmwobWFtbWFscywgc3FsKCJTRUxFQ1QgKiBGUk9NIHN1cnZleXMiKSkKYGBgCgpNVlAKCkV4dHJhY3QgdGhlIGRpZmZlcmVudCBjb21wb25lbnRzICh5ZWFyLCBtb250aCwgbWRheSwgeWRheSwgd2RheSkgZnJvbSB0aGUgCnZhcmlhYmxlIGRhdGUxLiBBZGQgdGhlIGxhYmVscyB0byB0aGUgbW9udGggYW5kIGRvIG5vdCBhYmJyZXZpYXRlIHRoZSBtb250aCAKbGFiZWxzLgpgYGB7cn0KeWVhcihkYXRlMSkKbW9udGgoZGF0ZTEsIGxhYmVsID0gVFJVRSwgYWJiciA9IEZBTFNFKQptZGF5KGRhdGUxKQp5ZGF5KGRhdGUxKQp3ZGF5KGRhdGUxKQpgYGAKCkFkZCAxNCBkYXlzIHRvIHlvdXIgZGF0ZTEgdmFyaWFibGUgYW5kIHN0b3JlIGl0IGluIGEgdmFyaWFibGUgY2FsbGVkIApuZXh0X2ZvcnRuaWdodC4gVGFrZSBhd2F5IDEwIHllYXJzIGZyb20geW91ciBkYXRlMiB2YXJpYWJsZSwgYW5kIHN0b3JlIGl0IGluCnByZXZpb3VzX2RlY2FkZS4KYGBge3J9Cm5leHRfZm9ydG5pZ2h0IDwtIGRhdGUxICsgd2Vla3MoMikKcHJldmlvdXNfZGVjYWRlIDwtIGRhdGUyIC0geWVhcnMoMTApCmBgYAoKQ3JlYXRlIGEgdmFyaWFibGUgY2FsbGVkIHRoaXNfeWVhciB3aGljaCBjb250YWlucyB0b2RheeKAmXMgZGF0ZS4gVGhlbiBjcmVhdGUgYW4KaW50ZXJ2YWwgb2JqZWN0IHdoaWNoIHVzZXMgdGhpc195ZWFyIGFuZCB0aGUgcHJldmlvdXNfZGVjYWRlIHZhcmlhYmxlIHlvdSBtYWRlCmFib3ZlLiBTdG9yZSBpdCBpbiBpbnRlcnZhbF95ZWFycy4KYGBge3J9CnRoaXNfeWVhciA8LSB0b2RheSgpCmludGVydmFsX3llYXJzIDwtIGludGVydmFsKHRoaXNfeWVhciwgcHJldmlvdXNfZGVjYWRlKQpgYGAKCkNoYW5nZSB0aGUgdGltZSB6b25lIG9mIGJvdGggeW91ciBkYXRlIHZhcmlhYmxlcyB0byDigJxBbWVyaWNhL05ld19Zb3Jr4oCdLCBhbmQgY2FsbAp0aGVtIG55Y19kYXRlMSBhbmQgbnljX2RhdGUyLgpgYGB7cn0KbnljX2RhdGUxIDwtIHdpdGhfdHooZGF0ZTEsIHR6b25lID0gIkFtZXJpY2EvTmV3X1lvcmsiKQpueWNfZGF0ZTIgPC0gd2l0aF90eihkYXRlMiwgdHpvbmUgPSAiQW1lcmljYS9OZXdfWW9yayIpCmBgYAoKTGV04oCZcyBtb3ZlIG9uIHRvIHVzaW5nIHRoZSBkYXRhIGZyb20gb3VyIGRhdGFiYXNlLgoKQ3JlYXRlIGEgdGliYmxlIGNhbGxlZCBzdXJ2ZXlfdGliYmxlLiBVc2UgdGhlIG1ha2VfZGF0ZXRpbWUgZnVuY3Rpb24gdG8gY3JlYXRlIGEKbmV3IGNvbHVtbiB3aXRoaW4gdGhhdCB0aWJibGUgY2FsbGVkIGZ1bGxfZGF0ZS4gCmBgYHtyfQpzdXJ2ZXlfdGliYmxlIDwtIHN1cnZleXMgJT4lCiAgICAgICAgY29sbGVjdCgpICU+JQogICAgICAgIG11dGF0ZShmdWxsX2RhdGUgPSBtYWtlX2RhdGV0aW1lKHllYXIsIG1vbnRoLCBkYXkpKQpgYGAKCkNoZWNrIHdoYXQgdHlwZSB0aGUgbmV3IGZ1bGxfZGF0ZSB2YXJpYWJsZSBpcy4KYGBge3J9CmNsYXNzKHN1cnZleV90aWJibGUkZnVsbF9kYXRlKQpgYGAKCkNvbnZlcnQgdGhlIHNleCB2YXJpYWJsZSB3aXRoaW4gc3VydmV5X3RpYmJsZSB0byBhIGxvZ2ljYWwgdmFyaWFibGUuIFNhdmUgaXQgaW4Kc3VydmV5b3Jfc2V4LgpgYGB7cn0Kc3VydmV5X3RpYmJsZSA8LSBzdXJ2ZXlfdGliYmxlICU+JQogICAgICAgIG11dGF0ZShzdXJ2ZXlvcl9zZXggPSBzZXggPT0gIk0iKQpgYGAKClVzaW5nIHRoZSBkYnBseXIgcGFja2FnZSwgam9pbiB0aGUgc3BlY2llcyBhbmQgc3VydmV5cyB0YWJsZSwgc28gdGhhdCBvbmx5IHRob3NlCnNwZWNpZXMgd2hvIHdlcmUgc3VydmV5ZWQgYXJlIGtlcHQuIFNhdmUgaXQgaW4gYSBuZXcgdGliYmxlIGNhbGxlZCBhbGxfc3BlY2llcy4KYGBge3J9CmFsbF9zcGVjaWVzIDwtIGlubmVyX2pvaW4oc3VydmV5cywgc3BlY2llcywgYnkgPSAic3BlY2llc19pZCIpCmBgYAoKVXNpbmcgdGhlIGRwYmx5ciBwYWNrYWdlLCBpbXBsZW1lbnQgYSBxdWVyeSAoaW4gUikgdGhhdCBqb2lucyB0aGUgc3BlY2llcyBhbmQKc3VydmV5IHRhYmxlcyB0b2dldGhlciwgYW5kIHRoYXQgcmV0dXJucyB0aGUgbnVtYmVyIG9mIGJpcmRzIG9ic2VydmVkIGluIGVhY2gKcGxvdCwgZWFjaCB5ZWFyLiAKYGBge3J9CmFsbF9zcGVjaWVzICU+JQogICAgICAgIGZpbHRlcih0YXhhID09ICJCaXJkIikgJT4lCiAgICAgICAgZ3JvdXBfYnkocGxvdCwgeWVhcikgJT4lCiAgICAgICAgc3VtbWFyaXNlKGNvdW50ID0gbigpKQpgYGAKCldoYXQgd291bGQgdGhlIGVxdWl2YWxlbnQgcXVlcnkgYmUgaW4gU1FMPwpgYGB7ciwgZXZhbCA9IEZBTFNFfQpTRUxFQ1Qgc3UueWVhcgogICAgICAgICwgQ09VTlQoc3UuaWQpCkZST00gc3VydmV5cyBBUyBzdQogICAgICAgIEpPSU4gc3BlY2llcyBBUyBzcCBPTiBzdS5zcGVjaWVzX2lkID0gc3Auc3BlY2llc19pZApXSEVSRSBzcC50YXhhID0gIkJpcmQiCkdST1VQIEJZIHN1LnllYXIKYGBgCgpFeHRlbnNpb25zCgpgYGB7cn0KbGlicmFyeShueWNmbGlnaHRzMTMpCmBgYAoKTWFrZSBhIGRhdGUtdGltZSBjb2x1bW4gY2FsbGVkIGRlcGFydHVyZV9kYXRlIGZyb20gdGhlIHllYXIsIG1vbnRoLCBkYXksIGhvdXIsIAphbmQgbWludXRlIHZhcmlhYmxlcyBpbiB0aGUgZmxpZ2h0cyB0aWJibGUuCmBgYHtyfQpmbGlnaHRzIDwtIGZsaWdodHMgJT4lCiAgICAgICAgbXV0YXRlKGRlcGFydHVyZV9kYXRlID0geW1kX2htKHBhc3RlMCh5ZWFyLCAiLSIsIG1vbnRoLCAiLSIsIGRheSwgIiAiLCBob3VyLCAiOiIsIG1pbnV0ZSkpKQpgYGAKCkFkZCB0aGUgd2VhdGhlciB0byB0aGUgZmxpZ2h0cyBkYXRhIGJ5IGNpdHkgb2Ygb3JpZ2luLgpgYGB7cn0KZmxpZ2h0cyA8LSBpbm5lcl9qb2luKAogICAgICAgIGZsaWdodHMsIAogICAgICAgIHdlYXRoZXIsIAogICAgICAgIGJ5ID0gYygib3JpZ2luIiA9ICJvcmlnaW4iLCAidGltZV9ob3VyIiA9ICJ0aW1lX2hvdXIiKQopCmBgYAoKQWRkIHRoZSBsb2NhdGlvbiBvZiB0aGUgb3JpZ2luIGFuZCBkZXN0aW5hdGlvbiAoaS5lLiB0aGUgbGF0IGFuZCBsb24pIHRvIApmbGlnaHRzLiBPbmx5IGtlZXAgdGhvc2UgdGhhdCBoYXZlIGEgbG9jYXRpb24uCmBgYHtyfQpsb2NhdGlvbiA8LSBmbGlnaHRzICU+JQogICAgICAgIGlubmVyX2pvaW4oYWlycG9ydHNbICwgYygiZmFhIiwgImxhdCIsICJsb24iKV0sIGJ5ID0gYygib3JpZ2luIiA9ICJmYWEiKSkgJT4lCiAgICAgICAgaW5uZXJfam9pbihhaXJwb3J0c1sgLCBjKCJmYWEiLCAibGF0IiwgImxvbiIpXSwgYnkgPSBjKCJkZXN0IiA9ICJmYWEiKSkKYGBgCgpXcml0ZSBhIHF1ZXJ5IHdoaWNoIHNob3dzIHRoZSBtZWFuIGRlbGF5IG9mIGZsaWdodHMgZm9yIGVhY2ggdGFpbG51bWJlciBhbmQgCmFpcmxpbmUgY2Fycmllciwgd2hlcmUgdGhlIGFycml2YWwgZGVsYXkgd2FzIGdyZWF0ZXIgdGhhbiAxMDAgbWludXRlcy4KYGBge3J9CmZsaWdodHMgJT4lCiAgICAgICAgZmlsdGVyKGFycl9kZWxheSA+IDEwMCkgJT4lCiAgICAgICAgZ3JvdXBfYnkodGFpbG51bSwgY2FycmllcikgJT4lCiAgICAgICAgc3VtbWFyaXNlKG1lYW4oYXJyX2RlbGF5KSkKYGBgCgpGaW5kIHRoZSAxMCBtb3N0IHBvcHVsYXIgZGVzdGluYXRpb25zIHRvIGZseSB0bywgYW5kIHRoZW4gcGVyZm9ybSBhIGpvaW4gdG8gZmluZAp3aGljaCBmbGlnaHQgd2VudCB3aXRoIHRob3NlIHRvcCAxMCBkZXN0aW5hdGlvbnMuCmBgYHtyfQpmbGlnaHRzICU+JQogICAgICAgIGdyb3VwX2J5KGRlc3QpICU+JQogICAgICAgIHN1bW1hcmlzZShjb3VudCA9IG4oKSkgJT4lCiAgICAgICAgYXJyYW5nZShkZXNjKGNvdW50KSkgJT4lCiAgICAgICAgdG9wX24oMTApICU+JQogICAgICAgIGlubmVyX2pvaW4oZmxpZ2h0cywgYnkgPSAiZGVzdCIpCmBgYAo=</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKYGBge3J9CmxpYnJhcnkoQ29kZUNsYW5EYXRhKQpsaWJyYXJ5KHRpZHl2ZXJzZSkKYGBgCgpNVlAKClVzZSB0aGUgc3RvY2sgcHJpY2VzIGRhdGEgZnJvbSB0aGUgQ29kZUNsYW5EYXRhOiBJQk1fc3RvY2tfcHJpY2UgYW5kIApKTkpfc3RvY2tfcHJpY2UKYGBge3J9CklCTV9zdG9ja19wcmljZQpKTkpfc3RvY2tfcHJpY2UKYGBgCgpZb3VyIEpOSiBkYXRhIGlzIGluIHdpZGUgZm9ybWF0LiBSZXNoYXBlIGl0IHNvIGl0IGlzIGluIGxvbmcgZm9ybWF0LiBDcmVhdGUgdHdvCmNvbHVtbnM6IG9uZSBjYWxsZWQgZGF0ZSBhbmQgb25lIGNhbGxlZCBqbmpfb3BlbiAoYXMgaXQgaXMgb3BlbiBzdG9jayBwcmljZXMpLgpTYXZlIGl0IGluIGEgbmV3IHRpYmJsZSBjYWxsZWQgSk5KX3N0b2NrX3ByaWNlX2dhdGhlcmVkLgpgYGB7cn0KSk5KX3N0b2NrX3ByaWNlX2dhdGhlcmVkIDwtIGdhdGhlcihKTkpfc3RvY2tfcHJpY2UsCiAgICAgICAga2V5ID0gZGF0ZSwKICAgICAgICB2YWx1ZSA9IGpual9vcGVuLAogICAgICAgICIxMi8wNC8xNyI6IjEzLzAzLzE3IgopCmBgYAoKWW91ciBJQk0gZGF0YSBoYXMgYSB2YXJpYWJsZSBjYWxsZWQgYWdlbnRzIGluIGl0LCB3aGljaCBjb250YWlucyB0aGUgaW5pdGlhbHMgb2YKdGhlIHR3byBzdGFmZiB3b3JraW5nLiBTZXBhcmF0ZSBvdXQgdGhpcyBjb2x1bW4gaW50byB0d286IGFnZW50MSBhbmQgYWdlbnQyLgpTYXZlIHRoZSBvdXRwdXQgaW4gYSBuZXcgdGliYmxlIGNhbGxlZCBJQk1fYWdlbnRzLgpgYGB7cn0KSUJNX2FnZW50cyA8LSBzZXBhcmF0ZShJQk1fc3RvY2tfcHJpY2UsCiAgICAgICAgY29sID0gQWdlbnRzLAogICAgICAgIGludG8gPSBjKCJhZ2VudDEiLCAiYWdlbnQyIiksCiAgICAgICAgc2VwID0gIlxcLyIKKQpgYGAKClVzZSB0aGUgdW5pdGUgZnVuY3Rpb24gdG8gdW5pdGUgdGhlIEFnZW50IElEIGNvbHVtbnMgKElEMSxJRDIpIHdpdGggdGhlIGFnZW50CmluaXRpYWxzLiBVc2UgYSBjb2xvbiBhcyBhIHNlcGFyYXRvci4gSGludDogeW91IG1pZ2h0IG5lZWQgdG8gdXNlIGEgcGlwZSB0byBkbyAyCnVuaXRlIGZ1bmN0aW9ucy4gU2VsZWN0IG9ubHkgdGhlIGFnZW50IHZhcmlhYmxlcyBhbmQgc2F2ZSBpdCBpbiBhIHRpYmJsZSBjYWxsZWQKSUJNX2FnZW50X2RhdGEuCmBgYHtyfQpJQk1fYWdlbnRfZGF0YSA8LSBJQk1fYWdlbnRzICU+JQogICAgICAgIHVuaXRlKGNvbCA9IGFnZW50MSwgYygiSUQxIiwgImFnZW50MSIpLCBzZXAgPSAiOiIpICU+JQogICAgICAgIHVuaXRlKGNvbCA9IGFnZW50MiwgYygiSUQyIiwgImFnZW50MiIpLCBzZXAgPSAiOiIpCgpgYGAKCllvdXIgSk5KIGRhdGEgb25seSBoYXMgZGF0YSBmb3Igb3BlbiBzdG9jay4gVGhlcmVmb3JlIGZpcnN0IHRoaW5nIHRvIGRvIGlzCmNyZWF0ZSBhIG5ldyB0aWJibGUgY2FsbGVkIElCTV9kYXRhLCB3aGljaCBzZWxlY3RzIG9ubHkgdGhlIGRhdGUgYW5kIHRoZSBvcGVuCnN0b2NrIGRhdGEgZnJvbSB0aGUgSUJNX3N0b2NrX2RhdGEgdGliYmxlLiBPbmNlIHlvdSBoYXZlIHRoYXQsIHVzZSBhIGZ1bGwgam9pbgp0byBqb2luIHRoZSBJQk1fZGF0YSBhbmQgSk5KX2RhdGEgdGliYmxlcy4gU2F2ZSBpdCBpbiBhIG5ldyB0aWJibGUgY2FsbGVkCm9wZW5fc3RvY2tfZGF0YS4KYGBge3J9CklCTV9kYXRhIDwtIElCTV9zdG9ja19wcmljZSAlPiUKICAgICAgICBzZWxlY3QoZGF0ZSwgb3BlbikKCm9wZW5fc3RvY2tfZGF0YSA8LSBmdWxsX2pvaW4oSUJNX2RhdGEsIAogICAgICAgIEpOSl9zdG9ja19wcmljZV9nYXRoZXJlZCwgCiAgICAgICAgYnkgPSAiZGF0ZSIKKQpgYGAKCldyaXRlIGEgZm9yIGxvb3Agd2hpY2ggY2FsY3VsYXRlcyB0aGUgbWVhbiBvZiBlYWNoIHZhcmlhYmxlIGluIHRoZSBvcGVuX3N0b2NrCmRhdGFzZXQuIFNhdmUgdGhlIG91dHB1dCBpbiBhIHZlY3RvciBjYWxsZWQgc3RvY2tfbWVhbl9kYXRhLiAKYGBge3J9CnN0b2NrX21lYW5fZGF0YSA8LSBudW1lcmljKGxlbmd0aCA9IGxlbmd0aChvcGVuX3N0b2NrX2RhdGEpIC0xICkKCmZvciAoY29sdW1uIGluIDI6bGVuZ3RoKG9wZW5fc3RvY2tfZGF0YSkpIHsKICAgICAgICBzdG9ja19tZWFuX2RhdGFbW2NvbHVtbiAtIDFdXSA8LSBtZWFuKG9wZW5fc3RvY2tfZGF0YVtbY29sdW1uXV0pCn0KYGBgCgpOb3cgZG8gdGhlIHNhbWUgY2FsY3VsYXRpb24gd2l0aCB0aGUgYXBwcm9wcmlhdGUgbWFwIGZ1bmN0aW9uLgpgYGB7cn0KbWFwX2RibChvcGVuX3N0b2NrX2RhdGFbICwgLTFdLCBtZWFuKQpgYGAKCkV4dGVuc2lvbgoKV3JpdGUgYSBsb29wIHdoaWNoIGNhbGN1bGF0ZXMgdGhlIGxlbmd0aCBvZiBlYWNoIHZhcmlhYmxlIGluIG9wZW5fc3RvY2sKYGBge3J9CmZvciAoY29sdW1uIGluIDE6bGVuZ3RoKG9wZW5fc3RvY2tfZGF0YSkpIHsKICAgICAgICBwcmludChsZW5ndGgob3Blbl9zdG9ja19kYXRhW1tjb2x1bW5dXSkpCn0KYGBgCgpXcml0ZSBhIGxvb3Agd2hpY2ggcHJpbnRzIHRoZSB0eXBlIG9mIGVhY2ggdmFyaWFibGUgaW4gb3Blbl9zdG9jawpgYGB7cn0KZm9yIChjb2x1bW4gaW4gMTpsZW5ndGgob3Blbl9zdG9ja19kYXRhKSkgewogICAgICAgIHByaW50KGNsYXNzKG9wZW5fc3RvY2tfZGF0YVtbY29sdW1uXV0pKQp9CmBgYAoKVXNlIHRoZSBtYXAgZnVuY3Rpb24gdG8gdHVybiB5b3VyIGRhdGUgY29sdW1uIGluIHN0b2NrX2RhdGEgaW50byBkYXRldGltZXMuCmBgYHtyfQpvcGVuX3N0b2NrX2RhdGFbICwgMV0gJT4lCiAgICAgICAgbWFwKGFzLkRhdGUsIGZvcm1hdCA9ICIlZC8lbS8leSIpCmBgYAoKVXNlIHRoZSBtYXAgZnVuY3Rpb24gdG8gY2FsY3VsYXRlIHRoZSBtZWRpYW4gb2YgdGhlIHN0b2NrIHByaWNlLgpgYGB7cn0Kb3Blbl9zdG9ja19kYXRhWyAsIC0xXSAlPiUKICAgICAgICBtYXBfZGJsKG1lZGlhbikKYGBgCgpDYWxjdWxhdGUgc3VtbWFyeSBzdGF0cyBmb3IgYWxsIHRoZSBudW1lcmljIHZhcmlhYmxlcy4KYGBge3J9Cm9wZW5fc3RvY2tfZGF0YVsgLCAtMV0gJT4lCiAgICAgICAgbWFwKHN1bW1hcnkpCmBgYAo=</div>
 
 
 

@@ -40,7 +40,7 @@ next_fortnight. Take away 10 years from your date2 variable, and store it in
 previous_decade.
 ```{r}
 next_fortnight <- date1 + weeks(2)
-previous_decade <- next_fortnight - years(2)
+previous_decade <- date2 - years(10)
 ```
 
 Create a variable called this_year which contains today’s date. Then create an
@@ -65,7 +65,7 @@ new column within that tibble called full_date.
 ```{r}
 survey_tibble <- surveys %>%
         collect() %>%
-        mutate(full_date = make_datetime(year = 2019L, month = 8L, day = 6L))
+        mutate(full_date = make_datetime(year, month, day))
 ```
 
 Check what type the new full_date variable is.
@@ -92,7 +92,7 @@ plot, each year.
 ```{r}
 all_species %>%
         filter(taxa == "Bird") %>%
-        group_by(year) %>%
+        group_by(plot, year) %>%
         summarise(count = n())
 ```
 
@@ -128,15 +128,12 @@ flights <- inner_join(
 )
 ```
 
-```{r}
-flights
-airports[ , c("faa", "lat", "lon")]
-```
-
 Add the location of the origin and destination (i.e. the lat and lon) to 
 flights. Only keep those that have a location.
 ```{r}
-inner_join(flights, airports[ , c("faa", "lat", "lon")], by = c("origin" = "faa"))
+location <- flights %>%
+        inner_join(airports[ , c("faa", "lat", "lon")], by = c("origin" = "faa")) %>%
+        inner_join(airports[ , c("faa", "lat", "lon")], by = c("dest" = "faa"))
 ```
 
 Write a query which shows the mean delay of flights for each tailnumber and 

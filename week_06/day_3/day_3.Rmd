@@ -1,0 +1,115 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(CodeClanData)
+library(tidyverse)
+```
+
+MVP
+
+Use the stock prices data from the CodeClanData: IBM_stock_price and 
+JNJ_stock_price
+```{r}
+IBM_stock_price
+JNJ_stock_price
+```
+
+Your JNJ data is in wide format. Reshape it so it is in long format. Create two
+columns: one called date and one called jnj_open (as it is open stock prices).
+Save it in a new tibble called JNJ_stock_price_gathered.
+```{r}
+JNJ_stock_price_gathered <- gather(JNJ_stock_price,
+        key = date,
+        value = jnj_open,
+        "12/04/17":"13/03/17"
+)
+```
+
+Your IBM data has a variable called agents in it, which contains the initials of
+the two staff working. Separate out this column into two: agent1 and agent2.
+Save the output in a new tibble called IBM_agents.
+```{r}
+IBM_agents <- separate(IBM_stock_price,
+        col = Agents,
+        into = c("agent1", "agent2"),
+        sep = "\\/"
+)
+```
+
+Use the unite function to unite the Agent ID columns (ID1,ID2) with the agent
+initials. Use a colon as a separator. Hint: you might need to use a pipe to do 2
+unite functions. Select only the agent variables and save it in a tibble called
+IBM_agent_data.
+```{r}
+IBM_agent_data <- IBM_agents %>%
+        unite(col = agent1, c("ID1", "agent1"), sep = ":") %>%
+        unite(col = agent2, c("ID2", "agent2"), sep = ":")
+
+```
+
+Your JNJ data only has data for open stock. Therefore first thing to do is
+create a new tibble called IBM_data, which selects only the date and the open
+stock data from the IBM_stock_data tibble. Once you have that, use a full join
+to join the IBM_data and JNJ_data tibbles. Save it in a new tibble called
+open_stock_data.
+```{r}
+IBM_data <- IBM_stock_price %>%
+        select(date, open)
+
+open_stock_data <- full_join(IBM_data, 
+        JNJ_stock_price_gathered, 
+        by = "date"
+)
+```
+
+Write a for loop which calculates the mean of each variable in the open_stock
+dataset. Save the output in a vector called stock_mean_data. 
+```{r}
+stock_mean_data <- numeric(length = length(open_stock_data) -1 )
+
+for (column in 2:length(open_stock_data)) {
+        stock_mean_data[[column - 1]] <- mean(open_stock_data[[column]])
+}
+```
+
+Now do the same calculation with the appropriate map function.
+```{r}
+map_dbl(open_stock_data[ , -1], mean)
+```
+
+Extension
+
+Write a loop which calculates the length of each variable in open_stock
+```{r}
+for (column in 1:length(open_stock_data)) {
+        print(length(open_stock_data[[column]]))
+}
+```
+
+Write a loop which prints the type of each variable in open_stock
+```{r}
+for (column in 1:length(open_stock_data)) {
+        print(class(open_stock_data[[column]]))
+}
+```
+
+Use the map function to turn your date column in stock_data into datetimes.
+```{r}
+open_stock_data[ , 1] %>%
+        map(as.Date, format = "%d/%m/%y")
+```
+
+Use the map function to calculate the median of the stock price.
+```{r}
+open_stock_data[ , -1] %>%
+        map_dbl(median)
+```
+
+Calculate summary stats for all the numeric variables.
+```{r}
+open_stock_data[ , -1] %>%
+        map(summary)
+```

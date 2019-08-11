@@ -1,0 +1,137 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+MVP
+
+```{r}
+library(tidyverse)
+library(readxl)
+library(stringr)
+library(lubridate)
+```
+
+Load in the code_clan_tweets.csv. Find the number of rows, columns, and lists of
+all the variable names.
+```{r}
+code_clan_tweets <- 
+        read_csv("~/de1_classnotes/week_06/day_5/5_Weekend_Homework/data/code_clan_tweets.csv")
+
+dim(code_clan_tweets)
+names(code_clan_tweets)
+```
+
+First, we’re going to summarise the number of likes CodeClan tweets have. Create
+a boxplot to check for outliers.
+```{r}
+boxplot(code_clan_tweets$favorite_count)
+```
+
+Summarise the number of likes (stored in favorite_count) that CodeClan tweets
+have got. Don’t summarise when it was a quoted tweet (is_quote variable).
+```{r}
+summary(code_clan_tweets[, "is_quote" != FALSE]$favorite_count)
+```
+
+Summarise the mean number of retweets (retweet_count), by the type of platform
+that was used to tweet (source).
+```{r}
+code_clan_tweets %>%
+        group_by(source) %>%
+        summarise(mean(retweet_count))
+```
+
+Count the number of likes by media type, and arrange them from most likes to
+least.
+```{r}
+code_clan_tweets %>%
+        group_by(media_type) %>%
+        summarise(count_likes = sum(favorite_count))
+```
+
+Find the mean number of characters a CodeClan tweet contains.
+```{r}
+mean(code_clan_tweets$display_text_width)
+```
+
+Convert the dates in the created_at variable into ISO format, and store them in
+a new datetime variable. Get the months and store them in a new variable called
+month.
+```{r}
+code_clan_tweets <- code_clan_tweets %>%
+        mutate(datetime = dmy_hm(created_at)) %>%
+        mutate(month = month(datetime))
+```
+
+Using your new month column, count the number retweets codeclan got in May vs 
+April.
+```{r}
+code_clan_tweets %>%
+        group_by(month) %>%
+        summarise(retweets = sum(retweet_count))
+```
+
+The code_clan_info.csv contains url and tweet info. Load this in, and join it to
+the code_clan_tweets data, so that you have a tweet url for wherever you have a
+tweet.
+```{r}
+code_clan_info <- 
+        read_csv("~/de1_classnotes/week_06/day_5/5_Weekend_Homework/data/code_clan_info.csv")
+```
+
+```{r}
+combined <- left_join(code_clan_tweets, code_clan_info, by = "tweet_id")
+```
+
+From your new joined data, create a variable which has all the hashtags in 
+lowercase for analysis.
+```{r}
+combined <- combined %>%
+        mutate(lower_hashtag = str_to_lower(hashtags))
+```
+
+Some tweets have more than one hashtag, denoted by the c() expression at the 
+start of the string. Use the substr and str_detect functions to create a tibble
+where the first letter of the string begins with a c.
+```{r}
+combined %>%
+        filter(str_detect(combined$lower_hashtag, pattern = "c\\(") == TRUE)
+```
+
+Use the str_extract function to find all cases where a tweet mentions edinburgh
+anywhere in it. How many mentions of Edinburgh are there in CodeClan’s tweets?
+```{r}
+sum(!is.na(str_extract(combined$text, pattern = "[eE]dinburgh")))
+```
+
+Use str_extract_all with a regular expression to find out which users CodeClan
+have been tweeting. Hint: think about all the different characters which could
+be in a username
+```{r}
+users <- str_extract_all(combined$text, pattern = "@\\w+", simplify = TRUE)
+
+users[users[ , 1] != "", ]
+```
+
+Extensions
+
+codeclan_info has tweet url (status_url) stored in a string. Save the numeric
+substring part of the string in a new variable called status_url_number
+```{r}
+code_clan_info <- code_clan_info %>%
+        mutate(status_url_number = str_extract(status_url, pattern = "[0-9]{19}"))
+```
+
+Use the str_replace function to replace the url numbers in the status_url_number
+string with a the word HIDDEN_URL
+```{r}
+code_clan_info$status_url <-
+        str_replace(code_clan_info$status_url, code_clan_info$status_url_number, "HIDDEN_URL")
+```
+
+Use str_detect to see which tweets don’t include a shortened link
+(https://t.co/**********)
+```{r}
+code_clan_tweets[str_detect(code_clan_tweets$text, pattern = "https:\\/\\/t.co\\/", negate = TRUE) == TRUE, ]
+```

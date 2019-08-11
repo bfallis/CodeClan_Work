@@ -68,7 +68,7 @@ open_stock_data <- full_join(IBM_data,
 Write a for loop which calculates the mean of each variable in the open_stock
 dataset. Save the output in a vector called stock_mean_data. 
 ```{r}
-stock_mean_data <- numeric(length = length(open_stock_data) -1 )
+stock_mean_data <- numeric(length = length(open_stock_data) - 1)
 
 for (column in 2:length(open_stock_data)) {
         stock_mean_data[[column - 1]] <- mean(open_stock_data[[column]])

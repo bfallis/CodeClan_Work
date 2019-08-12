@@ -1,0 +1,150 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(outliers)
+library(lubridate)
+library(mice)
+```
+
+Load in the women_in_gov csv file. Make sure you remove all metadata from the
+top.
+```{r}
+women_in_gov <- 
+        read_csv("~/de1_classnotes/week_07/day_1/5_cleaning_data_homework/data/women_in_gov.csv",
+                skip = 4)
+```
+
+Some of the column names contain spaces and numbers. Fix the column names using 
+the make.names function.
+```{r}
+names(women_in_gov) <- make.names(names(women_in_gov))
+```
+
+We have some columns in the data that don’t really need to be there. Confirm 
+that the X64, Indicator.Name and Indicator.Code have the same values for all 
+observations. If they do, remove those columns.
+```{r}
+unique(women_in_gov$X64)
+unique(women_in_gov$Indicator.Name)
+unique(women_in_gov$Indicator.Code)
+
+women_in_gov <- women_in_gov %>%
+        select(-c(X64, Indicator.Name, Indicator.Code))
+```
+
+Now we have got rid of the extra columns, we can rename the remaining country
+columns to something more tidy. Rename the Country.Name and Country.Code 
+variables to country and code.
+```{r}
+colnames(women_in_gov)[colnames(women_in_gov) == "Country.Name"] <- "country"
+colnames(women_in_gov)[colnames(women_in_gov) == "Country.Code"] <- "code"
+```
+
+Think back to last week where we talked about wide vs long format. As the data 
+is in wide format, it’s pretty clear to see we have a lot of missing values. 
+Reshape the data from wide to long format, so that for each country the year 
+column becomes a row.
+```{r}
+women_in_gov_long <- gather(women_in_gov, key = year, value = prop_women, X1960:X2018)
+```
+
+You’ll notice your prop_women column contains missing values. Let’s do a few 
+things. First, let’s count how many missing values you have. Then check how many
+different missing values you have (e.g. how many unique ones do you have). Then
+decide how you will impute. Will you insert average imputation values, most 
+common imputation values, or use the multiple imputation method? Explain your
+decision. Then fix the missing values.
+```{r}
+sum(is.na(women_in_gov_long$prop_women))
+
+women_in_gov_long <- women_in_gov_long %>%
+        separate(col = year, into = c("prefix", "year_recorded"), sep = "X",  remove = TRUE) %>%
+        select(-prefix) %>%
+        filter(year_recorded >= 1990)
+```
+
+```{r}
+md.pattern(women_in_gov_long)
+
+women_imputed <- mice(women_in_gov_long, m = 5, maxit = 50, method = 'pmm')
+```
+
+```{r}
+complete_women <- complete(women_imputed, 2)
+```
+
+Create a boxplot to see if there are any outliers in the proportion of women.
+```{r}
+ggplot(complete_women) +
+        aes(y = prop_women) +
+        geom_boxplot()
+```
+
+Use the outliers package to calculate a zscore for each observation in your 
+data. Mark any of the values in the prop_women column that are more or less than
+3 standard deviations above or below the mean as outliers. Add this outlier flag
+as a new column within the dataset. Create a table that only contains the 
+outliers and have a look at them.
+```{r}
+measurement_score <- scores(complete_women$prop_women)
+is_outlier <- measurement_score > 3 | measurement_score < -3
+
+complete_women$is_outlier <- is_outlier
+
+women_outliers <- complete_women %>%
+        filter(is_outlier == TRUE)
+```
+
+Next decide - what will you do with these outliers? Create a table with your 
+newly dealt with outliers.
+- doing nothing with the outliers,  could be valid data
+```{r}
+complete_women
+```
+
+Extension task
+
+We will be looking for outliers and relationships between the 
+receipt_description variable and the receipt_value variable. Load in the data.
+Check the variable names, and check for missing values in the variable of
+interest receipt_value.
+```{r}
+deputies_info <- 
+        read_csv("~/de1_classnotes/week_07/day_1/5_cleaning_data_homework/data/deputies_info.csv")
+
+names(deputies_info)
+sum(is.na(deputies_info$receipt_value))
+```
+
+Spend some time visualizing any outliers in the receipt_value column. Does it 
+have a relationship with the receipt_description column?
+```{r}
+ggplot(deputies_info) +
+        aes(x = receipt_description, y = receipt_value) +
+        geom_boxplot() +
+        coord_flip()
+```
+
+Identify which rows in the receipt_value column of data_v1 dataset are outliers.
+Try plotting them or looking through just the outliers.
+
+Calculate the outlier zcores for the receipt_value column. Replot the data, and 
+then remove the outliers.
+```{r}
+measurement_score <- scores(deputies_info$receipt_value)
+is_outlier <- measurement_score > 3 | measurement_score < -3
+
+deputies_info$is_outlier <- is_outlier
+
+deputies_outliers <- deputies_info %>%
+        filter(is_outlier == TRUE)
+
+ggplot(deputies_outliers) +
+        aes(x = receipt_description, y = receipt_value) +
+        geom_boxplot() +
+        coord_flip()
+```

@@ -1,0 +1,81 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+Load the data into a dataframe project
+```{r}
+project <- read.csv("~/de1_classnotes/week_07/day_2/5_regression_homework/project_management.csv")
+```
+
+Plot the data, taking estimated_length as the independent variable and actual_length as the dependent variable.
+
+Label the data points with their row number in the data frame using the command
+`text(project$estimated_length, project$actual_length, labels = seq(nrows(project)), cex = 0.7, pos = 2)`
+```{r}
+plot(project$estimated_length, project$actual_length)
+text(project$estimated_length, project$actual_length, labels = seq(nrow(project)), cex = 0.7, pos = 2)
+```
+
+Identify by eye any points you think might be outliers and note their labels.
+- 5, 18
+
+Further split your outliers into those you think are ‘influential’ or ‘non-influential’ based on a visual assessment of their leverage.
+- 5 has high leverage/influence
+- 18 has low leverage/influence
+
+Regress actual_length on estimated_length and confirm your visual assessment of which points are ‘influential’ or ‘non-influential’ outliers based on the “Cook’s distance” lines in the Residuals vs Leverage diagnostic plot.
+```{r}
+plot(lm(actual_length ~ estimated_length, data = project))
+```
+
+Obtain the intercept and regression coefficient of variable estimated_length for a simple linear model fitted to data omitting one of your non-influential outlier points.
+```{r}
+part_lm_non <- lm(actual_length ~ estimated_length, data = project[-18, ])
+part_lm_non
+```
+
+How different are the intercept and coefficient from those obtained above by fitting the full data set? Does this support classifying the omitted point as non-influential?
+```{r}
+full_lm_non <- lm(actual_length ~ estimated_length, data = project)
+full_lm_non
+```
+
+Plot the data points, this regression line and the regression line for the full data set. How different are the lines?
+```{r}
+predict_at_non <- data.frame(estimated_length = seq(10, 22, 1))
+predict_y_part_non <- predict(part_lm_non, newdata = predict_at_non)
+predict_y_full_non <- predict(full_lm_non, newdata = predict_at_non)
+
+plot(project$estimated_length, project$actual_length)
+lines(predict_at_non$estimated_length, predict_y_part_non, col = "red")
+lines(predict_at_non$estimated_length, predict_y_full_non, col = "green")
+```
+
+Repeat the procedure above, but this time omitting one of your influential outliers.
+```{r}
+part_lm_inf <- lm(actual_length ~ estimated_length, data = project[-5, ])
+
+full_lm_inf <- lm(actual_length ~ estimated_length, data = project)
+
+predict_at_inf <- data.frame(estimated_length = seq(10, 22, 1))
+predict_y_part_inf <- predict(part_lm_inf, newdata = predict_at_inf)
+predict_y_full_inf <- predict(full_lm_inf, newdata = predict_at_inf)
+
+plot(project$estimated_length, project$actual_length)
+lines(predict_at_inf$estimated_length, predict_y_part_inf, col = "red")
+lines(predict_at_inf$estimated_length, predict_y_full_inf, col = "green")
+```
+
+Return to your fitted model for the complete data set and examine and comment upon the Residuals vs Fitted, Normal Q-Q and Scale-Location diagnostic plots. Are the regression assumptions reasonably satisfied?
+```{r}
+plot(full_lm_inf)
+```
+residuals vs fitted
+- slight downward slope but residuals don't appear to great bigger with y.
+
+normal qq
+- mostly on a straight line but points 5 and 18 are off suggesting not completely normal
+
+scale-location
+- not a straight line indicating heteroscedastic residuals.

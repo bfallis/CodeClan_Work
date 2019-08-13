@@ -1729,7 +1729,7 @@ $(document).ready(function () {
 </style>
 <script>
 $(document).ready(function () {
-  window.initializeSourceEmbed("day_1.Rmd");
+  window.initializeSourceEmbed("day_2.Rmd");
   window.initializeCodeFolding("show" === "show");
 });
 </script>
@@ -1767,154 +1767,98 @@ $(document).ready(function () {
 
 
 <!-- rnb-text-begin -->
+<p>Load the data into a dataframe project</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG5saWJyYXJ5KG91dGxpZXJzKVxubGlicmFyeShsdWJyaWRhdGUpXG5saWJyYXJ5KG1pY2UpXG5gYGAifQ== -->
-<pre class="r"><code>library(tidyverse)
-library(outliers)
-library(lubridate)
-library(mice)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucHJvamVjdCA8LSByZWFkLmNzdihcIn4vZGUxX2NsYXNzbm90ZXMvd2Vla18wNy9kYXlfMi81X3JlZ3Jlc3Npb25faG9tZXdvcmsvcHJvamVjdF9tYW5hZ2VtZW50LmNzdlwiKVxuYGBgIn0= -->
+<pre class="r"><code>project &lt;- read.csv(&quot;~/de1_classnotes/week_07/day_2/5_regression_homework/project_management.csv&quot;)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Load in the women_in_gov csv file. Make sure you remove all metadata from the top.</p>
+<p>Plot the data, taking estimated_length as the independent variable and actual_length as the dependent variable.</p>
+<p>Label the data points with their row number in the data frame using the command <code>text(project$estimated_length, project$actual_length, labels = seq(nrows(project)), cex = 0.7, pos = 2)</code></p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxud29tZW5faW5fZ292IDwtIFxuICAgICAgICByZWFkX2NzdihcXH4vZGUxX2NsYXNzbm90ZXMvd2Vla18wNy9kYXlfMS81X2NsZWFuaW5nX2RhdGFfaG9tZXdvcmsvZGF0YS93b21lbl9pbl9nb3YuY3N2XFwsXG4gICAgICAgICAgICAgICAgc2tpcCA9IDQpXG5gYGBcbmBgYCJ9 -->
-<p><code>r</code>r women_in_gov &lt;- read_csv(~/de1_classnotes/week_07/day_1/5_cleaning_data_homework/data/women_in_gov.csv, skip = 4)</p>
-<pre><code></code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGxvdChwcm9qZWN0JGVzdGltYXRlZF9sZW5ndGgsIHByb2plY3QkYWN0dWFsX2xlbmd0aClcbnRleHQocHJvamVjdCRlc3RpbWF0ZWRfbGVuZ3RoLCBwcm9qZWN0JGFjdHVhbF9sZW5ndGgsIGxhYmVscyA9IHNlcShucm93KHByb2plY3QpKSwgY2V4ID0gMC43LCBwb3MgPSAyKVxuYGBgIn0= -->
+<pre class="r"><code>plot(project$estimated_length, project$actual_length)
+text(project$estimated_length, project$actual_length, labels = seq(nrow(project)), cex = 0.7, pos = 2)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Some of the column names contain spaces and numbers. Fix the column names using the make.names function.</p>
+<p>Identify by eye any points you think might be outliers and note their labels. - 5, 18</p>
+<p>Further split your outliers into those you think are ‘influential’ or ‘non-influential’ based on a visual assessment of their leverage. - 5 has high leverage/influence - 18 has low leverage/influence</p>
+<p>Regress actual_length on estimated_length and confirm your visual assessment of which points are ‘influential’ or ‘non-influential’ outliers based on the “Cook’s distance” lines in the Residuals vs Leverage diagnostic plot.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxubmFtZXMod29tZW5faW5fZ292KSA8LSBtYWtlLm5hbWVzKG5hbWVzKHdvbWVuX2luX2dvdikpXG5gYGBcbmBgYCJ9 -->
-<p><code>r</code>r names(women_in_gov) &lt;- make.names(names(women_in_gov))</p>
-<pre><code></code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGxvdChsbShhY3R1YWxfbGVuZ3RoIH4gZXN0aW1hdGVkX2xlbmd0aCwgZGF0YSA9IHByb2plY3QpKVxuYGBgIn0= -->
+<pre class="r"><code>plot(lm(actual_length ~ estimated_length, data = project))</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>We have some columns in the data that don’t really need to be there. Confirm that the X64, Indicator.Name and Indicator.Code have the same values for all observations. If they do, remove those columns.</p>
+<p>Obtain the intercept and regression coefficient of variable estimated_length for a simple linear model fitted to data omitting one of your non-influential outlier points.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxudW5pcXVlKHdvbWVuX2luX2dvdiRYNjQpXG51bmlxdWUod29tZW5faW5fZ292JEluZGljYXRvci5OYW1lKVxudW5pcXVlKHdvbWVuX2luX2dvdiRJbmRpY2F0b3IuQ29kZSlcblxud29tZW5faW5fZ292IDwtIHdvbWVuX2luX2dvdiAlPiVcbiAgICAgICAgc2VsZWN0KC1jKFg2NCwgSW5kaWNhdG9yLk5hbWUsIEluZGljYXRvci5Db2RlKSlcbmBgYFxuYGBgIn0= -->
-<p><code>r</code>r unique(women_in_gov<span class="math inline">\(X64) unique(women_in_gov\)</span>Indicator.Name) unique(women_in_gov$Indicator.Code)</p>
-<p>women_in_gov &lt;- women_in_gov %&gt;% select(-c(X64, Indicator.Name, Indicator.Code))</p>
-<pre><code></code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGFydF9sbV9ub24gPC0gbG0oYWN0dWFsX2xlbmd0aCB+IGVzdGltYXRlZF9sZW5ndGgsIGRhdGEgPSBwcm9qZWN0Wy0xOCwgXSlcbnBhcnRfbG1fbm9uXG5gYGAifQ== -->
+<pre class="r"><code>part_lm_non &lt;- lm(actual_length ~ estimated_length, data = project[-18, ])
+part_lm_non</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Now we have got rid of the extra columns, we can rename the remaining country columns to something more tidy. Rename the Country.Name and Country.Code variables to country and code.</p>
+<p>How different are the intercept and coefficient from those obtained above by fitting the full data set? Does this support classifying the omitted point as non-influential?</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuY29sbmFtZXMod29tZW5faW5fZ292KVtjb2xuYW1lcyh3b21lbl9pbl9nb3YpID09IFxcQ291bnRyeS5OYW1lXFxdIDwtIFxcY291bnRyeVxcXG5jb2xuYW1lcyh3b21lbl9pbl9nb3YpW2NvbG5hbWVzKHdvbWVuX2luX2dvdikgPT0gXFxDb3VudHJ5LkNvZGVcXF0gPC0gXFxjb2RlXFxcbmBgYFxuYGBgIn0= -->
-<p><code>r</code>r colnames(women_in_gov)[colnames(women_in_gov) == .Name] &lt;- <br />
-colnames(women_in_gov)[colnames(women_in_gov) == .Code] &lt;- <br />
-</p>
-<pre><code></code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZnVsbF9sbV9ub24gPC0gbG0oYWN0dWFsX2xlbmd0aCB+IGVzdGltYXRlZF9sZW5ndGgsIGRhdGEgPSBwcm9qZWN0KVxuZnVsbF9sbV9ub25cbmBgYCJ9 -->
+<pre class="r"><code>full_lm_non &lt;- lm(actual_length ~ estimated_length, data = project)
+full_lm_non</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Think back to last week where we talked about wide vs long format. As the data is in wide format, it’s pretty clear to see we have a lot of missing values. Reshape the data from wide to long format, so that for each country the year column becomes a row.</p>
+<p>Plot the data points, this regression line and the regression line for the full data set. How different are the lines?</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxud29tZW5faW5fZ292X2xvbmcgPC0gZ2F0aGVyKHdvbWVuX2luX2dvdiwga2V5ID0geWVhciwgdmFsdWUgPSBwcm9wX3dvbWVuLCBYMTk2MDpYMjAxOClcbmBgYFxuYGBgIn0= -->
-<p><code>r</code>r women_in_gov_long &lt;- gather(women_in_gov, key = year, value = prop_women, X1960:X2018)</p>
-<pre><code></code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>You’ll notice your prop_women column contains missing values. Let’s do a few things. First, let’s count how many missing values you have. Then check how many different missing values you have (e.g. how many unique ones do you have). Then decide how you will impute. Will you insert average imputation values, most common imputation values, or use the multiple imputation method? Explain your decision. Then fix the missing values.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuc3VtKGlzLm5hKHdvbWVuX2luX2dvdl9sb25nJHByb3Bfd29tZW4pKVxuXG53b21lbl9pbl9nb3ZfbG9uZyA8LSB3b21lbl9pbl9nb3ZfbG9uZyAlPiVcbiAgICAgICAgc2VwYXJhdGUoY29sID0geWVhciwgaW50byA9IGMoXFxwcmVmaXhcXCwgXFx5ZWFyX3JlY29yZGVkXFwpLCBzZXAgPSBcXFhcXCwgIHJlbW92ZSA9IFRSVUUpICU+JVxuICAgICAgICBzZWxlY3QoLXByZWZpeCkgJT4lXG4gICAgICAgIGZpbHRlcih5ZWFyX3JlY29yZGVkID49IDE5OTApXG5gYGBcbmBgYCJ9 -->
-<p><code>r</code>r sum(is.na(women_in_gov_long$prop_women))</p>
-<p>women_in_gov_long &lt;- women_in_gov_long %&gt;% separate(col = year, into = c(, _recorded), sep = , remove = TRUE) %&gt;% select(-prefix) %&gt;% filter(year_recorded &gt;= 1990)</p>
-<pre><code></code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxubWQucGF0dGVybih3b21lbl9pbl9nb3ZfbG9uZylcblxud29tZW5faW1wdXRlZCA8LSBtaWNlKHdvbWVuX2luX2dvdl9sb25nLCBtID0gNSwgbWF4aXQgPSA1MCwgbWV0aG9kID0gJ3BtbScpXG5gYGBcbmBgYCJ9 -->
-<p><code>r</code>r md.pattern(women_in_gov_long)</p>
-<p>women_imputed &lt;- mice(women_in_gov_long, m = 5, maxit = 50, method = ‘pmm’)</p>
-<pre><code></code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuY29tcGxldGVfd29tZW4gPC0gY29tcGxldGUod29tZW5faW1wdXRlZCwgMilcbmBgYFxuYGBgIn0= -->
-<p><code>r</code>r complete_women &lt;- complete(women_imputed, 2)</p>
-<pre><code></code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Create a boxplot to see if there are any outliers in the proportion of women.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuZ2dwbG90KGNvbXBsZXRlX3dvbWVuKSArXG4gICAgICAgIGFlcyh5ID0gcHJvcF93b21lbikgK1xuICAgICAgICBnZW9tX2JveHBsb3QoKVxuYGBgXG5gYGAifQ== -->
-<p><code>r</code>r ggplot(complete_women) + aes(y = prop_women) + geom_boxplot()</p>
-<pre><code></code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Use the outliers package to calculate a zscore for each observation in your data. Mark any of the values in the prop_women column that are more or less than 3 standard deviations above or below the mean as outliers. Add this outlier flag as a new column within the dataset. Create a table that only contains the outliers and have a look at them.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxubWVhc3VyZW1lbnRfc2NvcmUgPC0gc2NvcmVzKGNvbXBsZXRlX3dvbWVuJHByb3Bfd29tZW4pXG5pc19vdXRsaWVyIDwtIG1lYXN1cmVtZW50X3Njb3JlID4gMyB8IG1lYXN1cmVtZW50X3Njb3JlIDwgLTNcblxuY29tcGxldGVfd29tZW4kaXNfb3V0bGllciA8LSBpc19vdXRsaWVyXG5cbndvbWVuX291dGxpZXJzIDwtIGNvbXBsZXRlX3dvbWVuICU+JVxuICAgICAgICBmaWx0ZXIoaXNfb3V0bGllciA9PSBUUlVFKVxuYGBgXG5gYGAifQ== -->
-<p><code>r</code>r measurement_score &lt;- scores(complete_women$prop_women) is_outlier &lt;- measurement_score &gt; 3 | measurement_score &lt; -3</p>
-<p>complete_women$is_outlier &lt;- is_outlier</p>
-<p>women_outliers &lt;- complete_women %&gt;% filter(is_outlier == TRUE)</p>
-<pre><code></code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Next decide - what will you do with these outliers? Create a table with your newly dealt with outliers. - doing nothing with the outliers, could be valid data</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuY29tcGxldGVfd29tZW5cbmBgYFxuYGBgIn0= -->
-<p><code>r</code>r complete_women</p>
-<pre><code></code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Extension task</p>
-<p>We will be looking for outliers and relationships between the receipt_description variable and the receipt_value variable. Load in the data. Check the variable names, and check for missing values in the variable of interest receipt_value.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuZGVwdXRpZXNfaW5mbyA8LSBcbiAgICAgICAgcmVhZF9jc3YoXFx+L2RlMV9jbGFzc25vdGVzL3dlZWtfMDcvZGF5XzEvNV9jbGVhbmluZ19kYXRhX2hvbWV3b3JrL2RhdGEvZGVwdXRpZXNfaW5mby5jc3ZcXClcblxubmFtZXMoZGVwdXRpZXNfaW5mbylcbnN1bShpcy5uYShkZXB1dGllc19pbmZvJHJlY2VpcHRfdmFsdWUpKVxuYGBgXG5gYGAifQ== -->
-<p><code>r</code>r deputies_info &lt;- read_csv(~/de1_classnotes/week_07/day_1/5_cleaning_data_homework/data/deputies_info.csv)</p>
-<p>names(deputies_info) sum(is.na(deputies_info$receipt_value))</p>
-<pre><code></code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Spend some time visualizing any outliers in the receipt_value column. Does it have a relationship with the receipt_description column?</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuZ2dwbG90KGRlcHV0aWVzX2luZm8pICtcbiAgICAgICAgYWVzKHggPSByZWNlaXB0X2Rlc2NyaXB0aW9uLCB5ID0gcmVjZWlwdF92YWx1ZSkgK1xuICAgICAgICBnZW9tX2JveHBsb3QoKSArXG4gICAgICAgIGNvb3JkX2ZsaXAoKVxuYGBgXG5gYGAifQ== -->
-<p><code>r</code>r ggplot(deputies_info) + aes(x = receipt_description, y = receipt_value) + geom_boxplot() + coord_flip()</p>
-<pre><code></code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Identify which rows in the receipt_value column of data_v1 dataset are outliers. Try plotting them or looking through just the outliers.</p>
-<p>Calculate the outlier zcores for the receipt_value column. Replot the data, and then remove the outliers.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxubWVhc3VyZW1lbnRfc2NvcmUgPC0gc2NvcmVzKGRlcHV0aWVzX2luZm8kcmVjZWlwdF92YWx1ZSlcbmlzX291dGxpZXIgPC0gbWVhc3VyZW1lbnRfc2NvcmUgPiAzIHwgbWVhc3VyZW1lbnRfc2NvcmUgPCAtM1xuXG5kZXB1dGllc19pbmZvJGlzX291dGxpZXIgPC0gaXNfb3V0bGllclxuXG5kZXB1dGllc19vdXRsaWVycyA8LSBkZXB1dGllc19pbmZvICU+JVxuICAgICAgICBmaWx0ZXIoaXNfb3V0bGllciA9PSBUUlVFKVxuXG5nZ3Bsb3QoZGVwdXRpZXNfb3V0bGllcnMpICtcbiAgICAgICAgYWVzKHggPSByZWNlaXB0X2Rlc2NyaXB0aW9uLCB5ID0gcmVjZWlwdF92YWx1ZSkgK1xuICAgICAgICBnZW9tX2JveHBsb3QoKSArXG4gICAgICAgIGNvb3JkX2ZsaXAoKVxuYGBgXG5gYGAifQ== -->
-<p><code>r</code>r measurement_score &lt;- scores(deputies_info$receipt_value) is_outlier &lt;- measurement_score &gt; 3 | measurement_score &lt; -3</p>
-<p>deputies_info$is_outlier &lt;- is_outlier</p>
-<p>deputies_outliers &lt;- deputies_info %&gt;% filter(is_outlier == TRUE)</p>
-<p>ggplot(deputies_outliers) + aes(x = receipt_description, y = receipt_value) + geom_boxplot() + coord_flip()</p>
-<pre><code></code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucHJlZGljdF9hdF9ub24gPC0gZGF0YS5mcmFtZShlc3RpbWF0ZWRfbGVuZ3RoID0gc2VxKDEwLCAyMiwgMSkpXG5wcmVkaWN0X3lfcGFydF9ub24gPC0gcHJlZGljdChwYXJ0X2xtX25vbiwgbmV3ZGF0YSA9IHByZWRpY3RfYXRfbm9uKVxucHJlZGljdF95X2Z1bGxfbm9uIDwtIHByZWRpY3QoZnVsbF9sbV9ub24sIG5ld2RhdGEgPSBwcmVkaWN0X2F0X25vbilcblxucGxvdChwcm9qZWN0JGVzdGltYXRlZF9sZW5ndGgsIHByb2plY3QkYWN0dWFsX2xlbmd0aClcbmxpbmVzKHByZWRpY3RfYXRfbm9uJGVzdGltYXRlZF9sZW5ndGgsIHByZWRpY3RfeV9wYXJ0X25vbiwgY29sID0gXCJyZWRcIilcbmxpbmVzKHByZWRpY3RfYXRfbm9uJGVzdGltYXRlZF9sZW5ndGgsIHByZWRpY3RfeV9mdWxsX25vbiwgY29sID0gXCJncmVlblwiKVxuYGBgIn0= -->
+<pre class="r"><code>predict_at_non &lt;- data.frame(estimated_length = seq(10, 22, 1))
+predict_y_part_non &lt;- predict(part_lm_non, newdata = predict_at_non)
+predict_y_full_non &lt;- predict(full_lm_non, newdata = predict_at_non)
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKYGBge3IsIG1lc3NhZ2UgPSBGQUxTRX0KbGlicmFyeSh0aWR5dmVyc2UpCmxpYnJhcnkob3V0bGllcnMpCmxpYnJhcnkobHVicmlkYXRlKQpsaWJyYXJ5KG1pY2UpCmBgYAoKTG9hZCBpbiB0aGUgd29tZW5faW5fZ292IGNzdiBmaWxlLiBNYWtlIHN1cmUgeW91IHJlbW92ZSBhbGwgbWV0YWRhdGEgZnJvbSB0aGUKdG9wLgpgYGB7ciwgbWVzc2FnZSA9IEZBTFNFfQp3b21lbl9pbl9nb3YgPC0gCiAgICAgICAgcmVhZF9jc3YoIn4vZGUxX2NsYXNzbm90ZXMvd2Vla18wNy9kYXlfMS81X2NsZWFuaW5nX2RhdGFfaG9tZXdvcmsvZGF0YS93b21lbl9pbl9nb3YuY3N2IiwKICAgICAgICAgICAgICAgIHNraXAgPSA0KQpgYGAKClNvbWUgb2YgdGhlIGNvbHVtbiBuYW1lcyBjb250YWluIHNwYWNlcyBhbmQgbnVtYmVycy4gRml4IHRoZSBjb2x1bW4gbmFtZXMgdXNpbmcgCnRoZSBtYWtlLm5hbWVzIGZ1bmN0aW9uLgpgYGB7cn0KbmFtZXMod29tZW5faW5fZ292KSA8LSBtYWtlLm5hbWVzKG5hbWVzKHdvbWVuX2luX2dvdikpCmBgYAoKV2UgaGF2ZSBzb21lIGNvbHVtbnMgaW4gdGhlIGRhdGEgdGhhdCBkb27igJl0IHJlYWxseSBuZWVkIHRvIGJlIHRoZXJlLiBDb25maXJtIAp0aGF0IHRoZSBYNjQsIEluZGljYXRvci5OYW1lIGFuZCBJbmRpY2F0b3IuQ29kZSBoYXZlIHRoZSBzYW1lIHZhbHVlcyBmb3IgYWxsIApvYnNlcnZhdGlvbnMuIElmIHRoZXkgZG8sIHJlbW92ZSB0aG9zZSBjb2x1bW5zLgpgYGB7cn0KdW5pcXVlKHdvbWVuX2luX2dvdiRYNjQpCnVuaXF1ZSh3b21lbl9pbl9nb3YkSW5kaWNhdG9yLk5hbWUpCnVuaXF1ZSh3b21lbl9pbl9nb3YkSW5kaWNhdG9yLkNvZGUpCgp3b21lbl9pbl9nb3YgPC0gd29tZW5faW5fZ292ICU+JQogICAgICAgIHNlbGVjdCgtYyhYNjQsIEluZGljYXRvci5OYW1lLCBJbmRpY2F0b3IuQ29kZSkpCmBgYAoKTm93IHdlIGhhdmUgZ290IHJpZCBvZiB0aGUgZXh0cmEgY29sdW1ucywgd2UgY2FuIHJlbmFtZSB0aGUgcmVtYWluaW5nIGNvdW50cnkKY29sdW1ucyB0byBzb21ldGhpbmcgbW9yZSB0aWR5LiBSZW5hbWUgdGhlIENvdW50cnkuTmFtZSBhbmQgQ291bnRyeS5Db2RlIAp2YXJpYWJsZXMgdG8gY291bnRyeSBhbmQgY29kZS4KYGBge3J9CmNvbG5hbWVzKHdvbWVuX2luX2dvdilbY29sbmFtZXMod29tZW5faW5fZ292KSA9PSAiQ291bnRyeS5OYW1lIl0gPC0gImNvdW50cnkiCmNvbG5hbWVzKHdvbWVuX2luX2dvdilbY29sbmFtZXMod29tZW5faW5fZ292KSA9PSAiQ291bnRyeS5Db2RlIl0gPC0gImNvZGUiCmBgYAoKVGhpbmsgYmFjayB0byBsYXN0IHdlZWsgd2hlcmUgd2UgdGFsa2VkIGFib3V0IHdpZGUgdnMgbG9uZyBmb3JtYXQuIEFzIHRoZSBkYXRhIAppcyBpbiB3aWRlIGZvcm1hdCwgaXTigJlzIHByZXR0eSBjbGVhciB0byBzZWUgd2UgaGF2ZSBhIGxvdCBvZiBtaXNzaW5nIHZhbHVlcy4gClJlc2hhcGUgdGhlIGRhdGEgZnJvbSB3aWRlIHRvIGxvbmcgZm9ybWF0LCBzbyB0aGF0IGZvciBlYWNoIGNvdW50cnkgdGhlIHllYXIgCmNvbHVtbiBiZWNvbWVzIGEgcm93LgpgYGB7cn0Kd29tZW5faW5fZ292X2xvbmcgPC0gZ2F0aGVyKHdvbWVuX2luX2dvdiwga2V5ID0geWVhciwgdmFsdWUgPSBwcm9wX3dvbWVuLCBYMTk2MDpYMjAxOCkKYGBgCgpZb3XigJlsbCBub3RpY2UgeW91ciBwcm9wX3dvbWVuIGNvbHVtbiBjb250YWlucyBtaXNzaW5nIHZhbHVlcy4gTGV04oCZcyBkbyBhIGZldyAKdGhpbmdzLiBGaXJzdCwgbGV04oCZcyBjb3VudCBob3cgbWFueSBtaXNzaW5nIHZhbHVlcyB5b3UgaGF2ZS4gVGhlbiBjaGVjayBob3cgbWFueQpkaWZmZXJlbnQgbWlzc2luZyB2YWx1ZXMgeW91IGhhdmUgKGUuZy4gaG93IG1hbnkgdW5pcXVlIG9uZXMgZG8geW91IGhhdmUpLiBUaGVuCmRlY2lkZSBob3cgeW91IHdpbGwgaW1wdXRlLiBXaWxsIHlvdSBpbnNlcnQgYXZlcmFnZSBpbXB1dGF0aW9uIHZhbHVlcywgbW9zdCAKY29tbW9uIGltcHV0YXRpb24gdmFsdWVzLCBvciB1c2UgdGhlIG11bHRpcGxlIGltcHV0YXRpb24gbWV0aG9kPyBFeHBsYWluIHlvdXIKZGVjaXNpb24uIFRoZW4gZml4IHRoZSBtaXNzaW5nIHZhbHVlcy4KYGBge3J9CnN1bShpcy5uYSh3b21lbl9pbl9nb3ZfbG9uZyRwcm9wX3dvbWVuKSkKCndvbWVuX2luX2dvdl9sb25nIDwtIHdvbWVuX2luX2dvdl9sb25nICU+JQogICAgICAgIHNlcGFyYXRlKGNvbCA9IHllYXIsIGludG8gPSBjKCJwcmVmaXgiLCAieWVhcl9yZWNvcmRlZCIpLCBzZXAgPSAiWCIsICByZW1vdmUgPSBUUlVFKSAlPiUKICAgICAgICBzZWxlY3QoLXByZWZpeCkgJT4lCiAgICAgICAgZmlsdGVyKHllYXJfcmVjb3JkZWQgPj0gMTk5MCkKYGBgCgpgYGB7cn0KbWQucGF0dGVybih3b21lbl9pbl9nb3ZfbG9uZykKCndvbWVuX2ltcHV0ZWQgPC0gbWljZSh3b21lbl9pbl9nb3ZfbG9uZywgbSA9IDUsIG1heGl0ID0gNTAsIG1ldGhvZCA9ICdwbW0nKQpgYGAKCmBgYHtyfQpjb21wbGV0ZV93b21lbiA8LSBjb21wbGV0ZSh3b21lbl9pbXB1dGVkLCAyKQpgYGAKCkNyZWF0ZSBhIGJveHBsb3QgdG8gc2VlIGlmIHRoZXJlIGFyZSBhbnkgb3V0bGllcnMgaW4gdGhlIHByb3BvcnRpb24gb2Ygd29tZW4uCmBgYHtyfQpnZ3Bsb3QoY29tcGxldGVfd29tZW4pICsKICAgICAgICBhZXMoeSA9IHByb3Bfd29tZW4pICsKICAgICAgICBnZW9tX2JveHBsb3QoKQpgYGAKClVzZSB0aGUgb3V0bGllcnMgcGFja2FnZSB0byBjYWxjdWxhdGUgYSB6c2NvcmUgZm9yIGVhY2ggb2JzZXJ2YXRpb24gaW4geW91ciAKZGF0YS4gTWFyayBhbnkgb2YgdGhlIHZhbHVlcyBpbiB0aGUgcHJvcF93b21lbiBjb2x1bW4gdGhhdCBhcmUgbW9yZSBvciBsZXNzIHRoYW4KMyBzdGFuZGFyZCBkZXZpYXRpb25zIGFib3ZlIG9yIGJlbG93IHRoZSBtZWFuIGFzIG91dGxpZXJzLiBBZGQgdGhpcyBvdXRsaWVyIGZsYWcKYXMgYSBuZXcgY29sdW1uIHdpdGhpbiB0aGUgZGF0YXNldC4gQ3JlYXRlIGEgdGFibGUgdGhhdCBvbmx5IGNvbnRhaW5zIHRoZSAKb3V0bGllcnMgYW5kIGhhdmUgYSBsb29rIGF0IHRoZW0uCmBgYHtyfQptZWFzdXJlbWVudF9zY29yZSA8LSBzY29yZXMoY29tcGxldGVfd29tZW4kcHJvcF93b21lbikKaXNfb3V0bGllciA8LSBtZWFzdXJlbWVudF9zY29yZSA+IDMgfCBtZWFzdXJlbWVudF9zY29yZSA8IC0zCgpjb21wbGV0ZV93b21lbiRpc19vdXRsaWVyIDwtIGlzX291dGxpZXIKCndvbWVuX291dGxpZXJzIDwtIGNvbXBsZXRlX3dvbWVuICU+JQogICAgICAgIGZpbHRlcihpc19vdXRsaWVyID09IFRSVUUpCmBgYAoKTmV4dCBkZWNpZGUgLSB3aGF0IHdpbGwgeW91IGRvIHdpdGggdGhlc2Ugb3V0bGllcnM/IENyZWF0ZSBhIHRhYmxlIHdpdGggeW91ciAKbmV3bHkgZGVhbHQgd2l0aCBvdXRsaWVycy4KLSBkb2luZyBub3RoaW5nIHdpdGggdGhlIG91dGxpZXJzLCAgY291bGQgYmUgdmFsaWQgZGF0YQpgYGB7cn0KY29tcGxldGVfd29tZW4KYGBgCgpFeHRlbnNpb24gdGFzawoKV2Ugd2lsbCBiZSBsb29raW5nIGZvciBvdXRsaWVycyBhbmQgcmVsYXRpb25zaGlwcyBiZXR3ZWVuIHRoZSAKcmVjZWlwdF9kZXNjcmlwdGlvbiB2YXJpYWJsZSBhbmQgdGhlIHJlY2VpcHRfdmFsdWUgdmFyaWFibGUuIExvYWQgaW4gdGhlIGRhdGEuCkNoZWNrIHRoZSB2YXJpYWJsZSBuYW1lcywgYW5kIGNoZWNrIGZvciBtaXNzaW5nIHZhbHVlcyBpbiB0aGUgdmFyaWFibGUgb2YKaW50ZXJlc3QgcmVjZWlwdF92YWx1ZS4KYGBge3J9CmRlcHV0aWVzX2luZm8gPC0gCiAgICAgICAgcmVhZF9jc3YoIn4vZGUxX2NsYXNzbm90ZXMvd2Vla18wNy9kYXlfMS81X2NsZWFuaW5nX2RhdGFfaG9tZXdvcmsvZGF0YS9kZXB1dGllc19pbmZvLmNzdiIpCgpuYW1lcyhkZXB1dGllc19pbmZvKQpzdW0oaXMubmEoZGVwdXRpZXNfaW5mbyRyZWNlaXB0X3ZhbHVlKSkKYGBgCgpTcGVuZCBzb21lIHRpbWUgdmlzdWFsaXppbmcgYW55IG91dGxpZXJzIGluIHRoZSByZWNlaXB0X3ZhbHVlIGNvbHVtbi4gRG9lcyBpdCAKaGF2ZSBhIHJlbGF0aW9uc2hpcCB3aXRoIHRoZSByZWNlaXB0X2Rlc2NyaXB0aW9uIGNvbHVtbj8KYGBge3J9CmdncGxvdChkZXB1dGllc19pbmZvKSArCiAgICAgICAgYWVzKHggPSByZWNlaXB0X2Rlc2NyaXB0aW9uLCB5ID0gcmVjZWlwdF92YWx1ZSkgKwogICAgICAgIGdlb21fYm94cGxvdCgpICsKICAgICAgICBjb29yZF9mbGlwKCkKYGBgCgpJZGVudGlmeSB3aGljaCByb3dzIGluIHRoZSByZWNlaXB0X3ZhbHVlIGNvbHVtbiBvZiBkYXRhX3YxIGRhdGFzZXQgYXJlIG91dGxpZXJzLgpUcnkgcGxvdHRpbmcgdGhlbSBvciBsb29raW5nIHRocm91Z2gganVzdCB0aGUgb3V0bGllcnMuCgpDYWxjdWxhdGUgdGhlIG91dGxpZXIgemNvcmVzIGZvciB0aGUgcmVjZWlwdF92YWx1ZSBjb2x1bW4uIFJlcGxvdCB0aGUgZGF0YSwgYW5kIAp0aGVuIHJlbW92ZSB0aGUgb3V0bGllcnMuCmBgYHtyfQptZWFzdXJlbWVudF9zY29yZSA8LSBzY29yZXMoZGVwdXRpZXNfaW5mbyRyZWNlaXB0X3ZhbHVlKQppc19vdXRsaWVyIDwtIG1lYXN1cmVtZW50X3Njb3JlID4gMyB8IG1lYXN1cmVtZW50X3Njb3JlIDwgLTMKCmRlcHV0aWVzX2luZm8kaXNfb3V0bGllciA8LSBpc19vdXRsaWVyCgpkZXB1dGllc19vdXRsaWVycyA8LSBkZXB1dGllc19pbmZvICU+JQogICAgICAgIGZpbHRlcihpc19vdXRsaWVyID09IFRSVUUpCgpnZ3Bsb3QoZGVwdXRpZXNfb3V0bGllcnMpICsKICAgICAgICBhZXMoeCA9IHJlY2VpcHRfZGVzY3JpcHRpb24sIHkgPSByZWNlaXB0X3ZhbHVlKSArCiAgICAgICAgZ2VvbV9ib3hwbG90KCkgKwogICAgICAgIGNvb3JkX2ZsaXAoKQpgYGAK</div>
+plot(project$estimated_length, project$actual_length)
+lines(predict_at_non$estimated_length, predict_y_part_non, col = &quot;red&quot;)
+lines(predict_at_non$estimated_length, predict_y_full_non, col = &quot;green&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Repeat the procedure above, but this time omitting one of your influential outliers.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGFydF9sbV9pbmYgPC0gbG0oYWN0dWFsX2xlbmd0aCB+IGVzdGltYXRlZF9sZW5ndGgsIGRhdGEgPSBwcm9qZWN0Wy01LCBdKVxuXG5mdWxsX2xtX2luZiA8LSBsbShhY3R1YWxfbGVuZ3RoIH4gZXN0aW1hdGVkX2xlbmd0aCwgZGF0YSA9IHByb2plY3QpXG5cbnByZWRpY3RfYXRfaW5mIDwtIGRhdGEuZnJhbWUoZXN0aW1hdGVkX2xlbmd0aCA9IHNlcSgxMCwgMjIsIDEpKVxucHJlZGljdF95X3BhcnRfaW5mIDwtIHByZWRpY3QocGFydF9sbV9pbmYsIG5ld2RhdGEgPSBwcmVkaWN0X2F0X2luZilcbnByZWRpY3RfeV9mdWxsX2luZiA8LSBwcmVkaWN0KGZ1bGxfbG1faW5mLCBuZXdkYXRhID0gcHJlZGljdF9hdF9pbmYpXG5cbnBsb3QocHJvamVjdCRlc3RpbWF0ZWRfbGVuZ3RoLCBwcm9qZWN0JGFjdHVhbF9sZW5ndGgpXG5saW5lcyhwcmVkaWN0X2F0X2luZiRlc3RpbWF0ZWRfbGVuZ3RoLCBwcmVkaWN0X3lfcGFydF9pbmYsIGNvbCA9IFwicmVkXCIpXG5saW5lcyhwcmVkaWN0X2F0X2luZiRlc3RpbWF0ZWRfbGVuZ3RoLCBwcmVkaWN0X3lfZnVsbF9pbmYsIGNvbCA9IFwiZ3JlZW5cIilcbmBgYCJ9 -->
+<pre class="r"><code>part_lm_inf &lt;- lm(actual_length ~ estimated_length, data = project[-5, ])
+
+full_lm_inf &lt;- lm(actual_length ~ estimated_length, data = project)
+
+predict_at_inf &lt;- data.frame(estimated_length = seq(10, 22, 1))
+predict_y_part_inf &lt;- predict(part_lm_inf, newdata = predict_at_inf)
+predict_y_full_inf &lt;- predict(full_lm_inf, newdata = predict_at_inf)
+
+plot(project$estimated_length, project$actual_length)
+lines(predict_at_inf$estimated_length, predict_y_part_inf, col = &quot;red&quot;)
+lines(predict_at_inf$estimated_length, predict_y_full_inf, col = &quot;green&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Return to your fitted model for the complete data set and examine and comment upon the Residuals vs Fitted, Normal Q-Q and Scale-Location diagnostic plots. Are the regression assumptions reasonably satisfied?</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGxvdChmdWxsX2xtX2luZilcbmBgYCJ9 -->
+<pre class="r"><code>plot(full_lm_inf)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>residuals vs fitted - slight downward slope but residuals don’t appear to great bigger with y.</p>
+<p>normal qq - mostly on a straight line but points 5 and 18 are off suggesting not completely normal</p>
+<p>scale-location - not a straight line indicating heteroscedastic residuals.</p>
+<!-- rnb-text-end -->
+
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKTG9hZCB0aGUgZGF0YSBpbnRvIGEgZGF0YWZyYW1lIHByb2plY3QKYGBge3J9CnByb2plY3QgPC0gcmVhZC5jc3YoIn4vZGUxX2NsYXNzbm90ZXMvd2Vla18wNy9kYXlfMi81X3JlZ3Jlc3Npb25faG9tZXdvcmsvcHJvamVjdF9tYW5hZ2VtZW50LmNzdiIpCmBgYAoKUGxvdCB0aGUgZGF0YSwgdGFraW5nIGVzdGltYXRlZF9sZW5ndGggYXMgdGhlIGluZGVwZW5kZW50IHZhcmlhYmxlIGFuZCBhY3R1YWxfbGVuZ3RoIGFzIHRoZSBkZXBlbmRlbnQgdmFyaWFibGUuCgpMYWJlbCB0aGUgZGF0YSBwb2ludHMgd2l0aCB0aGVpciByb3cgbnVtYmVyIGluIHRoZSBkYXRhIGZyYW1lIHVzaW5nIHRoZSBjb21tYW5kCmB0ZXh0KHByb2plY3QkZXN0aW1hdGVkX2xlbmd0aCwgcHJvamVjdCRhY3R1YWxfbGVuZ3RoLCBsYWJlbHMgPSBzZXEobnJvd3MocHJvamVjdCkpLCBjZXggPSAwLjcsIHBvcyA9IDIpYApgYGB7cn0KcGxvdChwcm9qZWN0JGVzdGltYXRlZF9sZW5ndGgsIHByb2plY3QkYWN0dWFsX2xlbmd0aCkKdGV4dChwcm9qZWN0JGVzdGltYXRlZF9sZW5ndGgsIHByb2plY3QkYWN0dWFsX2xlbmd0aCwgbGFiZWxzID0gc2VxKG5yb3cocHJvamVjdCkpLCBjZXggPSAwLjcsIHBvcyA9IDIpCmBgYAoKSWRlbnRpZnkgYnkgZXllIGFueSBwb2ludHMgeW91IHRoaW5rIG1pZ2h0IGJlIG91dGxpZXJzIGFuZCBub3RlIHRoZWlyIGxhYmVscy4KLSA1LCAxOAoKRnVydGhlciBzcGxpdCB5b3VyIG91dGxpZXJzIGludG8gdGhvc2UgeW91IHRoaW5rIGFyZSDigJhpbmZsdWVudGlhbOKAmSBvciDigJhub24taW5mbHVlbnRpYWzigJkgYmFzZWQgb24gYSB2aXN1YWwgYXNzZXNzbWVudCBvZiB0aGVpciBsZXZlcmFnZS4KLSA1IGhhcyBoaWdoIGxldmVyYWdlL2luZmx1ZW5jZQotIDE4IGhhcyBsb3cgbGV2ZXJhZ2UvaW5mbHVlbmNlCgpSZWdyZXNzIGFjdHVhbF9sZW5ndGggb24gZXN0aW1hdGVkX2xlbmd0aCBhbmQgY29uZmlybSB5b3VyIHZpc3VhbCBhc3Nlc3NtZW50IG9mIHdoaWNoIHBvaW50cyBhcmUg4oCYaW5mbHVlbnRpYWzigJkgb3Ig4oCYbm9uLWluZmx1ZW50aWFs4oCZIG91dGxpZXJzIGJhc2VkIG9uIHRoZSDigJxDb29r4oCZcyBkaXN0YW5jZeKAnSBsaW5lcyBpbiB0aGUgUmVzaWR1YWxzIHZzIExldmVyYWdlIGRpYWdub3N0aWMgcGxvdC4KYGBge3J9CnBsb3QobG0oYWN0dWFsX2xlbmd0aCB+IGVzdGltYXRlZF9sZW5ndGgsIGRhdGEgPSBwcm9qZWN0KSkKYGBgCgpPYnRhaW4gdGhlIGludGVyY2VwdCBhbmQgcmVncmVzc2lvbiBjb2VmZmljaWVudCBvZiB2YXJpYWJsZSBlc3RpbWF0ZWRfbGVuZ3RoIGZvciBhIHNpbXBsZSBsaW5lYXIgbW9kZWwgZml0dGVkIHRvIGRhdGEgb21pdHRpbmcgb25lIG9mIHlvdXIgbm9uLWluZmx1ZW50aWFsIG91dGxpZXIgcG9pbnRzLgpgYGB7cn0KcGFydF9sbV9ub24gPC0gbG0oYWN0dWFsX2xlbmd0aCB+IGVzdGltYXRlZF9sZW5ndGgsIGRhdGEgPSBwcm9qZWN0Wy0xOCwgXSkKcGFydF9sbV9ub24KYGBgCgpIb3cgZGlmZmVyZW50IGFyZSB0aGUgaW50ZXJjZXB0IGFuZCBjb2VmZmljaWVudCBmcm9tIHRob3NlIG9idGFpbmVkIGFib3ZlIGJ5IGZpdHRpbmcgdGhlIGZ1bGwgZGF0YSBzZXQ/IERvZXMgdGhpcyBzdXBwb3J0IGNsYXNzaWZ5aW5nIHRoZSBvbWl0dGVkIHBvaW50IGFzIG5vbi1pbmZsdWVudGlhbD8KYGBge3J9CmZ1bGxfbG1fbm9uIDwtIGxtKGFjdHVhbF9sZW5ndGggfiBlc3RpbWF0ZWRfbGVuZ3RoLCBkYXRhID0gcHJvamVjdCkKZnVsbF9sbV9ub24KYGBgCgpQbG90IHRoZSBkYXRhIHBvaW50cywgdGhpcyByZWdyZXNzaW9uIGxpbmUgYW5kIHRoZSByZWdyZXNzaW9uIGxpbmUgZm9yIHRoZSBmdWxsIGRhdGEgc2V0LiBIb3cgZGlmZmVyZW50IGFyZSB0aGUgbGluZXM/CmBgYHtyfQpwcmVkaWN0X2F0X25vbiA8LSBkYXRhLmZyYW1lKGVzdGltYXRlZF9sZW5ndGggPSBzZXEoMTAsIDIyLCAxKSkKcHJlZGljdF95X3BhcnRfbm9uIDwtIHByZWRpY3QocGFydF9sbV9ub24sIG5ld2RhdGEgPSBwcmVkaWN0X2F0X25vbikKcHJlZGljdF95X2Z1bGxfbm9uIDwtIHByZWRpY3QoZnVsbF9sbV9ub24sIG5ld2RhdGEgPSBwcmVkaWN0X2F0X25vbikKCnBsb3QocHJvamVjdCRlc3RpbWF0ZWRfbGVuZ3RoLCBwcm9qZWN0JGFjdHVhbF9sZW5ndGgpCmxpbmVzKHByZWRpY3RfYXRfbm9uJGVzdGltYXRlZF9sZW5ndGgsIHByZWRpY3RfeV9wYXJ0X25vbiwgY29sID0gInJlZCIpCmxpbmVzKHByZWRpY3RfYXRfbm9uJGVzdGltYXRlZF9sZW5ndGgsIHByZWRpY3RfeV9mdWxsX25vbiwgY29sID0gImdyZWVuIikKYGBgCgpSZXBlYXQgdGhlIHByb2NlZHVyZSBhYm92ZSwgYnV0IHRoaXMgdGltZSBvbWl0dGluZyBvbmUgb2YgeW91ciBpbmZsdWVudGlhbCBvdXRsaWVycy4KYGBge3J9CnBhcnRfbG1faW5mIDwtIGxtKGFjdHVhbF9sZW5ndGggfiBlc3RpbWF0ZWRfbGVuZ3RoLCBkYXRhID0gcHJvamVjdFstNSwgXSkKCmZ1bGxfbG1faW5mIDwtIGxtKGFjdHVhbF9sZW5ndGggfiBlc3RpbWF0ZWRfbGVuZ3RoLCBkYXRhID0gcHJvamVjdCkKCnByZWRpY3RfYXRfaW5mIDwtIGRhdGEuZnJhbWUoZXN0aW1hdGVkX2xlbmd0aCA9IHNlcSgxMCwgMjIsIDEpKQpwcmVkaWN0X3lfcGFydF9pbmYgPC0gcHJlZGljdChwYXJ0X2xtX2luZiwgbmV3ZGF0YSA9IHByZWRpY3RfYXRfaW5mKQpwcmVkaWN0X3lfZnVsbF9pbmYgPC0gcHJlZGljdChmdWxsX2xtX2luZiwgbmV3ZGF0YSA9IHByZWRpY3RfYXRfaW5mKQoKcGxvdChwcm9qZWN0JGVzdGltYXRlZF9sZW5ndGgsIHByb2plY3QkYWN0dWFsX2xlbmd0aCkKbGluZXMocHJlZGljdF9hdF9pbmYkZXN0aW1hdGVkX2xlbmd0aCwgcHJlZGljdF95X3BhcnRfaW5mLCBjb2wgPSAicmVkIikKbGluZXMocHJlZGljdF9hdF9pbmYkZXN0aW1hdGVkX2xlbmd0aCwgcHJlZGljdF95X2Z1bGxfaW5mLCBjb2wgPSAiZ3JlZW4iKQpgYGAKClJldHVybiB0byB5b3VyIGZpdHRlZCBtb2RlbCBmb3IgdGhlIGNvbXBsZXRlIGRhdGEgc2V0IGFuZCBleGFtaW5lIGFuZCBjb21tZW50IHVwb24gdGhlIFJlc2lkdWFscyB2cyBGaXR0ZWQsIE5vcm1hbCBRLVEgYW5kIFNjYWxlLUxvY2F0aW9uIGRpYWdub3N0aWMgcGxvdHMuIEFyZSB0aGUgcmVncmVzc2lvbiBhc3N1bXB0aW9ucyByZWFzb25hYmx5IHNhdGlzZmllZD8KYGBge3J9CnBsb3QoZnVsbF9sbV9pbmYpCmBgYApyZXNpZHVhbHMgdnMgZml0dGVkCi0gc2xpZ2h0IGRvd253YXJkIHNsb3BlIGJ1dCByZXNpZHVhbHMgZG9uJ3QgYXBwZWFyIHRvIGdyZWF0IGJpZ2dlciB3aXRoIHkuCgpub3JtYWwgcXEKLSBtb3N0bHkgb24gYSBzdHJhaWdodCBsaW5lIGJ1dCBwb2ludHMgNSBhbmQgMTggYXJlIG9mZiBzdWdnZXN0aW5nIG5vdCBjb21wbGV0ZWx5IG5vcm1hbAoKc2NhbGUtbG9jYXRpb24KLSBub3QgYSBzdHJhaWdodCBsaW5lIGluZGljYXRpbmcgaGV0ZXJvc2NlZGFzdGljIHJlc2lkdWFscy4=</div>
 
 
 

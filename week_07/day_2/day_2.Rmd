@@ -72,10 +72,10 @@ Return to your fitted model for the complete data set and examine and comment up
 plot(full_lm_inf)
 ```
 residuals vs fitted
-- slight downward slope but residuals don't appear to great bigger with y.
+- slight downward slope but residuals don't appear to get bigger with y.
 
 normal qq
 - mostly on a straight line but points 5 and 18 are off suggesting not completely normal
 
 scale-location
-- not a straight line indicating heteroscedastic residuals.
+- not a straight line indicating no heteroscedastic residuals.

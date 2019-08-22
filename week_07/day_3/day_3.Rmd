@@ -1,0 +1,38 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+What is classification?
+- y is a categorical output
+
+What distinguishes classification and profiling tasks?
+- profiling is explaining existing data
+- classification is predicting new data
+
+
+Can you briefly summarise the ‘naive rule’ in plain language?
+- we know nothing about the predictors, only the output information class, so
+  we'll classify each record as belonging to the majority class.
+
+
+What is the ‘cutoff value’ (AKA ‘threshold’)?
+- the probability value delimiting what class an output is assigned to.
+
+What is a ‘confusion matrix’ (AKA ‘classification matrix’)?
+- matrix summary of actual and predicted classes allowing easy viewing of the
+  how well the model made its predictions.
+
+What is the definition of ‘accuracy’?
+- the amount of correct predictions divided by the total nuber of predictions.
+
+What are ‘sensitivity’ (AKA ‘true positive rate’) and ‘specificity’ (AKA ‘true
+negative rate’)?
+- sensitivity is the ability of the classifier to correctly detect the important
+  members (% correctly classified members).
+- specificity is the ability to rule out the unimportant members (% correctly
+  not classified as members).
+
+What is a ‘receiver operating characteristic (ROC) curve’?
+- shows the effect of the cutoff value on the sensitivity and specificity of an
+  algorithm.

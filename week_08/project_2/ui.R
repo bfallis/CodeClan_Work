@@ -37,10 +37,17 @@ shinyUI(fluidPage(
                         )
                 )
         ),
-        
+
+        # Add the left hand navigation panel
         navlistPanel(
                 "Choose a visualisation:",
-                
+
+# ==============================================================================
+#
+# Tab 1 - Event Goal Overview
+#
+# ==============================================================================
+
                 tabPanel("Event Goal Overview",
                         fluidRow(
                                 column(8,
@@ -63,6 +70,13 @@ shinyUI(fluidPage(
                                 )
                         )
                 ),
+
+# ==============================================================================
+#
+# Tab 2 - Session Sources and Conversion by City
+#
+# ==============================================================================
+
                 tabPanel("Session Sources\n and Conversion by City",
                         fluidRow(
                                 plotOutput("session_channel"),
@@ -71,13 +85,34 @@ shinyUI(fluidPage(
                                 plotOutput("social_conversion_comparison")
                         )
                 ),
+
+# ==============================================================================
+#
+# Tab 3 - Map of sessions
+#
+# ==============================================================================
+
                 tabPanel("Map of Sessions",
                          uiOutput("map_1")
                 ),
+
+# ==============================================================================
+#
+# Tab 4 - Top 20 Sessions and Exits
+#
+# ==============================================================================
+
                 tabPanel("Top 20 Sessions and Exits",
                          plotOutput("plot_5a"),
                          plotOutput("plot_5b")
                 ),
+
+# ==============================================================================
+#
+# Tab 5 - Website link
+#
+# ==============================================================================
+
                 tabPanel(tags$a("CodeClan's Website",
                                 href = "https://codeclan.com/")
                 )

@@ -1,4 +1,10 @@
 shinyUI(fluidPage(
+
+# ==============================================================================
+#
+# Top of Page - Date picker, Total Sessions, Total Conversions.
+#
+# ==============================================================================
         
         # Adds in the random bit of javascript that somehow makes the map tab
         # size dynamically change with the sie of the window.
@@ -79,10 +85,20 @@ shinyUI(fluidPage(
 
                 tabPanel("Session Sources\n and Conversion by City",
                         fluidRow(
-                                plotOutput("session_channel"),
-                                plotOutput("session_social"),
-                                plotOutput("channel_conversion_comparison"),
-                                plotOutput("social_conversion_comparison")
+                                column(6, 
+                                        plotOutput("session_channel")
+                                ),
+                                column(6,
+                                        plotOutput("session_social")
+                                )
+                        ),
+                        fluidRow(
+                                column(6, 
+                                        plotOutput("channel_conversion_comparison")
+                                ),
+                                column(6,
+                                        plotOutput("social_conversion_comparison")
+                                )
                         )
                 ),
 

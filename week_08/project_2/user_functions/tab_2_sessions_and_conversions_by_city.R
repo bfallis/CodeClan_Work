@@ -121,7 +121,7 @@ social_conversion_comparison <- function(start_date, end_date){
                 )
 }
 
-###
+#
 filter_channel <- function(channel_group_df){
         # Create new data.frame which contains only the columns I need to work
         # with

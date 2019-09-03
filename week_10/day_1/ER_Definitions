@@ -1,0 +1,46 @@
+Menu Item
+- any product on the Menu created by the chef from a list of Main Ingredients.
+
+Major Category
+- the notional meal category in which a Menu Item is placed.
+
+Menu Item category
+- a meal category created by the management of the Company.
+
+Main ingredients
+- the main ingredient of a Menu Item.
+
+Lifestyle Choice
+- a dietary consideration.
+
+Allergen
+- a food type to which Customers may have an allergic reaction.
+
+Menu
+- a promotional Menu on which Menu Items can be placed.
+
+========
+
+Order Header
+- header information of the Order.
+
+Order Line
+- any item from the list of Menu Items that is ordered by a Customer as part of
+  an Order, showing the Price and Quantity.
+
+Order Status
+- the current Status of an Order placed by a Customer.
+
+Customer
+- an individual who places an Order for Menu Items at a Restaurant.
+
+Loyalty Card
+- a unique code given to a Customer to track frequency of Orders in exchange for
+  promotional Offers.
+
+Address
+- a geographical location of a Customer or Restaurant.
+
+Restaurant
+- a physical location which makes the Menu Items added to Orders placed by
+  Customers which can be delivered or collected.

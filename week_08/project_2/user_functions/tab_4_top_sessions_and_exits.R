@@ -33,7 +33,7 @@ create_plot_most_views <- function(start_date, end_date) {
                 labs(
                         title = "Top 20 Most Visted Pages\n",
                         x = "Page URL\n",
-                        y = "\nNumber of exits"
+                        y = "\nNumber of views"
                 )
 }
 
@@ -64,6 +64,6 @@ create_plot_most_exits <- function(start_date, end_date) {
                 labs(
                         title = "Top 20 Pages by Exit\n",
                         x = "Page URL\n",
-                        y = "\nNumber of Views"
+                        y = "\nNumber of Exits"
                 )
 }

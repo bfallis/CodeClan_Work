@@ -73,9 +73,9 @@ unique(diamonds_trim$color)
 Use the dummy_cols() function in the fastDummies package to generate dummies for
 these predictors and check the number of dummies in each case.
 ```{r}
-dummy_cols(diamonds_trim, select_columns = "cut", remove_first_dummy = TRUE)
-dummy_cols(diamonds_trim, select_columns = "clarity", remove_first_dummy = TRUE)
-dummy_cols(diamonds_trim, select_columns = "color", remove_first_dummy = TRUE)
+diamonds_trim <- dummy_cols(diamonds_trim,
+                select_columns = c("cut", "clarity", "color"),
+                remove_first_dummy = TRUE)
 ```
 
 Going forward we’ll let R handle dummy variable creation for categorical
@@ -88,18 +88,22 @@ check the regression diagnostics.
 ```{r}
 diamond_model <- lm(price ~ carat, data = diamonds_trim)
 summary(diamond_model)
+plot(diamond_model)
 ```
 
 Run a regression with one or both of the predictor and response variables log() 
 transformed and recheck the diagnostics. Do you see any improvement?
 ```{r}
 diamond_model_log <- lm(price ~ log(carat), data = diamonds_trim)
+plot(diamond_model_log)
 summary(diamond_model_log)
 
 diamond_model_log <- lm(log(price) ~ carat, data = diamonds_trim)
+plot(diamond_model_log)
 summary(diamond_model_log)
 
 diamond_model_log <- lm(log(price) ~ log(carat), data = diamonds_trim)
+plot(diamond_model_log)
 summary(diamond_model_log)
 ```
 
@@ -108,15 +112,18 @@ with adding a single categorical predictor into the model. Which categorical
 predictor is best? [Hint - investigate r2 values]
 ```{r}
 diamond_model_log <- lm(log(price) ~ log(carat) + cut, data = diamonds_trim)
+plot(diamond_model_log)
 summary(diamond_model_log)
 
 diamond_model_log <- lm(log(price) ~ log(carat) + clarity, data = diamonds_trim)
+plot(diamond_model_log)
 summary(diamond_model_log)
 
 diamond_model_log <- lm(log(price) ~ log(carat) + color, data = diamonds_trim)
+plot(diamond_model_log)
 summary(diamond_model_log)
 
-# clarity appears to be the best.
+# clarity appears to be the best (highest r squared).
 ```
 
 Interpret the fitted coefficients for the levels of your chosen categorical 
@@ -126,7 +133,9 @@ regressing the log(price) here, and think about what the presence of the
 log(carat) predictor implies. We’re not expecting a mathematical explanation]
 ```{r}
 # I1 is reference level
-# IF shows greatest difference
+# IF shows greatest difference in coefficient.
+# - difference between IF and I1 is the exponential of the coefficient
+# - exp(1.114625) = 3.048425
 ```
 
 Extension
@@ -136,12 +145,17 @@ predictor. Do you think this interaction term is statistically justified?
 ```{r}
 diamond_model_log <- lm(log(price) ~ log(carat) + clarity + log(carat):clarity,
         data = diamonds_trim)
+plot(diamond_model_log)
 summary(diamond_model_log)
 ```
 
 Find and plot an appropriate visualisation to show the effect of this
 interaction
 ```{r}
-#??
+ggplot(diamonds_trim) +
+        aes(x = log(carat), y = log(price), colour = clarity) +
+        geom_point(alpha = 0.1) +
+        geom_smooth(method = "lm", se = FALSE) +
+        facet_wrap(~ clarity)
 ```
 

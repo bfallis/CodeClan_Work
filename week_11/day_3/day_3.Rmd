@@ -1,0 +1,99 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+I want to predict how well 6 year-olds are going to do in their final school 
+exams. Using the following variables am I likely under-fitting, fitting well or
+over-fitting? Postcode, gender, reading level, score in maths test, date of 
+birth, family income.
+* overfitting since some of the variables like postcode and family income 
+  probably have no relation to aptitude (though it could be argued children
+  from high income families in wealthier postcodes will do better in school).
+
+
+If I have two models, one with an AIC score of 34,902 and the other with an AIC 
+score of 33,559 which model should I use?
+* second model as lower scores are better for AIC.
+
+
+I have two models, the first with: r-squared: 0.44, adjusted r-squared: 0.43.
+The second with: r-squared: 0.47, adjusted r-squared: 0.41. Which one should I
+use?
+* first model as the adjusted r-squared is higher.
+
+
+I have a model with the following errors: RMSE error on test set: 10.3, RMSE 
+error on training data: 10.4. Do you think this model is over-fitting?
+* no, since the scores are nearly the same. If it was overfitting, the RMSE for
+  the test would be much higher.
+
+
+How does k-fold validation work?
+* by dividing the dataset into k segments we can then build a model using k - 1
+  segments as the training data then the last segment as the test data. We can
+  then test a model k times using each of the segments as the test data and
+  average the error across all segments.
+
+
+What is a validation set? When do you need one?
+* a slice of the dataset that's not used in training or testing the model. Can
+  be used as a final check of the accuracy
+
+
+Describe how backwards selection works.
+* Starting with the model that contains all possible predictors, find the one
+  that lowers r-squared the least when it is removed. Remove this predictor 
+  from the model and repeat until all predictors in the model have been removed.
+
+Describe how best subset selection works.
+* for each size of model (in terms of number of predictors), search all possible
+  combinations of predictors for the model with highest r2 squared of that size.
+
+
+It is estimated on 5% of model projects end up being deployed. What actions can
+you take to maximise the likelihood of your model being deployed?
+* sense checking variables, making sure the model will work on production data,
+  understanding where and when the model should and shouldn't be used, 
+  correctly documenting the model.
+
+
+What metric could you use to confirm that the recent population is similar to
+the development population?
+* score distribution
+
+
+How is the Population Stability Index defined? What does this mean in words?
+* a measure of the change in score distribution
+
+
+Above what PSI value might we need to start to consider rebuilding or
+recalibrating the model
+* 0.2
+
+
+What are the common errors that can crop up when implementing a model?
+* Too many false positives
+* Low model understanding by the business
+* Low business understanding by the modeller
+* Too difficult to implement
+* Doesn’t address the root cause, only the symptoms of the problem
+* Training population too different to actual population
+* Unstable over time
+
+
+After performance monitoring, if we find that the discrimination is still
+satisfactory but the accuracy has deteriorated, what is the recommended action?
+* to recalibrate the model.
+
+
+Why is it important to have a unique model identifier for each model?
+* a business area may have may models in production, which should only be
+  used in that area. A unique identifier will all ow a business to ensure this
+  remains the case.
+
+
+Why is it important to document the modelling rationale and approach?
+* correctly documenting everything decreases risk of the model being incorrect
+  and increases transparency of what the model is doing, meaning errors can be 
+  rectified earlier.

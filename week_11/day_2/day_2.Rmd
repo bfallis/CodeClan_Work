@@ -56,6 +56,10 @@ house_prices$condition <- factor(house_prices$condition)
 house_prices$grade <- factor(house_prices$grade)
 ```
 
+```{r}
+glimpse(house_prices)
+```
+
 Check for aliased variables using the alias() function (this takes in a formula
 object and a data set). [Hint - formula price ~ . says ‘price varying with all
 predictors’, this is a suitable input to alias()]. Remove variables that lead to
@@ -74,7 +78,7 @@ the regression diagnostics as you go
   run in manageable time, although you will need to add either a price or resid 
   column to the non-numeric dataframe in order to see its correlations with the
   non-numeric predictors.
-```{r}
+```{r, message = FALSE}
 houses_tidy_numeric <- house_prices %>%
         select_if(is.numeric)
 
@@ -102,12 +106,21 @@ plot(model1a)
 plot(model1b)
 ```
 
-```{r}
+```{r, message = FALSE}
 house_prices_residuals <- house_prices %>%
         add_residuals(model1a) %>%
         select(-c("price", "sqft_living"))
 
-ggpairs(house_prices_residuals, aes(alpha = 0.5))
+houses_tidy_numeric <- house_prices_residuals %>%
+        select_if(is.numeric)
+
+houses_tidy_nonnumeric <- house_prices_residuals %>%
+        select_if(function(x) !is.numeric(x))
+
+houses_tidy_nonnumeric$price <- house_prices$price
+
+ggpairs(houses_tidy_numeric)
+ggpairs(houses_tidy_nonnumeric)
 ```
 
 Second Iteration
@@ -125,12 +138,21 @@ plot(model2a)
 plot(model2b)
 ```
 
-```{r}
+```{r, message = FALSE}
 house_prices_residuals <- house_prices %>%
         add_residuals(model2a) %>%
         select(-c("price", "sqft_living", "lat"))
 
-ggpairs(house_prices_residuals, aes(alpha = 0.5))
+houses_tidy_numeric <- house_prices_residuals %>%
+        select_if(is.numeric)
+
+houses_tidy_nonnumeric <- house_prices_residuals %>%
+        select_if(function(x) !is.numeric(x))
+
+houses_tidy_nonnumeric$price <- house_prices$price
+
+ggpairs(houses_tidy_numeric)
+ggpairs(houses_tidy_nonnumeric)
 ```
 
 Third Iteration
@@ -148,12 +170,21 @@ plot(model3a)
 plot(model3b)
 ```
 
-```{r}
+```{r, message = FALSE}
 house_prices_residuals <- house_prices %>%
         add_residuals(model3a) %>%
         select(-c("price", "sqft_living", "lat", "view"))
 
-ggpairs(house_prices_residuals, aes(alpha = 0.5))
+houses_tidy_numeric <- house_prices_residuals %>%
+        select_if(is.numeric)
+
+houses_tidy_nonnumeric <- house_prices_residuals %>%
+        select_if(function(x) !is.numeric(x))
+
+houses_tidy_nonnumeric$price <- house_prices$price
+
+ggpairs(houses_tidy_numeric)
+ggpairs(houses_tidy_nonnumeric)
 ```
 
 Fourth Iteration
@@ -174,8 +205,9 @@ plot(model4b)
 ```{r}
 house_prices_residuals <- house_prices %>%
         add_residuals(model) %>%
-        select(-c("price", "sqft_living", "lat", "view", "condition"))
+        select(-c("price", "sqft_living", "lat", "view", "grade"))
 
 ggpairs(house_prices_residuals, aes(alpha = 0.5))
 ```
 
+Model 4b has highest r squared.

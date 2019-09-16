@@ -1729,7 +1729,7 @@ $(document).ready(function () {
 </style>
 <script>
 $(document).ready(function () {
-  window.initializeSourceEmbed("day_5.Rmd");
+  window.initializeSourceEmbed("day_1.Rmd");
   window.initializeCodeFolding("show" === "show");
 });
 </script>
@@ -1767,185 +1767,129 @@ $(document).ready(function () {
 
 
 <!-- rnb-text-begin -->
-<p>Load required libraries</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG5saWJyYXJ5KGZhc3REdW1taWVzKVxubGlicmFyeShHR2FsbHkpXG5saWJyYXJ5KGx1YnJpZGF0ZSlcbmxpYnJhcnkobGVhcHMpXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG5saWJyYXJ5KHJjb21wYW5pb24pXG5saWJyYXJ5KERlc2NUb29scylcbmBgYCJ9 -->
 <pre class="r"><code>library(tidyverse)
-library(fastDummies)
-library(GGally)
-library(lubridate)
-library(leaps)</code></pre>
+library(rcompanion)
+library(DescTools)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Read in csv file to dataframe</p>
+<p>MVP</p>
+<p>Now we’ll go back to CI creation in the normal fashion. We’ll take the ames data from the CIs lab earlier today and regard it now as a sample, we won’t be drawing any smaller samples from within it. This is the usual situation in an analysis: you use all the data available to you!</p>
+<p>Load the data again and re-familiarise yourself with it</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYXZvY2FkbyA8LSByZWFkLmNzdihcImF2b2NhZG8uY3N2XCIpXG5uYW1lcyhhdm9jYWRvKSA8LSB0b2xvd2VyKG5hbWVzKGF2b2NhZG8pKVxubmFtZXMoYXZvY2FkbykgPC0gZ3N1YihcIlxcXFwuXCIsIFwiX1wiLCBuYW1lcyhhdm9jYWRvKSlcbnN0cihhdm9jYWRvKVxuYGBgIn0= -->
-<pre class="r"><code>avocado &lt;- read.csv(&quot;avocado.csv&quot;)
-names(avocado) &lt;- tolower(names(avocado))
-names(avocado) &lt;- gsub(&quot;\\.&quot;, &quot;_&quot;, names(avocado))
-str(avocado)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYW1lcyA8LSByZWFkLmNzdihcImFtZXMuY3N2XCIpXG5gYGAifQ== -->
+<pre class="r"><code>ames &lt;- read.csv(&quot;ames.csv&quot;)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Remove number of avocados total_bags as this can be derived</p>
+<p>Investigate the distribution of Lot.Area. Is the distribution roughly normal? If not, what problems do you find?</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYXZvY2FkbyA8LSBhdm9jYWRvICU+JVxuICAgICAgICBzZWxlY3QoLWModG90YWxfYmFncykpXG5gYGAifQ== -->
-<pre class="r"><code>avocado &lt;- avocado %&gt;%
-        select(-c(total_bags))</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2dwbG90KGFtZXMpICtcbiAgICAgICAgYWVzKHggPSBMb3QuQXJlYSkgK1xuICAgICAgICBnZW9tX2hpc3RvZ3JhbSgpXG5gYGAifQ== -->
+<pre class="r"><code>ggplot(ames) +
+        aes(x = Lot.Area) +
+        geom_histogram()</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Check summary statistics for presence of NAs</p>
+<p>Do you think any problematic features in the distribution of Lot.Area will cause any difficulties in estimating CIs or performing hypotheses tests using this variable?</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtbWFyeShhdm9jYWRvKVxuYGBgIn0= -->
-<pre class="r"><code>summary(avocado)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBcbmBgYCJ9 -->
+<pre class="r"><code># </code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Check create a month column and remove date</p>
+<p>Compute a 95% CI for the mean Lot.Area of the sold houses.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYXZvY2FkbyRtb250aCA8LSBtb250aChhdm9jYWRvJGRhdGUpXG5hdm9jYWRvIDwtIGF2b2NhZG8gJT4lXG4gICAgICAgIHNlbGVjdCgtYyhkYXRlKSlcbmBgYCJ9 -->
-<pre class="r"><code>avocado$month &lt;- month(avocado$date)
-avocado &lt;- avocado %&gt;%
-        select(-c(date))</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ3JvdXB3aXNlTWVhbihMb3QuQXJlYSB+IDEsIGRhdGEgPSBhbWVzLCBjb25mID0gMC45NSlcbmBgYCJ9 -->
+<pre class="r"><code>groupwiseMean(Lot.Area ~ 1, data = ames, conf = 0.95)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibmNvbCI6NiwibnJvdyI6MX0sInJkZiI6Ikg0c0lBQUFBQUFBQUExMVFRVTdETUJEY0puRlFncWdxOFk3NDBoNjRVUUhpaG9SUWtYbzFpVU1qakIwNUNlVnRYT0U5UEtGbDdkcEJqcVZrWjJlOW50bDl1dHN1ODIwT0FESEVLZjRKUWlEUG0vdmlDaUNKTUpsQkFwbUpuMWkrUklEWFlHRUxBTmtSRDhhTFUzNnVNYzROWG45L2dUczJ2LzZ0N2ZtdjN3VDE5YytqU3dOUkl0azc3NXhnNnNpWU5wVTNKUjFJSGpqek9MOVZzcWFDZjNEaG1ZMW1GUlZxejNYQURHMkxUQ2laYWJXblh0Yk5aYjdRVnlsWTUzMTVNcTlZejJpdHNSZXp3NlRsVExWOW95UTJSV2FMWk5JODB4TmlNVWpqb2lySzNTRGZpdVhLS0RnN0VGb2JjWHJTakk3dUxlTGVTcmw4YlNUMzVnVjdHVmN6eDNIdHRMVFZqZXo5S01oMnRGYzlHMWRZS3VFWk94d2MvZ0NEZ01YclBRSUFBQT09In0= -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[".id"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]},{"label":["Mean"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["Conf.level"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Trad.lower"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["Trad.upper"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"NA","2":"2930","3":"10100","4":"0.95","5":"9860","6":"10400"}],"options":{"columns":{"min":{},"max":[10],"total":[6]},"rows":{"min":[10],"max":[10],"total":[1]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>You would like to know the mean Lot.Area of the sold houses with higher confidence. Calculate the 99% CI for this variable. Is it narrower or broader than the 95% CI? Does that make sense?</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ3JvdXB3aXNlTWVhbihMb3QuQXJlYSB+IDEsIGRhdGEgPSBhbWVzLCBjb25mID0gMC45OSlcbmBgYCJ9 -->
+<pre class="r"><code>groupwiseMean(Lot.Area ~ 1, data = ames, conf = 0.99)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibmNvbCI6NiwibnJvdyI6MX0sInJkZiI6Ikg0c0lBQUFBQUFBQUExMVFRVTdETUJEY0puRlFncWdxQWMrSUx4VVNOeXFCNE1RRkZhbFhrN2dsd3RpUmsxREVrUWYxQVZ6aEk3eUFIN1NzVXp1Vll5bloyVm12WjNZZmJoYlRkSkVDUUFoaGpIK0NFTWpqL0RhN0JJZ0NURVlRUVdMaU81WlBFZUExbUhRRmdHU0hCK1BKUGovV0dNY0d6NzYvd0o0dXYvcmJuSDM4M20wTzlYT3ZQdnY1dEtrblNpUjc1YlVWakMwWjBySndwcVFGMFQxbkRxZlhTaTZwNEc5Y09HYXVXVUdGV25QdE1XMVZJZU5MSmxxdHFaTzFjNW5QOTVVTFZqdGZqa3dMMWpDNjFOaUwyWGJRY3FTcXBsUVNtd0t6UlRKb0h1a0JNV21sY1ZGaytYTXJYN0xwaFZHd2RzQzMxdU40cnhuczdGdkV2aFZ6dVNvbGQrWUZlK3BYTThaeHUybHBwVXZadUZHUXJXbWpHdGF2TUZmQ01kMXdzUDBISEoweVZqMENBQUE9In0= -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[".id"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]},{"label":["Mean"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["Conf.level"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Trad.lower"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["Trad.upper"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"NA","2":"2930","3":"10100","4":"0.99","5":"9770","6":"10500"}],"options":{"columns":{"min":{},"max":[10],"total":[6]},"rows":{"min":[10],"max":[10],"total":[1]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBicm9hZGVyIHNpbmNlIHdlJ3JlIGluY3JlYXNpbmcgdGhlIGNvbmZpZGVuY2VcbmBgYCJ9 -->
+<pre class="r"><code># broader since we're increasing the confidence</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Encode categorical data into dummy columns and then remove.</p>
+<p>Can you split out and show separate 99% CIs for mean Lot.Area grouped by House.Style? Do you see any CIs you might not trust?</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYXZvY2FkbyA8LSBkdW1teV9jb2xzKGF2b2NhZG8sIHNlbGVjdF9jb2x1bW5zID0gYyhcInR5cGVcIiksIHJlbW92ZV9maXJzdF9kdW1teSA9IFRSVUUpXG5hdm9jYWRvIDwtIGF2b2NhZG8gJT4lXG4gICAgICAgIHNlbGVjdCgtYyh4LCB0eXBlKSlcbmBgYCJ9 -->
-<pre class="r"><code>avocado &lt;- dummy_cols(avocado, select_columns = c(&quot;type&quot;), remove_first_dummy = TRUE)
-avocado &lt;- avocado %&gt;%
-        select(-c(x, type))</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Check which regions we have data for</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc29ydCh1bmlxdWUoYXZvY2FkbyRyZWdpb24pKVxuYGBgIn0= -->
-<pre class="r"><code>sort(unique(avocado$region))</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Seems to be an overlap in data collected (e.g.for cities, regions and the whole of the US) so separate into 3 datasets for each level.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYXJlYXMgPC0gYyhcIkdyZWF0TGFrZXNcIiwgXCJNaWRzb3V0aFwiLCBcIk5vcnRoZWFzdFwiLCBcIk5vcnRoZXJuTmV3RW5nbGFuZFwiLCBcbiAgICAgICAgXCJQbGFpbnNcIiwgXCJTb3V0aENlbnRyYWxcIiwgXCJTb3V0aGVhc3RcIiwgXCJXZXN0XCIsIFwiV2VzdFRleE5ld01leGljb1wiKVxuXG5hdm9jYWRvX2FyZWFzIDwtIGF2b2NhZG9bYXZvY2FkbyRyZWdpb24gJWluJSBhcmVhcywgXVxuYXZvY2Fkb19jaXRpZXMgPC0gYXZvY2Fkb1shKGF2b2NhZG8kcmVnaW9uICVpbiUgYyhhcmVhcywgXCJUb3RhbFVTXCIpKSwgXVxuYXZvY2Fkb190b3RhbCA8LSBhdm9jYWRvW2F2b2NhZG8kcmVnaW9uID09IFwiVG90YWxVU1wiLCBdXG5gYGAifQ== -->
-<pre class="r"><code>areas &lt;- c(&quot;GreatLakes&quot;, &quot;Midsouth&quot;, &quot;Northeast&quot;, &quot;NorthernNewEngland&quot;, 
-        &quot;Plains&quot;, &quot;SouthCentral&quot;, &quot;Southeast&quot;, &quot;West&quot;, &quot;WestTexNewMexico&quot;)
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWVhbl9hcmVhIDwtIGFtZXMgJT4lXG4gICAgICAgIGdyb3VwX2J5KEhvdXNlLlN0eWxlKSAlPiVcbiAgICAgICAgc3VtbWFyaXNlKG1lYW5fTG90LkFyZWEgPSBtZWFuKExvdC5BcmVhKSlcblxucmVzdWx0c19tZWFuIDwtIGRhdGEuZnJhbWUoKVxuXG5mb3IgKHN0eWxlIGluIGxldmVscyhhbWVzJEhvdXNlLlN0eWxlKSkge1xuICAgICAgICBzdHlsZV9tZWFuIDwtIGdyb3Vwd2lzZU1lYW4oTG90LkFyZWEgfiAxLCBkYXRhID0gYW1lc1thbWVzJEhvdXNlLlN0eWxlID09IHN0eWxlLCBdLCBjb25mID0gMC45OSlcbiAgICAgICAgc3R5bGVfbWVhbiA8LSBjYmluZChzdHlsZSwgc3R5bGVfbWVhbilcbiAgICAgICAgXG4gICAgICAgIHJlc3VsdHNfbWVhbiA8LSByYmluZChyZXN1bHRzX21lYW4sIHN0eWxlX21lYW4pXG59XG4jIDIuNUZpbiBvbmx5IGhhcyA4IHZhbHVlc1xuYGBgIn0= -->
+<pre class="r"><code>mean_area &lt;- ames %&gt;%
+        group_by(House.Style) %&gt;%
+        summarise(mean_Lot.Area = mean(Lot.Area))
 
-avocado_areas &lt;- avocado[avocado$region %in% areas, ]
-avocado_cities &lt;- avocado[!(avocado$region %in% c(areas, &quot;TotalUS&quot;)), ]
-avocado_total &lt;- avocado[avocado$region == &quot;TotalUS&quot;, ]</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Exploratory graphs</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBIb3cgZG9lcyB0eXBlIGFmZmVjdCBUb3RhbCBWb2x1bWUgZm9yIHRoZSB3aG9sZSBVUz9cbmdncGxvdChhdm9jYWRvX3RvdGFsKSArXG4gICAgICAgIGFlcyh4ID0gdHlwZV9vcmdhbmljLCB5ID0gdG90YWxfdm9sdW1lLCBncm91cCA9IHR5cGVfb3JnYW5pYykgK1xuICAgICAgICBnZW9tX2JveHBsb3QoKSBcblxuIyBIb3cgZG9lcyByZWdpb24gYWZmZWN0IFRvdGFsIFZvbHVtZSBwZXIgdHlwZSBmb3IgZWFjaCBjaXR5P1xuZ2dwbG90KGF2b2NhZG9fY2l0aWVzKSArXG4gICAgICAgIGFlcyh4ID0gcmVnaW9uLCB5ID0gdG90YWxfdm9sdW1lKSArXG4gICAgICAgIGdlb21fYmFyKHN0YXQgPSBcImlkZW50aXR5XCIpICtcbiAgICAgICAgY29vcmRfZmxpcCgpICtcbiAgICAgICAgZmFjZXRfd3JhcCh+IHR5cGVfb3JnYW5pYywgbmNvbCA9IDIpXG5cbiMgSGFzIFZvbHVtZSBjaGFuZ2VkIGVhY2ggeWVhciBvdmVyYWxsP1xuZ2dwbG90KGF2b2NhZG9fdG90YWwpICtcbiAgICAgICAgYWVzKHggPSB5ZWFyLCB5ID0gdG90YWxfdm9sdW1lLCBncm91cCA9IHllYXIpICtcbiAgICAgICAgZ2VvbV9ib3hwbG90KCkgK1xuICAgICAgICBmYWNldF93cmFwKH4gdHlwZV9vcmdhbmljLCBuY29sID0gMSlcblxuIyBJcyB0aGVyZSBhIHNlYXNvbiBjaGFuZ2UgZnJvbSBtb250aCB0byBtb250aCBvdmVyYWxsP1xuZ2dwbG90KGF2b2NhZG9fdG90YWwpICtcbiAgICAgICAgYWVzKHggPSBtb250aCwgeSA9IHRvdGFsX3ZvbHVtZSwgZ3JvdXAgPSBtb250aCkgK1xuICAgICAgICBnZW9tX2JveHBsb3QoKSArXG4gICAgICAgIGZhY2V0X3dyYXAofiB0eXBlX29yZ2FuaWMsIG5jb2wgPSAxKVxuXG4jIEhvdyBkb2VzIGF2ZXJhZ2UgcHJpY2UgYWZmZWN0IG92ZXJhbGwgVG90YWwgVm9sdW1lP1xuZ2dwbG90KGF2b2NhZG9fdG90YWwpICtcbiAgICAgICAgYWVzKHggPSBhdmVyYWdlcHJpY2UsIHkgPSB0b3RhbF92b2x1bWUpICtcbiAgICAgICAgZ2VvbV9wb2ludCgpICtcbiAgICAgICAgZmFjZXRfd3JhcCh+IHR5cGVfb3JnYW5pYylcbmBgYCJ9 -->
-<pre class="r"><code># How does type affect Total Volume for the whole US?
-ggplot(avocado_total) +
-        aes(x = type_organic, y = total_volume, group = type_organic) +
-        geom_boxplot() 
+results_mean &lt;- data.frame()
 
-# How does region affect Total Volume per type for each city?
-ggplot(avocado_cities) +
-        aes(x = region, y = total_volume) +
-        geom_bar(stat = &quot;identity&quot;) +
-        coord_flip() +
-        facet_wrap(~ type_organic, ncol = 2)
+for (style in levels(ames$House.Style)) {
+        style_mean &lt;- groupwiseMean(Lot.Area ~ 1, data = ames[ames$House.Style == style, ], conf = 0.99)
+        style_mean &lt;- cbind(style, style_mean)
+        
+        results_mean &lt;- rbind(results_mean, style_mean)
+}
+# 2.5Fin only has 8 values</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Calculate a 99% CI for the proportion of houses in the data built before 1890. Try using the wilson and wald methods. How different are the bounds of the CIs given by the two methods?</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYW1lcyA8LSBhbWVzICU+JVxuICAgICAgICBtdXRhdGUob2xkX2hvdXNlID0gYXMuZmFjdG9yKGlmZWxzZShZZWFyLkJ1aWx0IDwgMTg5MCwgXCJPbGRcIiwgXCJOZXdcIikpKVxuXG5vYnMgPC0gdGFibGUoYW1lcyRvbGRfaG91c2UpXG5vYnNcbnRvdGFsIDwtIHN1bShvYnMpXG50b3RhbFxuXG5CaW5vbUNJKHggPSBvYnMsIG4gPSB0b3RhbCwgY29uZi5sZXZlbCA9IDAuOTksIG1ldGhvZCA9IFwid2lsc29uXCIpXG5CaW5vbUNJKHggPSBvYnMsIG4gPSB0b3RhbCwgY29uZi5sZXZlbCA9IDAuOTksIG1ldGhvZCA9IFwid2FsZFwiKVxuYGBgIn0= -->
+<pre class="r"><code>ames &lt;- ames %&gt;%
+        mutate(old_house = as.factor(ifelse(Year.Built &lt; 1890, &quot;Old&quot;, &quot;New&quot;)))
 
-# Has Volume changed each year overall?
-ggplot(avocado_total) +
-        aes(x = year, y = total_volume, group = year) +
-        geom_boxplot() +
-        facet_wrap(~ type_organic, ncol = 1)
+obs &lt;- table(ames$old_house)
+obs
+total &lt;- sum(obs)
+total
 
-# Is there a season change from month to month overall?
-ggplot(avocado_total) +
-        aes(x = month, y = total_volume, group = month) +
-        geom_boxplot() +
-        facet_wrap(~ type_organic, ncol = 1)
+BinomCI(x = obs, n = total, conf.level = 0.99, method = &quot;wilson&quot;)
+BinomCI(x = obs, n = total, conf.level = 0.99, method = &quot;wald&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>[Harder] do a bit of reading on the Wald and Wilson methods. Why do you think the bounds produced by the two methods are more significantly different when the proportion is closer to 0? Which method would you choose for the ‘proportion before 1890’ CI?</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Calculate 95% CIs for the proportion of total house sales made up by each level of House.Style in the data</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxub2JzIDwtIHRhYmxlKGFtZXMkSG91c2UuU3R5bGUpXG5cbk11bHRpbm9tQ0koeCA9IG9icywgY29uZi5sZXZlbCA9IDAuOTUsIG1ldGhvZCA9IFwid2lsc29uXCIpXG5gYGAifQ== -->
+<pre class="r"><code>obs &lt;- table(ames$House.Style)
 
-# How does average price affect overall Total Volume?
-ggplot(avocado_total) +
-        aes(x = averageprice, y = total_volume) +
-        geom_point() +
-        facet_wrap(~ type_organic)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Seems like the type, region, year, month and average price could all be good predictors.</p>
-<p>Let’s work with area level data.</p>
-<p>Remove unused factor levels from dataframe</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYXZvY2Fkb19hcmVhcyA8LSBkcm9wbGV2ZWxzKGF2b2NhZG9fYXJlYXMpXG5gYGAifQ== -->
-<pre class="r"><code>avocado_areas &lt;- droplevels(avocado_areas)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Create dummy variables for the regions</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYXZvY2Fkb19hcmVhcyA8LSBkdW1teV9jb2xzKGF2b2NhZG9fYXJlYXMsIHNlbGVjdF9jb2x1bW5zID0gYyhcInJlZ2lvblwiKSwgcmVtb3ZlX2ZpcnN0X2R1bW15ID0gVFJVRSlcbmF2b2NhZG9fYXJlYXMgPC0gYXZvY2Fkb19hcmVhcyAlPiVcbiAgICAgICAgc2VsZWN0KC1yZWdpb24pXG5gYGAifQ== -->
-<pre class="r"><code>avocado_areas &lt;- dummy_cols(avocado_areas, select_columns = c(&quot;region&quot;), remove_first_dummy = TRUE)
-avocado_areas &lt;- avocado_areas %&gt;%
-        select(-region)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Split into training and test datasets</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubl9kYXRhIDwtIG5yb3coYXZvY2Fkb19hcmVhcylcbnRlc3RfaW5kZXggPC0gc2FtcGxlKDE6bl9kYXRhLCBzaXplID0gbl9kYXRhKjAuMSlcblxuYXZvY2Fkb19hcmVhc190ZXN0ICA8LSBzbGljZShhdm9jYWRvX2FyZWFzLCB0ZXN0X2luZGV4KVxuYXZvY2Fkb19hcmVhc190cmFpbiA8LSBzbGljZShhdm9jYWRvX2FyZWFzLCAtdGVzdF9pbmRleClcbmBgYCJ9 -->
-<pre class="r"><code>n_data &lt;- nrow(avocado_areas)
-test_index &lt;- sample(1:n_data, size = n_data*0.1)
-
-avocado_areas_test  &lt;- slice(avocado_areas, test_index)
-avocado_areas_train &lt;- slice(avocado_areas, -test_index)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubW9kZWwgPC0gcmVnc3Vic2V0cyh0b3RhbF92b2x1bWUgfiAuLCBkYXRhID0gYXZvY2Fkb19hcmVhc190cmFpbiwgbnZtYXggPSAxOSwgbWV0aG9kID0gXCJmb3J3YXJkXCIpXG5gYGAifQ== -->
-<pre class="r"><code>model &lt;- regsubsets(total_volume ~ ., data = avocado_areas_train, nvmax = 19, method = &quot;forward&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtbWFyeShtb2RlbClcbnBsb3QobW9kZWwpXG5gYGAifQ== -->
-<pre class="r"><code>summary(model)
-plot(model)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGxvdChzdW1tYXJ5KG1vZGVsKSRyc3EsIHR5cGUgPSBcImJcIilcbmBgYCJ9 -->
-<pre class="r"><code>plot(summary(model)$rsq, type = &quot;b&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtbWFyeShtb2RlbCkkd2hpY2hbNiwgXVxuYGBgIn0= -->
-<pre class="r"><code>summary(model)$which[6, ]</code></pre>
+MultinomCI(x = obs, conf.level = 0.95, method = &quot;wilson&quot;)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKTG9hZCByZXF1aXJlZCBsaWJyYXJpZXMKYGBge3J9CmxpYnJhcnkodGlkeXZlcnNlKQpsaWJyYXJ5KGZhc3REdW1taWVzKQpsaWJyYXJ5KEdHYWxseSkKbGlicmFyeShsdWJyaWRhdGUpCmxpYnJhcnkobGVhcHMpCmBgYAoKUmVhZCBpbiBjc3YgZmlsZSB0byBkYXRhZnJhbWUKYGBge3J9CmF2b2NhZG8gPC0gcmVhZC5jc3YoImF2b2NhZG8uY3N2IikKbmFtZXMoYXZvY2FkbykgPC0gdG9sb3dlcihuYW1lcyhhdm9jYWRvKSkKbmFtZXMoYXZvY2FkbykgPC0gZ3N1YigiXFwuIiwgIl8iLCBuYW1lcyhhdm9jYWRvKSkKc3RyKGF2b2NhZG8pCmBgYAoKUmVtb3ZlIG51bWJlciBvZiBhdm9jYWRvcyB0b3RhbF9iYWdzIGFzIHRoaXMgY2FuIGJlIGRlcml2ZWQKYGBge3J9CmF2b2NhZG8gPC0gYXZvY2FkbyAlPiUKICAgICAgICBzZWxlY3QoLWModG90YWxfYmFncykpCmBgYAoKQ2hlY2sgc3VtbWFyeSBzdGF0aXN0aWNzIGZvciBwcmVzZW5jZSBvZiBOQXMKYGBge3J9CnN1bW1hcnkoYXZvY2FkbykKYGBgCgpDaGVjayBjcmVhdGUgYSBtb250aCBjb2x1bW4gYW5kIHJlbW92ZSBkYXRlCmBgYHtyfQphdm9jYWRvJG1vbnRoIDwtIG1vbnRoKGF2b2NhZG8kZGF0ZSkKYXZvY2FkbyA8LSBhdm9jYWRvICU+JQogICAgICAgIHNlbGVjdCgtYyhkYXRlKSkKYGBgCgpFbmNvZGUgY2F0ZWdvcmljYWwgZGF0YSBpbnRvIGR1bW15IGNvbHVtbnMgYW5kIHRoZW4gcmVtb3ZlLgpgYGB7cn0KYXZvY2FkbyA8LSBkdW1teV9jb2xzKGF2b2NhZG8sIHNlbGVjdF9jb2x1bW5zID0gYygidHlwZSIpLCByZW1vdmVfZmlyc3RfZHVtbXkgPSBUUlVFKQphdm9jYWRvIDwtIGF2b2NhZG8gJT4lCiAgICAgICAgc2VsZWN0KC1jKHgsIHR5cGUpKQpgYGAKCkNoZWNrIHdoaWNoIHJlZ2lvbnMgd2UgaGF2ZSBkYXRhIGZvcgpgYGB7cn0Kc29ydCh1bmlxdWUoYXZvY2FkbyRyZWdpb24pKQpgYGAKClNlZW1zIHRvIGJlIGFuIG92ZXJsYXAgaW4gZGF0YSBjb2xsZWN0ZWQgKGUuZy5mb3IgY2l0aWVzLCByZWdpb25zIGFuZCB0aGUgd2hvbGUKb2YgdGhlIFVTKSBzbyBzZXBhcmF0ZSBpbnRvIDMgZGF0YXNldHMgZm9yIGVhY2ggbGV2ZWwuCmBgYHtyfQphcmVhcyA8LSBjKCJHcmVhdExha2VzIiwgIk1pZHNvdXRoIiwgIk5vcnRoZWFzdCIsICJOb3J0aGVybk5ld0VuZ2xhbmQiLCAKICAgICAgICAiUGxhaW5zIiwgIlNvdXRoQ2VudHJhbCIsICJTb3V0aGVhc3QiLCAiV2VzdCIsICJXZXN0VGV4TmV3TWV4aWNvIikKCmF2b2NhZG9fYXJlYXMgPC0gYXZvY2Fkb1thdm9jYWRvJHJlZ2lvbiAlaW4lIGFyZWFzLCBdCmF2b2NhZG9fY2l0aWVzIDwtIGF2b2NhZG9bIShhdm9jYWRvJHJlZ2lvbiAlaW4lIGMoYXJlYXMsICJUb3RhbFVTIikpLCBdCmF2b2NhZG9fdG90YWwgPC0gYXZvY2Fkb1thdm9jYWRvJHJlZ2lvbiA9PSAiVG90YWxVUyIsIF0KYGBgCgpFeHBsb3JhdG9yeSBncmFwaHMKYGBge3J9CiMgSG93IGRvZXMgdHlwZSBhZmZlY3QgVG90YWwgVm9sdW1lIGZvciB0aGUgd2hvbGUgVVM/CmdncGxvdChhdm9jYWRvX3RvdGFsKSArCiAgICAgICAgYWVzKHggPSB0eXBlX29yZ2FuaWMsIHkgPSB0b3RhbF92b2x1bWUsIGdyb3VwID0gdHlwZV9vcmdhbmljKSArCiAgICAgICAgZ2VvbV9ib3hwbG90KCkgCgojIEhvdyBkb2VzIHJlZ2lvbiBhZmZlY3QgVG90YWwgVm9sdW1lIHBlciB0eXBlIGZvciBlYWNoIGNpdHk/CmdncGxvdChhdm9jYWRvX2NpdGllcykgKwogICAgICAgIGFlcyh4ID0gcmVnaW9uLCB5ID0gdG90YWxfdm9sdW1lKSArCiAgICAgICAgZ2VvbV9iYXIoc3RhdCA9ICJpZGVudGl0eSIpICsKICAgICAgICBjb29yZF9mbGlwKCkgKwogICAgICAgIGZhY2V0X3dyYXAofiB0eXBlX29yZ2FuaWMsIG5jb2wgPSAyKQoKIyBIYXMgVm9sdW1lIGNoYW5nZWQgZWFjaCB5ZWFyIG92ZXJhbGw/CmdncGxvdChhdm9jYWRvX3RvdGFsKSArCiAgICAgICAgYWVzKHggPSB5ZWFyLCB5ID0gdG90YWxfdm9sdW1lLCBncm91cCA9IHllYXIpICsKICAgICAgICBnZW9tX2JveHBsb3QoKSArCiAgICAgICAgZmFjZXRfd3JhcCh+IHR5cGVfb3JnYW5pYywgbmNvbCA9IDEpCgojIElzIHRoZXJlIGEgc2Vhc29uIGNoYW5nZSBmcm9tIG1vbnRoIHRvIG1vbnRoIG92ZXJhbGw/CmdncGxvdChhdm9jYWRvX3RvdGFsKSArCiAgICAgICAgYWVzKHggPSBtb250aCwgeSA9IHRvdGFsX3ZvbHVtZSwgZ3JvdXAgPSBtb250aCkgKwogICAgICAgIGdlb21fYm94cGxvdCgpICsKICAgICAgICBmYWNldF93cmFwKH4gdHlwZV9vcmdhbmljLCBuY29sID0gMSkKCiMgSG93IGRvZXMgYXZlcmFnZSBwcmljZSBhZmZlY3Qgb3ZlcmFsbCBUb3RhbCBWb2x1bWU/CmdncGxvdChhdm9jYWRvX3RvdGFsKSArCiAgICAgICAgYWVzKHggPSBhdmVyYWdlcHJpY2UsIHkgPSB0b3RhbF92b2x1bWUpICsKICAgICAgICBnZW9tX3BvaW50KCkgKwogICAgICAgIGZhY2V0X3dyYXAofiB0eXBlX29yZ2FuaWMpCmBgYAoKU2VlbXMgbGlrZSB0aGUgdHlwZSwgcmVnaW9uLCB5ZWFyLCBtb250aCBhbmQgYXZlcmFnZSBwcmljZSBjb3VsZCBhbGwgYmUgZ29vZCAKcHJlZGljdG9ycy4KCkxldCdzIHdvcmsgd2l0aCBhcmVhIGxldmVsIGRhdGEuCgpSZW1vdmUgdW51c2VkIGZhY3RvciBsZXZlbHMgZnJvbSBkYXRhZnJhbWUKYGBge3J9CmF2b2NhZG9fYXJlYXMgPC0gZHJvcGxldmVscyhhdm9jYWRvX2FyZWFzKQpgYGAKCkNyZWF0ZSBkdW1teSB2YXJpYWJsZXMgZm9yIHRoZSByZWdpb25zCmBgYHtyfQphdm9jYWRvX2FyZWFzIDwtIGR1bW15X2NvbHMoYXZvY2Fkb19hcmVhcywgc2VsZWN0X2NvbHVtbnMgPSBjKCJyZWdpb24iKSwgcmVtb3ZlX2ZpcnN0X2R1bW15ID0gVFJVRSkKYXZvY2Fkb19hcmVhcyA8LSBhdm9jYWRvX2FyZWFzICU+JQogICAgICAgIHNlbGVjdCgtcmVnaW9uKQpgYGAKClNwbGl0IGludG8gdHJhaW5pbmcgYW5kIHRlc3QgZGF0YXNldHMKYGBge3J9Cm5fZGF0YSA8LSBucm93KGF2b2NhZG9fYXJlYXMpCnRlc3RfaW5kZXggPC0gc2FtcGxlKDE6bl9kYXRhLCBzaXplID0gbl9kYXRhKjAuMSkKCmF2b2NhZG9fYXJlYXNfdGVzdCAgPC0gc2xpY2UoYXZvY2Fkb19hcmVhcywgdGVzdF9pbmRleCkKYXZvY2Fkb19hcmVhc190cmFpbiA8LSBzbGljZShhdm9jYWRvX2FyZWFzLCAtdGVzdF9pbmRleCkKYGBgCgpgYGB7cn0KbW9kZWwgPC0gcmVnc3Vic2V0cyh0b3RhbF92b2x1bWUgfiAuLCBkYXRhID0gYXZvY2Fkb19hcmVhc190cmFpbiwgbnZtYXggPSAxOSwgbWV0aG9kID0gImZvcndhcmQiKQpgYGAKCmBgYHtyfQpzdW1tYXJ5KG1vZGVsKQpwbG90KG1vZGVsKQpgYGAKCmBgYHtyfQpwbG90KHN1bW1hcnkobW9kZWwpJHJzcSwgdHlwZSA9ICJiIikKYGBgCgpgYGB7cn0Kc3VtbWFyeShtb2RlbCkkd2hpY2hbNiwgXQpgYGAK</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKYGBge3J9CmxpYnJhcnkodGlkeXZlcnNlKQpsaWJyYXJ5KHJjb21wYW5pb24pCmxpYnJhcnkoRGVzY1Rvb2xzKQpgYGAKCk1WUAoKTm93IHdl4oCZbGwgZ28gYmFjayB0byBDSSBjcmVhdGlvbiBpbiB0aGUgbm9ybWFsIGZhc2hpb24uIFdl4oCZbGwgdGFrZSB0aGUgYW1lcyBkYXRhCmZyb20gdGhlIENJcyBsYWIgZWFybGllciB0b2RheSBhbmQgcmVnYXJkIGl0IG5vdyBhcyBhIHNhbXBsZSwgd2Ugd29u4oCZdCBiZSAKZHJhd2luZyBhbnkgc21hbGxlciBzYW1wbGVzIGZyb20gd2l0aGluIGl0LiBUaGlzIGlzIHRoZSB1c3VhbCBzaXR1YXRpb24gaW4gYW4KYW5hbHlzaXM6IHlvdSB1c2UgYWxsIHRoZSBkYXRhIGF2YWlsYWJsZSB0byB5b3UhCgpMb2FkIHRoZSBkYXRhIGFnYWluIGFuZCByZS1mYW1pbGlhcmlzZSB5b3Vyc2VsZiB3aXRoIGl0CmBgYHtyfQphbWVzIDwtIHJlYWQuY3N2KCJhbWVzLmNzdiIpCmBgYAoKSW52ZXN0aWdhdGUgdGhlIGRpc3RyaWJ1dGlvbiBvZiBMb3QuQXJlYS4gSXMgdGhlIGRpc3RyaWJ1dGlvbiByb3VnaGx5IG5vcm1hbD8gCklmIG5vdCwgd2hhdCBwcm9ibGVtcyBkbyB5b3UgZmluZD8KYGBge3J9CmdncGxvdChhbWVzKSArCiAgICAgICAgYWVzKHggPSBMb3QuQXJlYSkgKwogICAgICAgIGdlb21faGlzdG9ncmFtKCkKYGBgCgpEbyB5b3UgdGhpbmsgYW55IHByb2JsZW1hdGljIGZlYXR1cmVzIGluIHRoZSBkaXN0cmlidXRpb24gb2YgTG90LkFyZWEgd2lsbCBjYXVzZQphbnkgZGlmZmljdWx0aWVzIGluIGVzdGltYXRpbmcgQ0lzIG9yIHBlcmZvcm1pbmcgaHlwb3RoZXNlcyB0ZXN0cyB1c2luZyB0aGlzIAp2YXJpYWJsZT8KYGBge3J9CiMgCmBgYAoKQ29tcHV0ZSBhIDk1JSBDSSBmb3IgdGhlIG1lYW4gTG90LkFyZWEgb2YgdGhlIHNvbGQgaG91c2VzLgpgYGB7cn0KZ3JvdXB3aXNlTWVhbihMb3QuQXJlYSB+IDEsIGRhdGEgPSBhbWVzLCBjb25mID0gMC45NSkKYGBgCgpZb3Ugd291bGQgbGlrZSB0byBrbm93IHRoZSBtZWFuIExvdC5BcmVhIG9mIHRoZSBzb2xkIGhvdXNlcyB3aXRoIGhpZ2hlciAKY29uZmlkZW5jZS4gQ2FsY3VsYXRlIHRoZSA5OSUgQ0kgZm9yIHRoaXMgdmFyaWFibGUuIElzIGl0IG5hcnJvd2VyIG9yIGJyb2FkZXIgCnRoYW4gdGhlIDk1JSBDST8gRG9lcyB0aGF0IG1ha2Ugc2Vuc2U/CmBgYHtyfQpncm91cHdpc2VNZWFuKExvdC5BcmVhIH4gMSwgZGF0YSA9IGFtZXMsIGNvbmYgPSAwLjk5KQojIGJyb2FkZXIgc2luY2Ugd2UncmUgaW5jcmVhc2luZyB0aGUgY29uZmlkZW5jZQpgYGAKCkNhbiB5b3Ugc3BsaXQgb3V0IGFuZCBzaG93IHNlcGFyYXRlIDk5JSBDSXMgZm9yIG1lYW4gTG90LkFyZWEgZ3JvdXBlZCBieSAKSG91c2UuU3R5bGU/IERvIHlvdSBzZWUgYW55IENJcyB5b3UgbWlnaHQgbm90IHRydXN0PwpgYGB7cn0KbWVhbl9hcmVhIDwtIGFtZXMgJT4lCiAgICAgICAgZ3JvdXBfYnkoSG91c2UuU3R5bGUpICU+JQogICAgICAgIHN1bW1hcmlzZShtZWFuX0xvdC5BcmVhID0gbWVhbihMb3QuQXJlYSkpCgpyZXN1bHRzX21lYW4gPC0gZGF0YS5mcmFtZSgpCgpmb3IgKHN0eWxlIGluIGxldmVscyhhbWVzJEhvdXNlLlN0eWxlKSkgewogICAgICAgIHN0eWxlX21lYW4gPC0gZ3JvdXB3aXNlTWVhbihMb3QuQXJlYSB+IDEsIGRhdGEgPSBhbWVzW2FtZXMkSG91c2UuU3R5bGUgPT0gc3R5bGUsIF0sIGNvbmYgPSAwLjk5KQogICAgICAgIHN0eWxlX21lYW4gPC0gY2JpbmQoc3R5bGUsIHN0eWxlX21lYW4pCiAgICAgICAgCiAgICAgICAgcmVzdWx0c19tZWFuIDwtIHJiaW5kKHJlc3VsdHNfbWVhbiwgc3R5bGVfbWVhbikKfQojIDIuNUZpbiBvbmx5IGhhcyA4IHZhbHVlcwpgYGAKCkNhbGN1bGF0ZSBhIDk5JSBDSSBmb3IgdGhlIHByb3BvcnRpb24gb2YgaG91c2VzIGluIHRoZSBkYXRhIGJ1aWx0IGJlZm9yZSAxODkwLgpUcnkgdXNpbmcgdGhlIHdpbHNvbiBhbmQgd2FsZCBtZXRob2RzLiBIb3cgZGlmZmVyZW50IGFyZSB0aGUgYm91bmRzIG9mIHRoZSBDSXMKZ2l2ZW4gYnkgdGhlIHR3byBtZXRob2RzPwpgYGB7cn0KYW1lcyA8LSBhbWVzICU+JQogICAgICAgIG11dGF0ZShvbGRfaG91c2UgPSBhcy5mYWN0b3IoaWZlbHNlKFllYXIuQnVpbHQgPCAxODkwLCAiT2xkIiwgIk5ldyIpKSkKCm9icyA8LSB0YWJsZShhbWVzJG9sZF9ob3VzZSkKb2JzCnRvdGFsIDwtIHN1bShvYnMpCnRvdGFsCgpCaW5vbUNJKHggPSBvYnMsIG4gPSB0b3RhbCwgY29uZi5sZXZlbCA9IDAuOTksIG1ldGhvZCA9ICJ3aWxzb24iKQpCaW5vbUNJKHggPSBvYnMsIG4gPSB0b3RhbCwgY29uZi5sZXZlbCA9IDAuOTksIG1ldGhvZCA9ICJ3YWxkIikKYGBgCgpbSGFyZGVyXSBkbyBhIGJpdCBvZiByZWFkaW5nIG9uIHRoZSBXYWxkIGFuZCBXaWxzb24gbWV0aG9kcy4gV2h5IGRvIHlvdSB0aGluawp0aGUgYm91bmRzIHByb2R1Y2VkIGJ5IHRoZSB0d28gbWV0aG9kcyBhcmUgbW9yZSBzaWduaWZpY2FudGx5IGRpZmZlcmVudCB3aGVuIHRoZQpwcm9wb3J0aW9uIGlzIGNsb3NlciB0byAwPyBXaGljaCBtZXRob2Qgd291bGQgeW91IGNob29zZSBmb3IgdGhlIOKAmHByb3BvcnRpb24gCmJlZm9yZSAxODkw4oCZIENJPwpgYGB7cn0KCmBgYAoKQ2FsY3VsYXRlIDk1JSBDSXMgZm9yIHRoZSBwcm9wb3J0aW9uIG9mIHRvdGFsIGhvdXNlIHNhbGVzIG1hZGUgdXAgYnkgZWFjaCBsZXZlbCAKb2YgSG91c2UuU3R5bGUgaW4gdGhlIGRhdGEKYGBge3J9Cm9icyA8LSB0YWJsZShhbWVzJEhvdXNlLlN0eWxlKQoKTXVsdGlub21DSSh4ID0gb2JzLCBjb25mLmxldmVsID0gMC45NSwgbWV0aG9kID0gIndpbHNvbiIpCmBgYAo=</div>
 
 
 

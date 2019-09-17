@@ -1,0 +1,104 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+In this homework we’ll use the msleep data set provided in the ggplot package.
+It concerns the sleeping patterns of various types of mammal.
+```{r}
+library(tidyverse)
+library(WebPower)
+```
+
+Explore the dataset, familiarise yourself with it.
+```{r}
+msleep
+```
+
+Jabberwockies sleep for around 7 hours a night, on average. Perform an 
+appropriate statistical test to determine whether the mean sleep_total in the
+sampled population of animal types differs from the typical value for
+jabberwockies.
+```{r}
+# Ho = mean sleep for jaberwockies - mean sleep for all other animals == 0
+# Ha = mean sleep for jaberwockies - mean sleep for all other animals != 0
+
+t.test(x = msleep$sleep_total, mu = 7, alternative = "two.sided")
+# p value < 0.05 so can reject Ho
+```
+
+Perform an appropriate statistical test to determine whether omnivores sleep for
+significantly longer than herbivores, on average.
+```{r}
+# Ho = mean sleep omnivores - mean sleep herbivores == 0
+# Ha = mean sleep omnivores - mean sleep herbivores > 0
+
+herb <- msleep[msleep$vore == "herbi", ]
+omni <- msleep[msleep$vore == "omni", ]
+
+t.test(x = herb$sleep_total, y = omni$sleep_total, alternative = "greater", paired = FALSE)
+# p value > 0.05 means no significant difference in sleep_total
+```
+
+Perform an appropriate statistical test to determine whether the proportion of 
+domesticated animals in the population of animal types is greater than 5%
+```{r}
+# Ho = proportion of deomesticated animals <= 5%
+# Ha = proportion of deomesticated animals > 5%
+
+num_domesticated <- msleep %>%
+        filter(conservation == "domesticated")
+
+# Success criteria
+0.0005  * nrow(msleep) >= 10
+(1 - 0.0005) * nrow(msleep) >= 10
+
+binom.test(x = nrow(num_domesticated), n = nrow(msleep), p = 0.0005, alternative = "greater")
+# p value < 0.05 so can reject Ho
+```
+
+Determine an appropriate sample size for the following problem:
+
+A quality analyst wants to estimate a 99% confidence interval to within ±0.01g 
+for the mean weight of fruit pastels produced by a production line tomorrow.
+Prior evidence suggests the standard deviation in fruit pastel weights is 0.05g
+
+What is the minimum number of fruit pastels the analyst should sample?
+```{r}
+CI <- 0.995
+interval <- 0.01
+sd <- 0.05
+
+(qnorm(CI)^2 * sd^2) / interval^2
+# 166 fruit pastilles
+```
+
+Determine an appropriate sample size for the following problem:
+
+A clinical dietician wants to compare two different diets, A and B, for diabetic
+patients. She hypothesizes that diet A (Group 1) will be different from diet B 
+(Group 2), in terms of mean blood glucose. She plans to get a random sample of
+diabetic patients and randomly assign them to one of the two diets. At the end 
+of the experiment, which lasts 6 weeks, a fasting blood glucose test will be 
+conducted on each patient. She also expects that the average difference in blood
+glucose measure between the two group will be about 10 mg/dl. Furthermore, she
+also assumes the standard deviation of blood glucose distribution for diet A to 
+be 15 mg/dl and the standard deviation for diet B to be 17 mg/dl. The dietician
+wants to know the number of subjects needed in each group assuming equal sized 
+groups.
+```{r}
+effect_size <- 10 / 17
+        
+wp.t(n1 = NULL, d = effect_size, alpha = 0.05, power = 0.95,
+        type = "two.sample", alternative = "two.sided")
+# need 77 in each group if equal size
+```
+
+What would the power of the test above be if the number of patients in each 
+group was 100?
+```{r}
+wp.t(n1 = 100, d = effect_size, alpha = 0.05, power = NULL,
+        type = "two.sample", alternative = "two.sided")
+# 98.5%
+```
+

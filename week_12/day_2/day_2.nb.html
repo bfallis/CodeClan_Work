@@ -1729,7 +1729,7 @@ $(document).ready(function () {
 </style>
 <script>
 $(document).ready(function () {
-  window.initializeSourceEmbed("day_1.Rmd");
+  window.initializeSourceEmbed("day_2.Rmd");
   window.initializeCodeFolding("show" === "show");
 });
 </script>
@@ -1767,163 +1767,110 @@ $(document).ready(function () {
 
 
 <!-- rnb-text-begin -->
+<p>In this homework we’ll use the msleep data set provided in the ggplot package. It concerns the sleeping patterns of various types of mammal.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG5saWJyYXJ5KHJjb21wYW5pb24pXG5saWJyYXJ5KERlc2NUb29scylcbmBgYCJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG5saWJyYXJ5KFdlYlBvd2VyKVxuYGBgIn0= -->
 <pre class="r"><code>library(tidyverse)
-library(rcompanion)
-library(DescTools)</code></pre>
+library(WebPower)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>MVP</p>
-<p>Now we’ll go back to CI creation in the normal fashion. We’ll take the ames data from the CIs lab earlier today and regard it now as a sample, we won’t be drawing any smaller samples from within it. This is the usual situation in an analysis: you use all the data available to you!</p>
-<p>Load the data again and re-familiarise yourself with it</p>
+<p>Explore the dataset, familiarise yourself with it.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYW1lcyA8LSByZWFkLmNzdihcImFtZXMuY3N2XCIpXG5gYGAifQ== -->
-<pre class="r"><code>ames &lt;- read.csv(&quot;ames.csv&quot;)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXNsZWVwXG5gYGAifQ== -->
+<pre class="r"><code>msleep</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Investigate the distribution of Lot.Area. Is the distribution roughly normal? If not, what problems do you find?</p>
+<p>Jabberwockies sleep for around 7 hours a night, on average. Perform an appropriate statistical test to determine whether the mean sleep_total in the sampled population of animal types differs from the typical value for jabberwockies.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2dwbG90KGFtZXMpICtcbiAgICAgICAgYWVzKHggPSBMb3QuQXJlYSkgK1xuICAgICAgICBnZW9tX2hpc3RvZ3JhbSgpXG5gYGAifQ== -->
-<pre class="r"><code>ggplot(ames) +
-        aes(x = Lot.Area) +
-        geom_histogram()</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Do you think any problematic features in the distribution of Lot.Area will cause any difficulties in estimating CIs or performing hypotheses tests using this variable?</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2dwbG90KGFtZXMpICtcbiAgICAgICAgYWVzKHkgPSBMb3QuQXJlYSkgK1xuICAgICAgICBnZW9tX2JveHBsb3QoKVxuIyBsb3RzIG9mIG91dGxpZXJzIGJ1dCBzYW1wbGUgc2l6ZSBpcyBoaWdoXG5gYGAifQ== -->
-<pre class="r"><code>ggplot(ames) +
-        aes(y = Lot.Area) +
-        geom_boxplot()
-# lots of outliers but sample size is high</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Compute a 95% CI for the mean Lot.Area of the sold houses.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ3JvdXB3aXNlTWVhbihMb3QuQXJlYSB+IDEsIGRhdGEgPSBhbWVzLCBjb25mID0gMC45NSlcbmBgYCJ9 -->
-<pre class="r"><code>groupwiseMean(Lot.Area ~ 1, data = ames, conf = 0.95)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibmNvbCI6NiwibnJvdyI6MX0sInJkZiI6Ikg0c0lBQUFBQUFBQUExMVFRVTdETUJEY0puRlFncWdxOFk3NDBoNjRVUUhpaG9SUWtYbzFpVU1qakIwNUNlVnRYT0U5UEtGbDdkcEJqcVZrWjJlOW50bDl1dHN1ODIwT0FESEVLZjRKUWlEUG0vdmlDaUNKTUpsQkFwbUpuMWkrUklEWFlHRUxBTmtSRDhhTFUzNnVNYzROWG45L2dUczJ2LzZ0N2ZtdjN3VDE5YytqU3dOUkl0azc3NXhnNnNpWU5wVTNKUjFJSGpqek9MOVZzcWFDZjNEaG1ZMW1GUlZxejNYQURHMkxUQ2laYWJXblh0Yk5aYjdRVnlsWTUzMTVNcTlZejJpdHNSZXp3NlRsVExWOW95UTJSV2FMWk5JODB4TmlNVWpqb2lySzNTRGZpdVhLS0RnN0VGb2JjWHJTakk3dUxlTGVTcmw4YlNUMzVnVjdHVmN6eDNIdHRMVFZqZXo5S01oMnRGYzlHMWRZS3VFWk94d2MvZ0NEZ01YclBRSUFBQT09In0= -->
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":[".id"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]},{"label":["Mean"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["Conf.level"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Trad.lower"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["Trad.upper"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"NA","2":"2930","3":"10100","4":"0.95","5":"9860","6":"10400"}],"options":{"columns":{"min":{},"max":[10],"total":[6]},"rows":{"min":[10],"max":[10],"total":[1]},"pages":{}}}
-  </script>
-</div>
-<!-- rnb-frame-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>You would like to know the mean Lot.Area of the sold houses with higher confidence. Calculate the 99% CI for this variable. Is it narrower or broader than the 95% CI? Does that make sense?</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ3JvdXB3aXNlTWVhbihMb3QuQXJlYSB+IDEsIGRhdGEgPSBhbWVzLCBjb25mID0gMC45OSlcbmBgYCJ9 -->
-<pre class="r"><code>groupwiseMean(Lot.Area ~ 1, data = ames, conf = 0.99)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibmNvbCI6NiwibnJvdyI6MX0sInJkZiI6Ikg0c0lBQUFBQUFBQUExMVFRVTdETUJEY0puRlFncWdxQWMrSUx4VVNOeXFCNE1RRkZhbFhrN2dsd3RpUmsxREVrUWYxQVZ6aEk3eUFIN1NzVXp1Vll5bloyVm12WjNZZmJoYlRkSkVDUUFoaGpIK0NFTWpqL0RhN0JJZ0NURVlRUVdMaU81WlBFZUExbUhRRmdHU0hCK1BKUGovV0dNY0d6NzYvd0o0dXYvcmJuSDM4M20wTzlYT3ZQdnY1dEtrblNpUjc1YlVWakMwWjBySndwcVFGMFQxbkRxZlhTaTZwNEc5Y09HYXVXVUdGV25QdE1XMVZJZU5MSmxxdHFaTzFjNW5QOTVVTFZqdGZqa3dMMWpDNjFOaUwyWGJRY3FTcXBsUVNtd0t6UlRKb0h1a0JNV21sY1ZGaytYTXJYN0xwaFZHd2RzQzMxdU40cnhuczdGdkV2aFZ6dVNvbGQrWUZlK3BYTThaeHUybHBwVXZadUZHUXJXbWpHdGF2TUZmQ01kMXdzUDBISEoweVZqMENBQUE9In0= -->
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":[".id"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]},{"label":["Mean"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["Conf.level"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Trad.lower"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["Trad.upper"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"NA","2":"2930","3":"10100","4":"0.99","5":"9770","6":"10500"}],"options":{"columns":{"min":{},"max":[10],"total":[6]},"rows":{"min":[10],"max":[10],"total":[1]},"pages":{}}}
-  </script>
-</div>
-<!-- rnb-frame-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBicm9hZGVyIHNpbmNlIHdlJ3JlIGluY3JlYXNpbmcgdGhlIGNvbmZpZGVuY2VcbmBgYCJ9 -->
-<pre class="r"><code># broader since we're increasing the confidence</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Can you split out and show separate 99% CIs for mean Lot.Area grouped by House.Style? Do you see any CIs you might not trust?</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWVhbl9hcmVhIDwtIGFtZXMgJT4lXG4gICAgICAgIGdyb3VwX2J5KEhvdXNlLlN0eWxlKSAlPiVcbiAgICAgICAgc3VtbWFyaXNlKG1lYW5fTG90LkFyZWEgPSBtZWFuKExvdC5BcmVhKSlcblxucmVzdWx0c19tZWFuIDwtIGRhdGEuZnJhbWUoKVxuXG5mb3IgKHN0eWxlIGluIGxldmVscyhhbWVzJEhvdXNlLlN0eWxlKSkge1xuICAgICAgICBzdHlsZV9tZWFuIDwtIGdyb3Vwd2lzZU1lYW4oTG90LkFyZWEgfiAxLCBkYXRhID0gYW1lc1thbWVzJEhvdXNlLlN0eWxlID09IHN0eWxlLCBdLCBjb25mID0gMC45OSlcbiAgICAgICAgc3R5bGVfbWVhbiA8LSBjYmluZChzdHlsZSwgc3R5bGVfbWVhbilcbiAgICAgICAgXG4gICAgICAgIHJlc3VsdHNfbWVhbiA8LSByYmluZChyZXN1bHRzX21lYW4sIHN0eWxlX21lYW4pXG59XG4jIDIuNUZpbiBvbmx5IGhhcyA4IHZhbHVlc1xuXG5ncm91cHdpc2VNZWFuKExvdC5BcmVhIH4gSG91c2UuU3R5bGUsIGRhdGEgPSBhbWVzLCBjb25mID0gMC45OSlcbiMgZ2l2ZXMgc2FtZSByZXN1bHQgYXMgYWJvdmVcbmBgYCJ9 -->
-<pre class="r"><code>mean_area &lt;- ames %&gt;%
-        group_by(House.Style) %&gt;%
-        summarise(mean_Lot.Area = mean(Lot.Area))
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBIbyA9IG1lYW4gc2xlZXAgZm9yIGphYmVyd29ja2llcyAtIG1lYW4gc2xlZXAgZm9yIGFsbCBvdGhlciBhbmltYWxzID09IDBcbiMgSGEgPSBtZWFuIHNsZWVwIGZvciBqYWJlcndvY2tpZXMgLSBtZWFuIHNsZWVwIGZvciBhbGwgb3RoZXIgYW5pbWFscyAhPSAwXG5cbnQudGVzdCh4ID0gbXNsZWVwJHNsZWVwX3RvdGFsLCBtdSA9IDcsIGFsdGVybmF0aXZlID0gXCJ0d28uc2lkZWRcIilcbiMgcCB2YWx1ZSA8IDAuMDUgc28gY2FuIHJlamVjdCBIb1xuYGBgIn0= -->
+<pre class="r"><code># Ho = mean sleep for jaberwockies - mean sleep for all other animals == 0
+# Ha = mean sleep for jaberwockies - mean sleep for all other animals != 0
 
-results_mean &lt;- data.frame()
+t.test(x = msleep$sleep_total, mu = 7, alternative = &quot;two.sided&quot;)
+# p value &lt; 0.05 so can reject Ho</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Perform an appropriate statistical test to determine whether omnivores sleep for significantly longer than herbivores, on average.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBIbyA9IG1lYW4gc2xlZXAgb21uaXZvcmVzIC0gbWVhbiBzbGVlcCBoZXJiaXZvcmVzID09IDBcbiMgSGEgPSBtZWFuIHNsZWVwIG9tbml2b3JlcyAtIG1lYW4gc2xlZXAgaGVyYml2b3JlcyA+IDBcblxuaGVyYiA8LSBtc2xlZXBbbXNsZWVwJHZvcmUgPT0gXCJoZXJiaVwiLCBdXG5vbW5pIDwtIG1zbGVlcFttc2xlZXAkdm9yZSA9PSBcIm9tbmlcIiwgXVxuXG50LnRlc3QoeCA9IGhlcmIkc2xlZXBfdG90YWwsIHkgPSBvbW5pJHNsZWVwX3RvdGFsLCBhbHRlcm5hdGl2ZSA9IFwiZ3JlYXRlclwiLCBwYWlyZWQgPSBGQUxTRSlcbiMgcCB2YWx1ZSA+IDAuMDUgbWVhbnMgbm8gc2lnbmlmaWNhbnQgZGlmZmVyZW5jZSBpbiBzbGVlcF90b3RhbFxuYGBgIn0= -->
+<pre class="r"><code># Ho = mean sleep omnivores - mean sleep herbivores == 0
+# Ha = mean sleep omnivores - mean sleep herbivores &gt; 0
 
-for (style in levels(ames$House.Style)) {
-        style_mean &lt;- groupwiseMean(Lot.Area ~ 1, data = ames[ames$House.Style == style, ], conf = 0.99)
-        style_mean &lt;- cbind(style, style_mean)
+herb &lt;- msleep[msleep$vore == &quot;herbi&quot;, ]
+omni &lt;- msleep[msleep$vore == &quot;omni&quot;, ]
+
+t.test(x = herb$sleep_total, y = omni$sleep_total, alternative = &quot;greater&quot;, paired = FALSE)
+# p value &gt; 0.05 means no significant difference in sleep_total</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Perform an appropriate statistical test to determine whether the proportion of domesticated animals in the population of animal types is greater than 5%</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBIbyA9IHByb3BvcnRpb24gb2YgZGVvbWVzdGljYXRlZCBhbmltYWxzIDw9IDUlXG4jIEhhID0gcHJvcG9ydGlvbiBvZiBkZW9tZXN0aWNhdGVkIGFuaW1hbHMgPiA1JVxuXG5udW1fZG9tZXN0aWNhdGVkIDwtIG1zbGVlcCAlPiVcbiAgICAgICAgZmlsdGVyKGNvbnNlcnZhdGlvbiA9PSBcImRvbWVzdGljYXRlZFwiKVxuXG4jIFN1Y2Nlc3MgY3JpdGVyaWFcbjAuMDAwNSAgKiBucm93KG1zbGVlcCkgPj0gMTBcbigxIC0gMC4wMDA1KSAqIG5yb3cobXNsZWVwKSA+PSAxMFxuXG5iaW5vbS50ZXN0KHggPSBucm93KG51bV9kb21lc3RpY2F0ZWQpLCBuID0gbnJvdyhtc2xlZXApLCBwID0gMC4wMDA1LCBhbHRlcm5hdGl2ZSA9IFwiZ3JlYXRlclwiKVxuIyBwIHZhbHVlIDwgMC4wNSBzbyBjYW4gcmVqZWN0IEhvXG5gYGAifQ== -->
+<pre class="r"><code># Ho = proportion of deomesticated animals &lt;= 5%
+# Ha = proportion of deomesticated animals &gt; 5%
+
+num_domesticated &lt;- msleep %&gt;%
+        filter(conservation == &quot;domesticated&quot;)
+
+# Success criteria
+0.0005  * nrow(msleep) &gt;= 10
+(1 - 0.0005) * nrow(msleep) &gt;= 10
+
+binom.test(x = nrow(num_domesticated), n = nrow(msleep), p = 0.0005, alternative = &quot;greater&quot;)
+# p value &lt; 0.05 so can reject Ho</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Determine an appropriate sample size for the following problem:</p>
+<p>A quality analyst wants to estimate a 99% confidence interval to within ±0.01g for the mean weight of fruit pastels produced by a production line tomorrow. Prior evidence suggests the standard deviation in fruit pastel weights is 0.05g</p>
+<p>What is the minimum number of fruit pastels the analyst should sample?</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuQ0kgPC0gMC45OTVcbmludGVydmFsIDwtIDAuMDFcbnNkIDwtIDAuMDVcblxuKHFub3JtKENJKV4yICogc2ReMikgLyBpbnRlcnZhbF4yXG4jIDE2NiBmcnVpdCBwYXN0aWxsZXNcbmBgYCJ9 -->
+<pre class="r"><code>CI &lt;- 0.995
+interval &lt;- 0.01
+sd &lt;- 0.05
+
+(qnorm(CI)^2 * sd^2) / interval^2
+# 166 fruit pastilles</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Determine an appropriate sample size for the following problem:</p>
+<p>A clinical dietician wants to compare two different diets, A and B, for diabetic patients. She hypothesizes that diet A (Group 1) will be different from diet B (Group 2), in terms of mean blood glucose. She plans to get a random sample of diabetic patients and randomly assign them to one of the two diets. At the end of the experiment, which lasts 6 weeks, a fasting blood glucose test will be conducted on each patient. She also expects that the average difference in blood glucose measure between the two group will be about 10 mg/dl. Furthermore, she also assumes the standard deviation of blood glucose distribution for diet A to be 15 mg/dl and the standard deviation for diet B to be 17 mg/dl. The dietician wants to know the number of subjects needed in each group assuming equal sized groups.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZWZmZWN0X3NpemUgPC0gMTAgLyAxN1xuICAgICAgICBcbndwLnQobjEgPSBOVUxMLCBkID0gZWZmZWN0X3NpemUsIGFscGhhID0gMC4wNSwgcG93ZXIgPSAwLjk1LFxuICAgICAgICB0eXBlID0gXCJ0d28uc2FtcGxlXCIsIGFsdGVybmF0aXZlID0gXCJ0d28uc2lkZWRcIilcbiMgbmVlZCA3NyBpbiBlYWNoIGdyb3VwIGlmIGVxdWFsIHNpemVcbmBgYCJ9 -->
+<pre class="r"><code>effect_size &lt;- 10 / 17
         
-        results_mean &lt;- rbind(results_mean, style_mean)
-}
-# 2.5Fin only has 8 values
-
-groupwiseMean(Lot.Area ~ House.Style, data = ames, conf = 0.99)
-# gives same result as above</code></pre>
+wp.t(n1 = NULL, d = effect_size, alpha = 0.05, power = 0.95,
+        type = &quot;two.sample&quot;, alternative = &quot;two.sided&quot;)
+# need 77 in each group if equal size</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Calculate a 99% CI for the proportion of houses in the data built before 1890. Try using the wilson and wald methods. How different are the bounds of the CIs given by the two methods?</p>
+<p>What would the power of the test above be if the number of patients in each group was 100?</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYW1lcyA8LSBhbWVzICU+JVxuICAgICAgICBtdXRhdGUob2xkX2hvdXNlID0gYXMuZmFjdG9yKGlmZWxzZShZZWFyLkJ1aWx0IDwgMTg5MCwgXCJPbGRcIiwgXCJOZXdcIikpKVxuXG5vYnMgPC0gdGFibGUoYW1lcyRvbGRfaG91c2UpXG5vYnNcbmBgYCJ9 -->
-<pre class="r"><code>ames &lt;- ames %&gt;%
-        mutate(old_house = as.factor(ifelse(Year.Built &lt; 1890, &quot;Old&quot;, &quot;New&quot;)))
-
-obs &lt;- table(ames$old_house)
-obs</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG4gTmV3ICBPbGQgXG4yOTE5ICAgMTEgXG4ifQ== -->
-<pre><code>
- New  Old 
-2919   11 </code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudG90YWwgPC0gc3VtKG9icylcbnRvdGFsXG5gYGAifQ== -->
-<pre class="r"><code>total &lt;- sum(obs)
-total</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDI5MzBcbiJ9 -->
-<pre><code>[1] 2930</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuQmlub21DSSh4ID0gb2JzLCBuID0gdG90YWwsIGNvbmYubGV2ZWwgPSAwLjk5LCBtZXRob2QgPSBcIndpbHNvblwiKVxuYGBgIn0= -->
-<pre class="r"><code>BinomCI(x = obs, n = total, conf.level = 0.99, method = &quot;wilson&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgICAgZXN0ICAgICAgbHdyLmNpICAgICAgdXByLmNpXG5OZXcgMC45OTYyNDU3MzQgMC45OTIwMDg4NjEgMC45OTgyNDAyMTdcbk9sZCAwLjAwMzc1NDI2NiAwLjAwMTc1OTc4MyAwLjAwNzk5MTEzOVxuIn0= -->
-<pre><code>            est      lwr.ci      upr.ci
-New 0.996245734 0.992008861 0.998240217
-Old 0.003754266 0.001759783 0.007991139</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuQmlub21DSSh4ID0gb2JzLCBuID0gdG90YWwsIGNvbmYubGV2ZWwgPSAwLjk5LCBtZXRob2QgPSBcIndhbGRcIilcbmBgYCJ9 -->
-<pre class="r"><code>BinomCI(x = obs, n = total, conf.level = 0.99, method = &quot;wald&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgICAgZXN0ICAgICAgIGx3ci5jaSAgICAgIHVwci5jaVxuTmV3IDAuOTk2MjQ1NzM0IDAuOTkzMzM1NDkyMiAwLjk5OTE1NTk3NVxuT2xkIDAuMDAzNzU0MjY2IDAuMDAwODQ0MDI0NiAwLjAwNjY2NDUwOFxuIn0= -->
-<pre><code>            est       lwr.ci      upr.ci
-New 0.996245734 0.9933354922 0.999155975
-Old 0.003754266 0.0008440246 0.006664508</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>[Harder] do a bit of reading on the Wald and Wilson methods. Why do you think the bounds produced by the two methods are more significantly different when the proportion is closer to 0? Which method would you choose for the ‘proportion before 1890’ CI?</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyB3YWxkIGlzIHRoZSBub3JtYWwgbWV0aG9kIHVzZWQgaW4gclxuIyB3aWxzb24gbWV0aG9kIGlzIHRyeWluZyB0byBjb3JyZWN0IGZvciBleHRyZW1lIHByb3BvcnRpb25zIChlLmcuIHdoZW4gb25lXG4jIHZhbHVlIGlzIGNsb3NlIHRvIDAuKVxuYGBgIn0= -->
-<pre class="r"><code># wald is the normal method used in r
-# wilson method is trying to correct for extreme proportions (e.g. when one
-# value is close to 0.)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxud3AudChuMSA9IDEwMCwgZCA9IGVmZmVjdF9zaXplLCBhbHBoYSA9IDAuMDUsIHBvd2VyID0gTlVMTCxcbiAgICAgICAgdHlwZSA9IFwidHdvLnNhbXBsZVwiLCBhbHRlcm5hdGl2ZSA9IFwidHdvLnNpZGVkXCIpXG4jIDk4LjUlXG5gYGAifQ== -->
+<pre class="r"><code>wp.t(n1 = 100, d = effect_size, alpha = 0.05, power = NULL,
+        type = &quot;two.sample&quot;, alternative = &quot;two.sided&quot;)
+# 98.5%</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Calculate 95% CIs for the proportion of total house sales made up by each level of House.Style in the data</p>
 <!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxub2JzIDwtIHRhYmxlKGFtZXMkSG91c2UuU3R5bGUpXG5cbk11bHRpbm9tQ0koeCA9IG9icywgY29uZi5sZXZlbCA9IDAuOTUsIG1ldGhvZCA9IFwid2lsc29uXCIpXG5gYGAifQ== -->
-<pre class="r"><code>obs &lt;- table(ames$House.Style)
 
-MultinomCI(x = obs, conf.level = 0.95, method = &quot;wilson&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKYGBge3J9CmxpYnJhcnkodGlkeXZlcnNlKQpsaWJyYXJ5KHJjb21wYW5pb24pCmxpYnJhcnkoRGVzY1Rvb2xzKQpgYGAKCk1WUAoKTm93IHdl4oCZbGwgZ28gYmFjayB0byBDSSBjcmVhdGlvbiBpbiB0aGUgbm9ybWFsIGZhc2hpb24uIFdl4oCZbGwgdGFrZSB0aGUgYW1lcyBkYXRhCmZyb20gdGhlIENJcyBsYWIgZWFybGllciB0b2RheSBhbmQgcmVnYXJkIGl0IG5vdyBhcyBhIHNhbXBsZSwgd2Ugd29u4oCZdCBiZSAKZHJhd2luZyBhbnkgc21hbGxlciBzYW1wbGVzIGZyb20gd2l0aGluIGl0LiBUaGlzIGlzIHRoZSB1c3VhbCBzaXR1YXRpb24gaW4gYW4KYW5hbHlzaXM6IHlvdSB1c2UgYWxsIHRoZSBkYXRhIGF2YWlsYWJsZSB0byB5b3UhCgpMb2FkIHRoZSBkYXRhIGFnYWluIGFuZCByZS1mYW1pbGlhcmlzZSB5b3Vyc2VsZiB3aXRoIGl0CmBgYHtyfQphbWVzIDwtIHJlYWQuY3N2KCJhbWVzLmNzdiIpCmBgYAoKSW52ZXN0aWdhdGUgdGhlIGRpc3RyaWJ1dGlvbiBvZiBMb3QuQXJlYS4gSXMgdGhlIGRpc3RyaWJ1dGlvbiByb3VnaGx5IG5vcm1hbD8gCklmIG5vdCwgd2hhdCBwcm9ibGVtcyBkbyB5b3UgZmluZD8KYGBge3J9CmdncGxvdChhbWVzKSArCiAgICAgICAgYWVzKHggPSBMb3QuQXJlYSkgKwogICAgICAgIGdlb21faGlzdG9ncmFtKCkKYGBgCgpEbyB5b3UgdGhpbmsgYW55IHByb2JsZW1hdGljIGZlYXR1cmVzIGluIHRoZSBkaXN0cmlidXRpb24gb2YgTG90LkFyZWEgd2lsbCBjYXVzZQphbnkgZGlmZmljdWx0aWVzIGluIGVzdGltYXRpbmcgQ0lzIG9yIHBlcmZvcm1pbmcgaHlwb3RoZXNlcyB0ZXN0cyB1c2luZyB0aGlzIAp2YXJpYWJsZT8KYGBge3J9CmdncGxvdChhbWVzKSArCiAgICAgICAgYWVzKHkgPSBMb3QuQXJlYSkgKwogICAgICAgIGdlb21fYm94cGxvdCgpCiMgbG90cyBvZiBvdXRsaWVycyBidXQgc2FtcGxlIHNpemUgaXMgaGlnaApgYGAKCkNvbXB1dGUgYSA5NSUgQ0kgZm9yIHRoZSBtZWFuIExvdC5BcmVhIG9mIHRoZSBzb2xkIGhvdXNlcy4KYGBge3J9Cmdyb3Vwd2lzZU1lYW4oTG90LkFyZWEgfiAxLCBkYXRhID0gYW1lcywgY29uZiA9IDAuOTUpCmBgYAoKWW91IHdvdWxkIGxpa2UgdG8ga25vdyB0aGUgbWVhbiBMb3QuQXJlYSBvZiB0aGUgc29sZCBob3VzZXMgd2l0aCBoaWdoZXIgCmNvbmZpZGVuY2UuIENhbGN1bGF0ZSB0aGUgOTklIENJIGZvciB0aGlzIHZhcmlhYmxlLiBJcyBpdCBuYXJyb3dlciBvciBicm9hZGVyIAp0aGFuIHRoZSA5NSUgQ0k/IERvZXMgdGhhdCBtYWtlIHNlbnNlPwpgYGB7cn0KZ3JvdXB3aXNlTWVhbihMb3QuQXJlYSB+IDEsIGRhdGEgPSBhbWVzLCBjb25mID0gMC45OSkKIyBicm9hZGVyIHNpbmNlIHdlJ3JlIGluY3JlYXNpbmcgdGhlIGNvbmZpZGVuY2UKYGBgCgpDYW4geW91IHNwbGl0IG91dCBhbmQgc2hvdyBzZXBhcmF0ZSA5OSUgQ0lzIGZvciBtZWFuIExvdC5BcmVhIGdyb3VwZWQgYnkgCkhvdXNlLlN0eWxlPyBEbyB5b3Ugc2VlIGFueSBDSXMgeW91IG1pZ2h0IG5vdCB0cnVzdD8KYGBge3J9Cm1lYW5fYXJlYSA8LSBhbWVzICU+JQogICAgICAgIGdyb3VwX2J5KEhvdXNlLlN0eWxlKSAlPiUKICAgICAgICBzdW1tYXJpc2UobWVhbl9Mb3QuQXJlYSA9IG1lYW4oTG90LkFyZWEpKQoKcmVzdWx0c19tZWFuIDwtIGRhdGEuZnJhbWUoKQoKZm9yIChzdHlsZSBpbiBsZXZlbHMoYW1lcyRIb3VzZS5TdHlsZSkpIHsKICAgICAgICBzdHlsZV9tZWFuIDwtIGdyb3Vwd2lzZU1lYW4oTG90LkFyZWEgfiAxLCBkYXRhID0gYW1lc1thbWVzJEhvdXNlLlN0eWxlID09IHN0eWxlLCBdLCBjb25mID0gMC45OSkKICAgICAgICBzdHlsZV9tZWFuIDwtIGNiaW5kKHN0eWxlLCBzdHlsZV9tZWFuKQogICAgICAgIAogICAgICAgIHJlc3VsdHNfbWVhbiA8LSByYmluZChyZXN1bHRzX21lYW4sIHN0eWxlX21lYW4pCn0KIyAyLjVGaW4gb25seSBoYXMgOCB2YWx1ZXMKCmdyb3Vwd2lzZU1lYW4oTG90LkFyZWEgfiBIb3VzZS5TdHlsZSwgZGF0YSA9IGFtZXMsIGNvbmYgPSAwLjk5KQojIGdpdmVzIHNhbWUgcmVzdWx0IGFzIGFib3ZlCmBgYAoKQ2FsY3VsYXRlIGEgOTklIENJIGZvciB0aGUgcHJvcG9ydGlvbiBvZiBob3VzZXMgaW4gdGhlIGRhdGEgYnVpbHQgYmVmb3JlIDE4OTAuClRyeSB1c2luZyB0aGUgd2lsc29uIGFuZCB3YWxkIG1ldGhvZHMuIEhvdyBkaWZmZXJlbnQgYXJlIHRoZSBib3VuZHMgb2YgdGhlIENJcwpnaXZlbiBieSB0aGUgdHdvIG1ldGhvZHM/CmBgYHtyfQphbWVzIDwtIGFtZXMgJT4lCiAgICAgICAgbXV0YXRlKG9sZF9ob3VzZSA9IGFzLmZhY3RvcihpZmVsc2UoWWVhci5CdWlsdCA8IDE4OTAsICJPbGQiLCAiTmV3IikpKQoKb2JzIDwtIHRhYmxlKGFtZXMkb2xkX2hvdXNlKQpvYnMKdG90YWwgPC0gc3VtKG9icykKdG90YWwKCkJpbm9tQ0koeCA9IG9icywgbiA9IHRvdGFsLCBjb25mLmxldmVsID0gMC45OSwgbWV0aG9kID0gIndpbHNvbiIpCkJpbm9tQ0koeCA9IG9icywgbiA9IHRvdGFsLCBjb25mLmxldmVsID0gMC45OSwgbWV0aG9kID0gIndhbGQiKQpgYGAKCltIYXJkZXJdIGRvIGEgYml0IG9mIHJlYWRpbmcgb24gdGhlIFdhbGQgYW5kIFdpbHNvbiBtZXRob2RzLiBXaHkgZG8geW91IHRoaW5rCnRoZSBib3VuZHMgcHJvZHVjZWQgYnkgdGhlIHR3byBtZXRob2RzIGFyZSBtb3JlIHNpZ25pZmljYW50bHkgZGlmZmVyZW50IHdoZW4gdGhlCnByb3BvcnRpb24gaXMgY2xvc2VyIHRvIDA/IFdoaWNoIG1ldGhvZCB3b3VsZCB5b3UgY2hvb3NlIGZvciB0aGUg4oCYcHJvcG9ydGlvbiAKYmVmb3JlIDE4OTDigJkgQ0k/CmBgYHtyfQojIHdhbGQgaXMgdGhlIG5vcm1hbCBtZXRob2QgdXNlZCBpbiByCiMgd2lsc29uIG1ldGhvZCBpcyB0cnlpbmcgdG8gY29ycmVjdCBmb3IgZXh0cmVtZSBwcm9wb3J0aW9ucyAoZS5nLiB3aGVuIG9uZQojIHZhbHVlIGlzIGNsb3NlIHRvIDAuKQpgYGAKCkNhbGN1bGF0ZSA5NSUgQ0lzIGZvciB0aGUgcHJvcG9ydGlvbiBvZiB0b3RhbCBob3VzZSBzYWxlcyBtYWRlIHVwIGJ5IGVhY2ggbGV2ZWwgCm9mIEhvdXNlLlN0eWxlIGluIHRoZSBkYXRhCmBgYHtyfQpvYnMgPC0gdGFibGUoYW1lcyRIb3VzZS5TdHlsZSkKCk11bHRpbm9tQ0koeCA9IG9icywgY29uZi5sZXZlbCA9IDAuOTUsIG1ldGhvZCA9ICJ3aWxzb24iKQpgYGAK</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKSW4gdGhpcyBob21ld29yayB3ZeKAmWxsIHVzZSB0aGUgbXNsZWVwIGRhdGEgc2V0IHByb3ZpZGVkIGluIHRoZSBnZ3Bsb3QgcGFja2FnZS4KSXQgY29uY2VybnMgdGhlIHNsZWVwaW5nIHBhdHRlcm5zIG9mIHZhcmlvdXMgdHlwZXMgb2YgbWFtbWFsLgpgYGB7cn0KbGlicmFyeSh0aWR5dmVyc2UpCmxpYnJhcnkoV2ViUG93ZXIpCmBgYAoKRXhwbG9yZSB0aGUgZGF0YXNldCwgZmFtaWxpYXJpc2UgeW91cnNlbGYgd2l0aCBpdC4KYGBge3J9Cm1zbGVlcApgYGAKCkphYmJlcndvY2tpZXMgc2xlZXAgZm9yIGFyb3VuZCA3IGhvdXJzIGEgbmlnaHQsIG9uIGF2ZXJhZ2UuIFBlcmZvcm0gYW4gCmFwcHJvcHJpYXRlIHN0YXRpc3RpY2FsIHRlc3QgdG8gZGV0ZXJtaW5lIHdoZXRoZXIgdGhlIG1lYW4gc2xlZXBfdG90YWwgaW4gdGhlCnNhbXBsZWQgcG9wdWxhdGlvbiBvZiBhbmltYWwgdHlwZXMgZGlmZmVycyBmcm9tIHRoZSB0eXBpY2FsIHZhbHVlIGZvcgpqYWJiZXJ3b2NraWVzLgpgYGB7cn0KIyBIbyA9IG1lYW4gc2xlZXAgZm9yIGphYmVyd29ja2llcyAtIG1lYW4gc2xlZXAgZm9yIGFsbCBvdGhlciBhbmltYWxzID09IDAKIyBIYSA9IG1lYW4gc2xlZXAgZm9yIGphYmVyd29ja2llcyAtIG1lYW4gc2xlZXAgZm9yIGFsbCBvdGhlciBhbmltYWxzICE9IDAKCnQudGVzdCh4ID0gbXNsZWVwJHNsZWVwX3RvdGFsLCBtdSA9IDcsIGFsdGVybmF0aXZlID0gInR3by5zaWRlZCIpCiMgcCB2YWx1ZSA8IDAuMDUgc28gY2FuIHJlamVjdCBIbwpgYGAKClBlcmZvcm0gYW4gYXBwcm9wcmlhdGUgc3RhdGlzdGljYWwgdGVzdCB0byBkZXRlcm1pbmUgd2hldGhlciBvbW5pdm9yZXMgc2xlZXAgZm9yCnNpZ25pZmljYW50bHkgbG9uZ2VyIHRoYW4gaGVyYml2b3Jlcywgb24gYXZlcmFnZS4KYGBge3J9CiMgSG8gPSBtZWFuIHNsZWVwIG9tbml2b3JlcyAtIG1lYW4gc2xlZXAgaGVyYml2b3JlcyA9PSAwCiMgSGEgPSBtZWFuIHNsZWVwIG9tbml2b3JlcyAtIG1lYW4gc2xlZXAgaGVyYml2b3JlcyA+IDAKCmhlcmIgPC0gbXNsZWVwW21zbGVlcCR2b3JlID09ICJoZXJiaSIsIF0Kb21uaSA8LSBtc2xlZXBbbXNsZWVwJHZvcmUgPT0gIm9tbmkiLCBdCgp0LnRlc3QoeCA9IGhlcmIkc2xlZXBfdG90YWwsIHkgPSBvbW5pJHNsZWVwX3RvdGFsLCBhbHRlcm5hdGl2ZSA9ICJncmVhdGVyIiwgcGFpcmVkID0gRkFMU0UpCiMgcCB2YWx1ZSA+IDAuMDUgbWVhbnMgbm8gc2lnbmlmaWNhbnQgZGlmZmVyZW5jZSBpbiBzbGVlcF90b3RhbApgYGAKClBlcmZvcm0gYW4gYXBwcm9wcmlhdGUgc3RhdGlzdGljYWwgdGVzdCB0byBkZXRlcm1pbmUgd2hldGhlciB0aGUgcHJvcG9ydGlvbiBvZiAKZG9tZXN0aWNhdGVkIGFuaW1hbHMgaW4gdGhlIHBvcHVsYXRpb24gb2YgYW5pbWFsIHR5cGVzIGlzIGdyZWF0ZXIgdGhhbiA1JQpgYGB7cn0KIyBIbyA9IHByb3BvcnRpb24gb2YgZGVvbWVzdGljYXRlZCBhbmltYWxzIDw9IDUlCiMgSGEgPSBwcm9wb3J0aW9uIG9mIGRlb21lc3RpY2F0ZWQgYW5pbWFscyA+IDUlCgpudW1fZG9tZXN0aWNhdGVkIDwtIG1zbGVlcCAlPiUKICAgICAgICBmaWx0ZXIoY29uc2VydmF0aW9uID09ICJkb21lc3RpY2F0ZWQiKQoKIyBTdWNjZXNzIGNyaXRlcmlhCjAuMDAwNSAgKiBucm93KG1zbGVlcCkgPj0gMTAKKDEgLSAwLjAwMDUpICogbnJvdyhtc2xlZXApID49IDEwCgpiaW5vbS50ZXN0KHggPSBucm93KG51bV9kb21lc3RpY2F0ZWQpLCBuID0gbnJvdyhtc2xlZXApLCBwID0gMC4wMDA1LCBhbHRlcm5hdGl2ZSA9ICJncmVhdGVyIikKIyBwIHZhbHVlIDwgMC4wNSBzbyBjYW4gcmVqZWN0IEhvCmBgYAoKRGV0ZXJtaW5lIGFuIGFwcHJvcHJpYXRlIHNhbXBsZSBzaXplIGZvciB0aGUgZm9sbG93aW5nIHByb2JsZW06CgpBIHF1YWxpdHkgYW5hbHlzdCB3YW50cyB0byBlc3RpbWF0ZSBhIDk5JSBjb25maWRlbmNlIGludGVydmFsIHRvIHdpdGhpbiDCsTAuMDFnIApmb3IgdGhlIG1lYW4gd2VpZ2h0IG9mIGZydWl0IHBhc3RlbHMgcHJvZHVjZWQgYnkgYSBwcm9kdWN0aW9uIGxpbmUgdG9tb3Jyb3cuClByaW9yIGV2aWRlbmNlIHN1Z2dlc3RzIHRoZSBzdGFuZGFyZCBkZXZpYXRpb24gaW4gZnJ1aXQgcGFzdGVsIHdlaWdodHMgaXMgMC4wNWcKCldoYXQgaXMgdGhlIG1pbmltdW0gbnVtYmVyIG9mIGZydWl0IHBhc3RlbHMgdGhlIGFuYWx5c3Qgc2hvdWxkIHNhbXBsZT8KYGBge3J9CkNJIDwtIDAuOTk1CmludGVydmFsIDwtIDAuMDEKc2QgPC0gMC4wNQoKKHFub3JtKENJKV4yICogc2ReMikgLyBpbnRlcnZhbF4yCiMgMTY2IGZydWl0IHBhc3RpbGxlcwpgYGAKCkRldGVybWluZSBhbiBhcHByb3ByaWF0ZSBzYW1wbGUgc2l6ZSBmb3IgdGhlIGZvbGxvd2luZyBwcm9ibGVtOgoKQSBjbGluaWNhbCBkaWV0aWNpYW4gd2FudHMgdG8gY29tcGFyZSB0d28gZGlmZmVyZW50IGRpZXRzLCBBIGFuZCBCLCBmb3IgZGlhYmV0aWMKcGF0aWVudHMuIFNoZSBoeXBvdGhlc2l6ZXMgdGhhdCBkaWV0IEEgKEdyb3VwIDEpIHdpbGwgYmUgZGlmZmVyZW50IGZyb20gZGlldCBCIAooR3JvdXAgMiksIGluIHRlcm1zIG9mIG1lYW4gYmxvb2QgZ2x1Y29zZS4gU2hlIHBsYW5zIHRvIGdldCBhIHJhbmRvbSBzYW1wbGUgb2YKZGlhYmV0aWMgcGF0aWVudHMgYW5kIHJhbmRvbWx5IGFzc2lnbiB0aGVtIHRvIG9uZSBvZiB0aGUgdHdvIGRpZXRzLiBBdCB0aGUgZW5kIApvZiB0aGUgZXhwZXJpbWVudCwgd2hpY2ggbGFzdHMgNiB3ZWVrcywgYSBmYXN0aW5nIGJsb29kIGdsdWNvc2UgdGVzdCB3aWxsIGJlIApjb25kdWN0ZWQgb24gZWFjaCBwYXRpZW50LiBTaGUgYWxzbyBleHBlY3RzIHRoYXQgdGhlIGF2ZXJhZ2UgZGlmZmVyZW5jZSBpbiBibG9vZApnbHVjb3NlIG1lYXN1cmUgYmV0d2VlbiB0aGUgdHdvIGdyb3VwIHdpbGwgYmUgYWJvdXQgMTAgbWcvZGwuIEZ1cnRoZXJtb3JlLCBzaGUKYWxzbyBhc3N1bWVzIHRoZSBzdGFuZGFyZCBkZXZpYXRpb24gb2YgYmxvb2QgZ2x1Y29zZSBkaXN0cmlidXRpb24gZm9yIGRpZXQgQSB0byAKYmUgMTUgbWcvZGwgYW5kIHRoZSBzdGFuZGFyZCBkZXZpYXRpb24gZm9yIGRpZXQgQiB0byBiZSAxNyBtZy9kbC4gVGhlIGRpZXRpY2lhbgp3YW50cyB0byBrbm93IHRoZSBudW1iZXIgb2Ygc3ViamVjdHMgbmVlZGVkIGluIGVhY2ggZ3JvdXAgYXNzdW1pbmcgZXF1YWwgc2l6ZWQgCmdyb3Vwcy4KYGBge3J9CmVmZmVjdF9zaXplIDwtIDEwIC8gMTcKICAgICAgICAKd3AudChuMSA9IE5VTEwsIGQgPSBlZmZlY3Rfc2l6ZSwgYWxwaGEgPSAwLjA1LCBwb3dlciA9IDAuOTUsCiAgICAgICAgdHlwZSA9ICJ0d28uc2FtcGxlIiwgYWx0ZXJuYXRpdmUgPSAidHdvLnNpZGVkIikKIyBuZWVkIDc3IGluIGVhY2ggZ3JvdXAgaWYgZXF1YWwgc2l6ZQpgYGAKCldoYXQgd291bGQgdGhlIHBvd2VyIG9mIHRoZSB0ZXN0IGFib3ZlIGJlIGlmIHRoZSBudW1iZXIgb2YgcGF0aWVudHMgaW4gZWFjaCAKZ3JvdXAgd2FzIDEwMD8KYGBge3J9CndwLnQobjEgPSAxMDAsIGQgPSBlZmZlY3Rfc2l6ZSwgYWxwaGEgPSAwLjA1LCBwb3dlciA9IE5VTEwsCiAgICAgICAgdHlwZSA9ICJ0d28uc2FtcGxlIiwgYWx0ZXJuYXRpdmUgPSAidHdvLnNpZGVkIikKIyA5OC41JQpgYGAKCg==</div>
 
 
 

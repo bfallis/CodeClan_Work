@@ -1,0 +1,203 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(zoo)
+library(xts)
+library(lubridate)
+library(tseries)
+library(forecast)
+library(tibbletime)
+library(timetk)
+library(tidyverse)
+```
+
+MVP
+
+Question 1
+
+Load in the sunspots data and check it is a time series. Get the start, end,
+periodicity, frequency and cycle information. Get the start and end times,
+periodicity, frequency, and anything else you need to understand your data.
+```{r}
+data(sunspots)
+start(sunspots)
+end(sunspots)
+frequency(sunspots)
+cycle(sunspots)
+sunspots
+```
+
+Question 2
+
+Write an initial description of your data. Give enough detail that you could use
+it as a description for a data dictionary or for another analyst to follow.
+```{r}
+# Data is a time series matrix containing the mean relative sunspot numbers for
+# each month from 1749 to 1983 inclusive.
+```
+
+Question 3
+
+Calculate the rolling average of your sunspots data, and plot it. Hint: You’ll 
+need to choose the window you want to average over to make sure it’s 
+representative of this particular time series
+```{r}
+rolling_average <- rollapply(sunspots, width = 12, align = "right", FUN = mean,
+        na.rm = TRUE)
+
+sunspots_cbind <- cbind(sunspots, rolling_average)
+plot(sunspots_cbind)
+```
+
+Question 4
+
+Decompose the time series and look at the different components. Make sure you 
+use the right type of decomposition. Then take a look at your different 
+components. What does it all tell you? Hint: you might need to subset some of 
+your data in order to see patterns more clearly
+```{r}
+sunspots_subset <- ts(sunspots[1:192], frequency = 12, start = 1749)
+plot(decompose(sunspots_subset, type = "multiplicative"))
+# trend is varied
+# strongly seasonal
+# no clear pattern of random noise
+```
+
+Question 5
+
+Check if your data is stationary using the appropriate plots. Do you have 
+stationary data? If no, make the data stationary.
+```{r}
+plot(aggregate(sunspots, FUN = mean))
+boxplot(sunspots ~ cycle(sunspots))
+# year on year trend varies wildly
+# minimal seasonal effect
+# not stationary
+
+sunspots_log <- log(sunspots)
+sunspots_detrend <- diff(sunspots_log)
+plot(sunspots_detrend)
+
+adf.test(sunspots_detrend, alternative = "stationary", k = 0)
+# doesn't work because sunspots_detrend has "inf" and "NaN' values in it.
+```
+
+Question 6
+
+Now we have our data, choose your ARIMA model parameters. Create ACF and PACF 
+plots to check, and write a summary of what you have found.
+```{r}
+acf(sunspots_detrend)
+pacf(sunspots_detrend)
+# won't work as it builds on 5
+```
+
+Question 7
+
+Fit an ARIMA model that predicts the sunspots for the next 20 years. Plot the 
+data, and have a look at your forecast. Does it look like a good forecast or 
+good fit?
+```{r}
+fit <- arima(sunspots_log, c(0, 1, 1),seasonal = list(order = c(0, 1, 1), period = 240))
+# lso won't work as it builds on 5
+```
+
+Question 8
+
+Problem solving: Your model isn’t predicting that well. What are some reasons 
+you can think for this?
+```{r}
+# seasonality is incorrect
+```
+
+Question 9
+
+Problem solving:
+
+In the present case, sunspots have a cycle of length 11 years. To know this, 
+you’d have to know something about sunspots. You can find this here. The 
+sunspots data are a monthly time series. Thus, the implicit seasonality of 
+sunspots is 12 (months), not 11×12=132 (months).
+
+ARIMA and auto.arima() were never built to automatically detect a seasonal cycle
+whose length is not pre-specified. It is not overly surprising it does not see 
+that it should do 11 seasonal differences to model a seasonality that repeats 
+every 11 cycles of its prespecified frequency.
+
+So, the first order of business would be to specify that seasonal cycles are 
+indeed of length 132 (i.e. 1112). Then you’ll need to use this seasonally 
+adjusted data in your model, and include a seasonality parameter into your 
+arima model (try ?auto.arima) to show how to do this. Hint, it involves setting
+your D parameter = 1*. Then you can plot your data and predict the next 20 
+years. Is this a better fit?
+```{r}
+# also builds on 5 so whatever goes here won't work either.
+```
+
+Extensions
+
+Question 1
+
+The dataset, sunspot.month is a ts class, rather than a classic tidy tibble. 
+Using your knowledge of tidyverse and ts objects, convert the sunspot.month data
+to a tidy data set using the tk_tbl() function from timetk package. Using this 
+instead of as.tibble() (from the tibble package) is better because it 
+automatically preserves the time series index.
+
+Then, convert the index to date using lubridate::as_date() and then change to a 
+tbl_time object (from the tibbletime package).
+
+Then summarise the median value of sunspots in the year 1980. Hint: you’ll have 
+to combine your knowledge of how to filter and summarise dates and times in 
+tidyverse to do this.
+```{r}
+sunspot_month_tibble <- tk_tbl(data = sunspot.month, rename_index = "date")
+
+sunspot_month_tibble$date <- lubridate::as_date(sunspot_month_tibble$date)
+
+sunspot_month_tibble <- tbl_time(sunspot_month_tibble, index = date)
+
+sunspot_month_tibble %>%
+        filter(date >= "1980-01-01" & date <= "1980-12-01") %>%
+        summarise(median = median(value))
+```
+
+Question 2
+
+Get and load the package ‘xts’ and all required packages. Create the objects 
+‘measurment’ and ‘dates’ like below.
+
+measurement <- rep(sin(seq(0,10,length.out = 90)),4) + rnorm(90*4)
+dates <- seq(as.Date("1987-01-01"), as.Date("1987-12-26"), "day")
+
+Use the two objects to create an xts time series (mytimeseries) ordered by 
+dates. Check the class, structure, number of years, months and quarters. Get the
+core data and index as well, and check these are matrix and index data.
+
+Select all of the August to September data in your xts object. Plot this new xts
+time series.Use apply.monthly from xts to get a monthly mean on the time series.
+Finally, get a monthly plot.
+```{r}
+measurement <- rep(sin(seq(0, 10, length.out = 90)), 4) + rnorm(90 * 4)
+dates <- seq(as.Date("1987-01-01"), as.Date("1987-12-26"), "day")
+
+mytimeseries <- xts(x = measurement, order.by = dates)
+class(mytimeseries)
+str(mytimeseries)
+
+ep_y <- endpoints(mytimeseries, on = "years")
+ep_m <- endpoints(mytimeseries, on = "months")
+ep_q <- endpoints(mytimeseries, on = "quarters")
+
+xts_core <- coredata(mytimeseries)
+xts_index <- index(xts_core)
+class(xts_core)
+class(xts_index)
+
+plot(mytimeseries["19870801/19870930"])
+apply.monthly(mytimeseries, FUN = mean)
+plot(apply.monthly(mytimeseries, FUN = mean))
+```

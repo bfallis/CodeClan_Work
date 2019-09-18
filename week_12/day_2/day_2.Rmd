@@ -36,7 +36,7 @@ significantly longer than herbivores, on average.
 herb <- msleep[msleep$vore == "herbi", ]
 omni <- msleep[msleep$vore == "omni", ]
 
-t.test(x = herb$sleep_total, y = omni$sleep_total, alternative = "greater", paired = FALSE)
+t.test(x = herb$sleep_total, y = omni$sleep_total, alternative = "less", paired = FALSE)
 # p value > 0.05 means no significant difference in sleep_total
 ```
 
@@ -50,10 +50,10 @@ num_domesticated <- msleep %>%
         filter(conservation == "domesticated")
 
 # Success criteria
-0.0005  * nrow(msleep) >= 10
-(1 - 0.0005) * nrow(msleep) >= 10
+0.05 * nrow(msleep) >= 10
+(1 - 0.05) * nrow(msleep) >= 10
 
-binom.test(x = nrow(num_domesticated), n = nrow(msleep), p = 0.0005, alternative = "greater")
+binom.test(x = nrow(num_domesticated), n = nrow(msleep), p = 0.05, alternative = "greater")
 # p value < 0.05 so can reject Ho
 ```
 
@@ -87,11 +87,13 @@ be 15 mg/dl and the standard deviation for diet B to be 17 mg/dl. The dietician
 wants to know the number of subjects needed in each group assuming equal sized 
 groups.
 ```{r}
-effect_size <- 10 / 17
+pooled_sd <- sqrt((15^2 + 17^2) / 2)
+
+effect_size <- 10 / pooled_sd
         
-wp.t(n1 = NULL, d = effect_size, alpha = 0.05, power = 0.95,
+wp.t(n1 = NULL, d = effect_size, alpha = 0.05, power = 0.8,
         type = "two.sample", alternative = "two.sided")
-# need 77 in each group if equal size
+# at least 42 in each group if equal size
 ```
 
 What would the power of the test above be if the number of patients in each 
@@ -99,6 +101,5 @@ group was 100?
 ```{r}
 wp.t(n1 = 100, d = effect_size, alpha = 0.05, power = NULL,
         type = "two.sample", alternative = "two.sided")
-# 98.5%
+# 99%
 ```
-

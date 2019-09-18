@@ -1729,7 +1729,7 @@ $(document).ready(function () {
 </style>
 <script>
 $(document).ready(function () {
-  window.initializeSourceEmbed("day_2.Rmd");
+  window.initializeSourceEmbed("day_3.Rmd");
   window.initializeCodeFolding("show" === "show");
 });
 </script>
@@ -1767,106 +1767,163 @@ $(document).ready(function () {
 
 
 <!-- rnb-text-begin -->
-<p>In this homework we’ll use the msleep data set provided in the ggplot package. It concerns the sleeping patterns of various types of mammal.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG5saWJyYXJ5KFdlYlBvd2VyKVxuYGBgIn0= -->
-<pre class="r"><code>library(tidyverse)
-library(WebPower)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh6b28pXG5saWJyYXJ5KHh0cylcbmxpYnJhcnkobHVicmlkYXRlKVxubGlicmFyeSh0c2VyaWVzKVxubGlicmFyeShmb3JlY2FzdClcbmxpYnJhcnkodGliYmxldGltZSlcbmxpYnJhcnkodGltZXRrKVxubGlicmFyeSh0aWR5dmVyc2UpXG5gYGAifQ== -->
+<pre class="r"><code>library(zoo)
+library(xts)
+library(lubridate)
+library(tseries)
+library(forecast)
+library(tibbletime)
+library(timetk)
+library(tidyverse)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Explore the dataset, familiarise yourself with it.</p>
+<p>MVP</p>
+<p>Question 1</p>
+<p>Load in the sunspots data and check it is a time series. Get the start, end, periodicity, frequency and cycle information. Get the start and end times, periodicity, frequency, and anything else you need to understand your data.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxubXNsZWVwXG5gYGBcbmBgYCJ9 -->
-<p><code>r</code>r msleep</p>
-<pre><code></code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGF0YShzdW5zcG90cylcbnN0YXJ0KHN1bnNwb3RzKVxuZW5kKHN1bnNwb3RzKVxuZnJlcXVlbmN5KHN1bnNwb3RzKVxuY3ljbGUoc3Vuc3BvdHMpXG5zdW5zcG90c1xuYGBgIn0= -->
+<pre class="r"><code>data(sunspots)
+start(sunspots)
+end(sunspots)
+frequency(sunspots)
+cycle(sunspots)
+sunspots</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Jabberwockies sleep for around 7 hours a night, on average. Perform an appropriate statistical test to determine whether the mean sleep_total in the sampled population of animal types differs from the typical value for jabberwockies.</p>
+<p>Question 2</p>
+<p>Write an initial description of your data. Give enough detail that you could use it as a description for a data dictionary or for another analyst to follow.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuIyBIbyA9IG1lYW4gc2xlZXAgZm9yIGphYmVyd29ja2llcyAtIG1lYW4gc2xlZXAgZm9yIGFsbCBvdGhlciBhbmltYWxzID09IDBcbiMgSGEgPSBtZWFuIHNsZWVwIGZvciBqYWJlcndvY2tpZXMgLSBtZWFuIHNsZWVwIGZvciBhbGwgb3RoZXIgYW5pbWFscyAhPSAwXG5cbnQudGVzdCh4ID0gbXNsZWVwJHNsZWVwX3RvdGFsLCBtdSA9IDcsIGFsdGVybmF0aXZlID0gXFx0d28uc2lkZWRcXClcbiMgcCB2YWx1ZSA8IDAuMDUgc28gY2FuIHJlamVjdCBIb1xuYGBgXG5gYGAifQ== -->
-<p><code>r</code>r # Ho = mean sleep for jaberwockies - mean sleep for all other animals == 0 # Ha = mean sleep for jaberwockies - mean sleep for all other animals != 0</p>
-<p>t.test(x = msleep$sleep_total, mu = 7, alternative = .sided) # p value &lt; 0.05 so can reject Ho</p>
-<pre><code></code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBEYXRhIGlzIGEgdGltZSBzZXJpZXMgbWF0cml4IGNvbnRhaW5pbmcgdGhlIG1lYW4gcmVsYXRpdmUgc3Vuc3BvdCBudW1iZXJzIGZvclxuIyBlYWNoIG1vbnRoIGZyb20gMTc0OSB0byAxOTgzIGluY2x1c2l2ZS5cbmBgYCJ9 -->
+<pre class="r"><code># Data is a time series matrix containing the mean relative sunspot numbers for
+# each month from 1749 to 1983 inclusive.</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Perform an appropriate statistical test to determine whether omnivores sleep for significantly longer than herbivores, on average.</p>
+<p>Question 3</p>
+<p>Calculate the rolling average of your sunspots data, and plot it. Hint: You’ll need to choose the window you want to average over to make sure it’s representative of this particular time series</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBIbyA9IG1lYW4gc2xlZXAgb21uaXZvcmVzIC0gbWVhbiBzbGVlcCBoZXJiaXZvcmVzID09IDBcbiMgSGEgPSBtZWFuIHNsZWVwIG9tbml2b3JlcyAtIG1lYW4gc2xlZXAgaGVyYml2b3JlcyA+IDBcblxuaGVyYiA8LSBtc2xlZXBbbXNsZWVwJHZvcmUgPT0gXCJoZXJiaVwiLCBdXG5vbW5pIDwtIG1zbGVlcFttc2xlZXAkdm9yZSA9PSBcIm9tbmlcIiwgXVxuXG50LnRlc3QoeCA9IGhlcmIkc2xlZXBfdG90YWwsIHkgPSBvbW5pJHNsZWVwX3RvdGFsLCBhbHRlcm5hdGl2ZSA9IFwibGVzc1wiLCBwYWlyZWQgPSBGQUxTRSlcbiMgcCB2YWx1ZSA+IDAuMDUgbWVhbnMgbm8gc2lnbmlmaWNhbnQgZGlmZmVyZW5jZSBpbiBzbGVlcF90b3RhbFxuYGBgIn0= -->
-<pre class="r"><code># Ho = mean sleep omnivores - mean sleep herbivores == 0
-# Ha = mean sleep omnivores - mean sleep herbivores &gt; 0
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucm9sbGluZ19hdmVyYWdlIDwtIHJvbGxhcHBseShzdW5zcG90cywgd2lkdGggPSAxMiwgYWxpZ24gPSBcInJpZ2h0XCIsIEZVTiA9IG1lYW4sXG4gICAgICAgIG5hLnJtID0gVFJVRSlcblxuc3Vuc3BvdHNfY2JpbmQgPC0gY2JpbmQoc3Vuc3BvdHMsIHJvbGxpbmdfYXZlcmFnZSlcbnBsb3Qoc3Vuc3BvdHNfY2JpbmQpXG5gYGAifQ== -->
+<pre class="r"><code>rolling_average &lt;- rollapply(sunspots, width = 12, align = &quot;right&quot;, FUN = mean,
+        na.rm = TRUE)
 
-herb &lt;- msleep[msleep$vore == &quot;herbi&quot;, ]
-omni &lt;- msleep[msleep$vore == &quot;omni&quot;, ]
-
-t.test(x = herb$sleep_total, y = omni$sleep_total, alternative = &quot;less&quot;, paired = FALSE)
-# p value &gt; 0.05 means no significant difference in sleep_total</code></pre>
+sunspots_cbind &lt;- cbind(sunspots, rolling_average)
+plot(sunspots_cbind)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Perform an appropriate statistical test to determine whether the proportion of domesticated animals in the population of animal types is greater than 5%</p>
+<p>Question 4</p>
+<p>Decompose the time series and look at the different components. Make sure you use the right type of decomposition. Then take a look at your different components. What does it all tell you? Hint: you might need to subset some of your data in order to see patterns more clearly</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBIbyA9IHByb3BvcnRpb24gb2YgZGVvbWVzdGljYXRlZCBhbmltYWxzIDw9IDUlXG4jIEhhID0gcHJvcG9ydGlvbiBvZiBkZW9tZXN0aWNhdGVkIGFuaW1hbHMgPiA1JVxuXG5udW1fZG9tZXN0aWNhdGVkIDwtIG1zbGVlcCAlPiVcbiAgICAgICAgZmlsdGVyKGNvbnNlcnZhdGlvbiA9PSBcImRvbWVzdGljYXRlZFwiKVxuXG4jIFN1Y2Nlc3MgY3JpdGVyaWFcbjAuMDUgKiBucm93KG1zbGVlcCkgPj0gMTBcbigxIC0gMC4wNSkgKiBucm93KG1zbGVlcCkgPj0gMTBcblxuYmlub20udGVzdCh4ID0gbnJvdyhudW1fZG9tZXN0aWNhdGVkKSwgbiA9IG5yb3cobXNsZWVwKSwgcCA9IDAuMDUsIGFsdGVybmF0aXZlID0gXCJncmVhdGVyXCIpXG4jIHAgdmFsdWUgPCAwLjA1IHNvIGNhbiByZWplY3QgSG9cbmBgYCJ9 -->
-<pre class="r"><code># Ho = proportion of deomesticated animals &lt;= 5%
-# Ha = proportion of deomesticated animals &gt; 5%
-
-num_domesticated &lt;- msleep %&gt;%
-        filter(conservation == &quot;domesticated&quot;)
-
-# Success criteria
-0.05 * nrow(msleep) &gt;= 10
-(1 - 0.05) * nrow(msleep) &gt;= 10
-
-binom.test(x = nrow(num_domesticated), n = nrow(msleep), p = 0.05, alternative = &quot;greater&quot;)
-# p value &lt; 0.05 so can reject Ho</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3Vuc3BvdHNfc3Vic2V0IDwtIHRzKHN1bnNwb3RzWzE6MTkyXSwgZnJlcXVlbmN5ID0gMTIsIHN0YXJ0ID0gMTc0OSlcbnBsb3QoZGVjb21wb3NlKHN1bnNwb3RzX3N1YnNldCwgdHlwZSA9IFwibXVsdGlwbGljYXRpdmVcIikpXG4jIHRyZW5kIGlzIHZhcmllZFxuIyBzdHJvbmdseSBzZWFzb25hbFxuIyBubyBjbGVhciBwYXR0ZXJuIG9mIHJhbmRvbSBub2lzZVxuYGBgIn0= -->
+<pre class="r"><code>sunspots_subset &lt;- ts(sunspots[1:192], frequency = 12, start = 1749)
+plot(decompose(sunspots_subset, type = &quot;multiplicative&quot;))
+# trend is varied
+# strongly seasonal
+# no clear pattern of random noise</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Determine an appropriate sample size for the following problem:</p>
-<p>A quality analyst wants to estimate a 99% confidence interval to within ±0.01g for the mean weight of fruit pastels produced by a production line tomorrow. Prior evidence suggests the standard deviation in fruit pastel weights is 0.05g</p>
-<p>What is the minimum number of fruit pastels the analyst should sample?</p>
+<p>Question 5</p>
+<p>Check if your data is stationary using the appropriate plots. Do you have stationary data? If no, make the data stationary.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuQ0kgPC0gMC45OTVcbmludGVydmFsIDwtIDAuMDFcbnNkIDwtIDAuMDVcblxuKHFub3JtKENJKV4yICogc2ReMikgLyBpbnRlcnZhbF4yXG4jIDE2NiBmcnVpdCBwYXN0aWxsZXNcbmBgYFxuYGBgIn0= -->
-<p><code>r</code>r CI &lt;- 0.995 interval &lt;- 0.01 sd &lt;- 0.05</p>
-<p>(qnorm(CI)^2 * sd^2) / interval^2 # 166 fruit pastilles</p>
-<pre><code></code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGxvdChhZ2dyZWdhdGUoc3Vuc3BvdHMsIEZVTiA9IG1lYW4pKVxuYm94cGxvdChzdW5zcG90cyB+IGN5Y2xlKHN1bnNwb3RzKSlcbiMgeWVhciBvbiB5ZWFyIHRyZW5kIHZhcmllcyB3aWxkbHlcbiMgbWluaW1hbCBzZWFzb25hbCBlZmZlY3RcbiMgbm90IHN0YXRpb25hcnlcblxuc3Vuc3BvdHNfbG9nIDwtIGxvZyhzdW5zcG90cylcbnN1bnNwb3RzX2RldHJlbmQgPC0gZGlmZihzdW5zcG90c19sb2cpXG5wbG90KHN1bnNwb3RzX2RldHJlbmQpXG5cbmFkZi50ZXN0KHN1bnNwb3RzX2RldHJlbmQsIGFsdGVybmF0aXZlID0gXCJzdGF0aW9uYXJ5XCIsIGsgPSAwKVxuIyBkb2Vzbid0IHdvcmsgYmVjYXVzZSBzdW5zcG90c19kZXRyZW5kIGhhcyBcImluZlwiIGFuZCBcIk5hTicgdmFsdWVzIGluIGl0LlxuYGBgIn0= -->
+<pre class="r"><code>plot(aggregate(sunspots, FUN = mean))
+boxplot(sunspots ~ cycle(sunspots))
+# year on year trend varies wildly
+# minimal seasonal effect
+# not stationary
+
+sunspots_log &lt;- log(sunspots)
+sunspots_detrend &lt;- diff(sunspots_log)
+plot(sunspots_detrend)
+
+adf.test(sunspots_detrend, alternative = &quot;stationary&quot;, k = 0)
+# doesn't work because sunspots_detrend has &quot;inf&quot; and &quot;NaN' values in it.</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Determine an appropriate sample size for the following problem:</p>
-<p>A clinical dietician wants to compare two different diets, A and B, for diabetic patients. She hypothesizes that diet A (Group 1) will be different from diet B (Group 2), in terms of mean blood glucose. She plans to get a random sample of diabetic patients and randomly assign them to one of the two diets. At the end of the experiment, which lasts 6 weeks, a fasting blood glucose test will be conducted on each patient. She also expects that the average difference in blood glucose measure between the two group will be about 10 mg/dl. Furthermore, she also assumes the standard deviation of blood glucose distribution for diet A to be 15 mg/dl and the standard deviation for diet B to be 17 mg/dl. The dietician wants to know the number of subjects needed in each group assuming equal sized groups.</p>
+<p>Question 6</p>
+<p>Now we have our data, choose your ARIMA model parameters. Create ACF and PACF plots to check, and write a summary of what you have found.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucG9vbGVkX3NkIDwtIHNxcnQoKDE1XjIgKyAxN14yKSAvIDIpXG5cbmVmZmVjdF9zaXplIDwtIDEwIC8gcG9vbGVkX3NkXG4gICAgICAgIFxud3AudChuMSA9IE5VTEwsIGQgPSBlZmZlY3Rfc2l6ZSwgYWxwaGEgPSAwLjA1LCBwb3dlciA9IDAuOCxcbiAgICAgICAgdHlwZSA9IFwidHdvLnNhbXBsZVwiLCBhbHRlcm5hdGl2ZSA9IFwidHdvLnNpZGVkXCIpXG4jIGF0IGxlYXN0IDQyIGluIGVhY2ggZ3JvdXAgaWYgZXF1YWwgc2l6ZVxuYGBgIn0= -->
-<pre class="r"><code>pooled_sd &lt;- sqrt((15^2 + 17^2) / 2)
-
-effect_size &lt;- 10 / pooled_sd
-        
-wp.t(n1 = NULL, d = effect_size, alpha = 0.05, power = 0.8,
-        type = &quot;two.sample&quot;, alternative = &quot;two.sided&quot;)
-# at least 42 in each group if equal size</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYWNmKHN1bnNwb3RzX2RldHJlbmQpXG5wYWNmKHN1bnNwb3RzX2RldHJlbmQpXG4jIHdvbid0IHdvcmsgYXMgaXQgYnVpbGRzIG9uIDVcbmBgYCJ9 -->
+<pre class="r"><code>acf(sunspots_detrend)
+pacf(sunspots_detrend)
+# won't work as it builds on 5</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>What would the power of the test above be if the number of patients in each group was 100?</p>
+<p>Question 7</p>
+<p>Fit an ARIMA model that predicts the sunspots for the next 20 years. Plot the data, and have a look at your forecast. Does it look like a good forecast or good fit?</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxud3AudChuMSA9IDEwMCwgZCA9IGVmZmVjdF9zaXplLCBhbHBoYSA9IDAuMDUsIHBvd2VyID0gTlVMTCxcbiAgICAgICAgdHlwZSA9IFwidHdvLnNhbXBsZVwiLCBhbHRlcm5hdGl2ZSA9IFwidHdvLnNpZGVkXCIpXG4jIDk5JVxuYGBgIn0= -->
-<pre class="r"><code>wp.t(n1 = 100, d = effect_size, alpha = 0.05, power = NULL,
-        type = &quot;two.sample&quot;, alternative = &quot;two.sided&quot;)
-# 99%</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZml0IDwtIGFyaW1hKHN1bnNwb3RzX2xvZywgYygwLCAxLCAxKSxzZWFzb25hbCA9IGxpc3Qob3JkZXIgPSBjKDAsIDEsIDEpLCBwZXJpb2QgPSAyNDApKVxuIyBsc28gd29uJ3Qgd29yayBhcyBpdCBidWlsZHMgb24gNVxuYGBgIn0= -->
+<pre class="r"><code>fit &lt;- arima(sunspots_log, c(0, 1, 1),seasonal = list(order = c(0, 1, 1), period = 240))
+# lso won't work as it builds on 5</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Question 8</p>
+<p>Problem solving: Your model isn’t predicting that well. What are some reasons you can think for this?</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBzZWFzb25hbGl0eSBpcyBpbmNvcnJlY3RcbmBgYCJ9 -->
+<pre class="r"><code># seasonality is incorrect</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Question 9</p>
+<p>Problem solving:</p>
+<p>In the present case, sunspots have a cycle of length 11 years. To know this, you’d have to know something about sunspots. You can find this here. The sunspots data are a monthly time series. Thus, the implicit seasonality of sunspots is 12 (months), not 11×12=132 (months).</p>
+<p>ARIMA and auto.arima() were never built to automatically detect a seasonal cycle whose length is not pre-specified. It is not overly surprising it does not see that it should do 11 seasonal differences to model a seasonality that repeats every 11 cycles of its prespecified frequency.</p>
+<p>So, the first order of business would be to specify that seasonal cycles are indeed of length 132 (i.e. 1112). Then you’ll need to use this seasonally adjusted data in your model, and include a seasonality parameter into your arima model (try ?auto.arima) to show how to do this. Hint, it involves setting your D parameter = 1*. Then you can plot your data and predict the next 20 years. Is this a better fit?</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBhbHNvIGJ1aWxkcyBvbiA1IHNvIHdoYXRldmVyIGdvZXMgaGVyZSB3b24ndCB3b3JrIGVpdGhlci5cbmBgYCJ9 -->
+<pre class="r"><code># also builds on 5 so whatever goes here won't work either.</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Extensions</p>
+<p>Question 1</p>
+<p>The dataset, sunspot.month is a ts class, rather than a classic tidy tibble. Using your knowledge of tidyverse and ts objects, convert the sunspot.month data to a tidy data set using the tk_tbl() function from timetk package. Using this instead of as.tibble() (from the tibble package) is better because it automatically preserves the time series index.</p>
+<p>Then, convert the index to date using lubridate::as_date() and then change to a tbl_time object (from the tibbletime package).</p>
+<p>Then summarise the median value of sunspots in the year 1980. Hint: you’ll have to combine your knowledge of how to filter and summarise dates and times in tidyverse to do this.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3Vuc3BvdF9tb250aF90aWJibGUgPC0gdGtfdGJsKGRhdGEgPSBzdW5zcG90Lm1vbnRoLCByZW5hbWVfaW5kZXggPSBcImRhdGVcIilcblxuc3Vuc3BvdF9tb250aF90aWJibGUkZGF0ZSA8LSBsdWJyaWRhdGU6OmFzX2RhdGUoc3Vuc3BvdF9tb250aF90aWJibGUkZGF0ZSlcblxuc3Vuc3BvdF9tb250aF90aWJibGUgPC0gdGJsX3RpbWUoc3Vuc3BvdF9tb250aF90aWJibGUsIGluZGV4ID0gZGF0ZSlcblxuc3Vuc3BvdF9tb250aF90aWJibGUgJT4lXG4gICAgICAgIGZpbHRlcihkYXRlID49IFwiMTk4MC0wMS0wMVwiICYgZGF0ZSA8PSBcIjE5ODAtMTItMDFcIikgJT4lXG4gICAgICAgIHN1bW1hcmlzZShtZWRpYW4gPSBtZWRpYW4odmFsdWUpKVxuYGBgIn0= -->
+<pre class="r"><code>sunspot_month_tibble &lt;- tk_tbl(data = sunspot.month, rename_index = &quot;date&quot;)
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKSW4gdGhpcyBob21ld29yayB3ZeKAmWxsIHVzZSB0aGUgbXNsZWVwIGRhdGEgc2V0IHByb3ZpZGVkIGluIHRoZSBnZ3Bsb3QgcGFja2FnZS4KSXQgY29uY2VybnMgdGhlIHNsZWVwaW5nIHBhdHRlcm5zIG9mIHZhcmlvdXMgdHlwZXMgb2YgbWFtbWFsLgpgYGB7cn0KbGlicmFyeSh0aWR5dmVyc2UpCmxpYnJhcnkoV2ViUG93ZXIpCmBgYAoKRXhwbG9yZSB0aGUgZGF0YXNldCwgZmFtaWxpYXJpc2UgeW91cnNlbGYgd2l0aCBpdC4KYGBge3J9Cm1zbGVlcApgYGAKCkphYmJlcndvY2tpZXMgc2xlZXAgZm9yIGFyb3VuZCA3IGhvdXJzIGEgbmlnaHQsIG9uIGF2ZXJhZ2UuIFBlcmZvcm0gYW4gCmFwcHJvcHJpYXRlIHN0YXRpc3RpY2FsIHRlc3QgdG8gZGV0ZXJtaW5lIHdoZXRoZXIgdGhlIG1lYW4gc2xlZXBfdG90YWwgaW4gdGhlCnNhbXBsZWQgcG9wdWxhdGlvbiBvZiBhbmltYWwgdHlwZXMgZGlmZmVycyBmcm9tIHRoZSB0eXBpY2FsIHZhbHVlIGZvcgpqYWJiZXJ3b2NraWVzLgpgYGB7cn0KIyBIbyA9IG1lYW4gc2xlZXAgZm9yIGphYmVyd29ja2llcyAtIG1lYW4gc2xlZXAgZm9yIGFsbCBvdGhlciBhbmltYWxzID09IDAKIyBIYSA9IG1lYW4gc2xlZXAgZm9yIGphYmVyd29ja2llcyAtIG1lYW4gc2xlZXAgZm9yIGFsbCBvdGhlciBhbmltYWxzICE9IDAKCnQudGVzdCh4ID0gbXNsZWVwJHNsZWVwX3RvdGFsLCBtdSA9IDcsIGFsdGVybmF0aXZlID0gInR3by5zaWRlZCIpCiMgcCB2YWx1ZSA8IDAuMDUgc28gY2FuIHJlamVjdCBIbwpgYGAKClBlcmZvcm0gYW4gYXBwcm9wcmlhdGUgc3RhdGlzdGljYWwgdGVzdCB0byBkZXRlcm1pbmUgd2hldGhlciBvbW5pdm9yZXMgc2xlZXAgZm9yCnNpZ25pZmljYW50bHkgbG9uZ2VyIHRoYW4gaGVyYml2b3Jlcywgb24gYXZlcmFnZS4KYGBge3J9CiMgSG8gPSBtZWFuIHNsZWVwIG9tbml2b3JlcyAtIG1lYW4gc2xlZXAgaGVyYml2b3JlcyA9PSAwCiMgSGEgPSBtZWFuIHNsZWVwIG9tbml2b3JlcyAtIG1lYW4gc2xlZXAgaGVyYml2b3JlcyA+IDAKCmhlcmIgPC0gbXNsZWVwW21zbGVlcCR2b3JlID09ICJoZXJiaSIsIF0Kb21uaSA8LSBtc2xlZXBbbXNsZWVwJHZvcmUgPT0gIm9tbmkiLCBdCgp0LnRlc3QoeCA9IGhlcmIkc2xlZXBfdG90YWwsIHkgPSBvbW5pJHNsZWVwX3RvdGFsLCBhbHRlcm5hdGl2ZSA9ICJsZXNzIiwgcGFpcmVkID0gRkFMU0UpCiMgcCB2YWx1ZSA+IDAuMDUgbWVhbnMgbm8gc2lnbmlmaWNhbnQgZGlmZmVyZW5jZSBpbiBzbGVlcF90b3RhbApgYGAKClBlcmZvcm0gYW4gYXBwcm9wcmlhdGUgc3RhdGlzdGljYWwgdGVzdCB0byBkZXRlcm1pbmUgd2hldGhlciB0aGUgcHJvcG9ydGlvbiBvZiAKZG9tZXN0aWNhdGVkIGFuaW1hbHMgaW4gdGhlIHBvcHVsYXRpb24gb2YgYW5pbWFsIHR5cGVzIGlzIGdyZWF0ZXIgdGhhbiA1JQpgYGB7cn0KIyBIbyA9IHByb3BvcnRpb24gb2YgZGVvbWVzdGljYXRlZCBhbmltYWxzIDw9IDUlCiMgSGEgPSBwcm9wb3J0aW9uIG9mIGRlb21lc3RpY2F0ZWQgYW5pbWFscyA+IDUlCgpudW1fZG9tZXN0aWNhdGVkIDwtIG1zbGVlcCAlPiUKICAgICAgICBmaWx0ZXIoY29uc2VydmF0aW9uID09ICJkb21lc3RpY2F0ZWQiKQoKIyBTdWNjZXNzIGNyaXRlcmlhCjAuMDUgKiBucm93KG1zbGVlcCkgPj0gMTAKKDEgLSAwLjA1KSAqIG5yb3cobXNsZWVwKSA+PSAxMAoKYmlub20udGVzdCh4ID0gbnJvdyhudW1fZG9tZXN0aWNhdGVkKSwgbiA9IG5yb3cobXNsZWVwKSwgcCA9IDAuMDUsIGFsdGVybmF0aXZlID0gImdyZWF0ZXIiKQojIHAgdmFsdWUgPCAwLjA1IHNvIGNhbiByZWplY3QgSG8KYGBgCgpEZXRlcm1pbmUgYW4gYXBwcm9wcmlhdGUgc2FtcGxlIHNpemUgZm9yIHRoZSBmb2xsb3dpbmcgcHJvYmxlbToKCkEgcXVhbGl0eSBhbmFseXN0IHdhbnRzIHRvIGVzdGltYXRlIGEgOTklIGNvbmZpZGVuY2UgaW50ZXJ2YWwgdG8gd2l0aGluIMKxMC4wMWcgCmZvciB0aGUgbWVhbiB3ZWlnaHQgb2YgZnJ1aXQgcGFzdGVscyBwcm9kdWNlZCBieSBhIHByb2R1Y3Rpb24gbGluZSB0b21vcnJvdy4KUHJpb3IgZXZpZGVuY2Ugc3VnZ2VzdHMgdGhlIHN0YW5kYXJkIGRldmlhdGlvbiBpbiBmcnVpdCBwYXN0ZWwgd2VpZ2h0cyBpcyAwLjA1ZwoKV2hhdCBpcyB0aGUgbWluaW11bSBudW1iZXIgb2YgZnJ1aXQgcGFzdGVscyB0aGUgYW5hbHlzdCBzaG91bGQgc2FtcGxlPwpgYGB7cn0KQ0kgPC0gMC45OTUKaW50ZXJ2YWwgPC0gMC4wMQpzZCA8LSAwLjA1CgoocW5vcm0oQ0kpXjIgKiBzZF4yKSAvIGludGVydmFsXjIKIyAxNjYgZnJ1aXQgcGFzdGlsbGVzCmBgYAoKRGV0ZXJtaW5lIGFuIGFwcHJvcHJpYXRlIHNhbXBsZSBzaXplIGZvciB0aGUgZm9sbG93aW5nIHByb2JsZW06CgpBIGNsaW5pY2FsIGRpZXRpY2lhbiB3YW50cyB0byBjb21wYXJlIHR3byBkaWZmZXJlbnQgZGlldHMsIEEgYW5kIEIsIGZvciBkaWFiZXRpYwpwYXRpZW50cy4gU2hlIGh5cG90aGVzaXplcyB0aGF0IGRpZXQgQSAoR3JvdXAgMSkgd2lsbCBiZSBkaWZmZXJlbnQgZnJvbSBkaWV0IEIgCihHcm91cCAyKSwgaW4gdGVybXMgb2YgbWVhbiBibG9vZCBnbHVjb3NlLiBTaGUgcGxhbnMgdG8gZ2V0IGEgcmFuZG9tIHNhbXBsZSBvZgpkaWFiZXRpYyBwYXRpZW50cyBhbmQgcmFuZG9tbHkgYXNzaWduIHRoZW0gdG8gb25lIG9mIHRoZSB0d28gZGlldHMuIEF0IHRoZSBlbmQgCm9mIHRoZSBleHBlcmltZW50LCB3aGljaCBsYXN0cyA2IHdlZWtzLCBhIGZhc3RpbmcgYmxvb2QgZ2x1Y29zZSB0ZXN0IHdpbGwgYmUgCmNvbmR1Y3RlZCBvbiBlYWNoIHBhdGllbnQuIFNoZSBhbHNvIGV4cGVjdHMgdGhhdCB0aGUgYXZlcmFnZSBkaWZmZXJlbmNlIGluIGJsb29kCmdsdWNvc2UgbWVhc3VyZSBiZXR3ZWVuIHRoZSB0d28gZ3JvdXAgd2lsbCBiZSBhYm91dCAxMCBtZy9kbC4gRnVydGhlcm1vcmUsIHNoZQphbHNvIGFzc3VtZXMgdGhlIHN0YW5kYXJkIGRldmlhdGlvbiBvZiBibG9vZCBnbHVjb3NlIGRpc3RyaWJ1dGlvbiBmb3IgZGlldCBBIHRvIApiZSAxNSBtZy9kbCBhbmQgdGhlIHN0YW5kYXJkIGRldmlhdGlvbiBmb3IgZGlldCBCIHRvIGJlIDE3IG1nL2RsLiBUaGUgZGlldGljaWFuCndhbnRzIHRvIGtub3cgdGhlIG51bWJlciBvZiBzdWJqZWN0cyBuZWVkZWQgaW4gZWFjaCBncm91cCBhc3N1bWluZyBlcXVhbCBzaXplZCAKZ3JvdXBzLgpgYGB7cn0KcG9vbGVkX3NkIDwtIHNxcnQoKDE1XjIgKyAxN14yKSAvIDIpCgplZmZlY3Rfc2l6ZSA8LSAxMCAvIHBvb2xlZF9zZAogICAgICAgIAp3cC50KG4xID0gTlVMTCwgZCA9IGVmZmVjdF9zaXplLCBhbHBoYSA9IDAuMDUsIHBvd2VyID0gMC44LAogICAgICAgIHR5cGUgPSAidHdvLnNhbXBsZSIsIGFsdGVybmF0aXZlID0gInR3by5zaWRlZCIpCiMgYXQgbGVhc3QgNDIgaW4gZWFjaCBncm91cCBpZiBlcXVhbCBzaXplCmBgYAoKV2hhdCB3b3VsZCB0aGUgcG93ZXIgb2YgdGhlIHRlc3QgYWJvdmUgYmUgaWYgdGhlIG51bWJlciBvZiBwYXRpZW50cyBpbiBlYWNoIApncm91cCB3YXMgMTAwPwpgYGB7cn0Kd3AudChuMSA9IDEwMCwgZCA9IGVmZmVjdF9zaXplLCBhbHBoYSA9IDAuMDUsIHBvd2VyID0gTlVMTCwKICAgICAgICB0eXBlID0gInR3by5zYW1wbGUiLCBhbHRlcm5hdGl2ZSA9ICJ0d28uc2lkZWQiKQojIDk5JQpgYGAK</div>
+sunspot_month_tibble$date &lt;- lubridate::as_date(sunspot_month_tibble$date)
+
+sunspot_month_tibble &lt;- tbl_time(sunspot_month_tibble, index = date)
+
+sunspot_month_tibble %&gt;%
+        filter(date &gt;= &quot;1980-01-01&quot; &amp; date &lt;= &quot;1980-12-01&quot;) %&gt;%
+        summarise(median = median(value))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Question 2</p>
+<p>Get and load the package ‘xts’ and all required packages. Create the objects ‘measurment’ and ‘dates’ like below.</p>
+<p>measurement &lt;- rep(sin(seq(0,10,length.out = 90)),4) + rnorm(90*4) dates &lt;- seq(as.Date(“1987-01-01”), as.Date(“1987-12-26”), “day”)</p>
+<p>Use the two objects to create an xts time series (mytimeseries) ordered by dates. Check the class, structure, number of years, months and quarters. Get the core data and index as well, and check these are matrix and index data.</p>
+<p>Select all of the August to September data in your xts object. Plot this new xts time series.Use apply.monthly from xts to get a monthly mean on the time series. Finally, get a monthly plot.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-chunk-end -->
+
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKYGBge3J9CmxpYnJhcnkoem9vKQpsaWJyYXJ5KHh0cykKbGlicmFyeShsdWJyaWRhdGUpCmxpYnJhcnkodHNlcmllcykKbGlicmFyeShmb3JlY2FzdCkKbGlicmFyeSh0aWJibGV0aW1lKQpsaWJyYXJ5KHRpbWV0aykKbGlicmFyeSh0aWR5dmVyc2UpCmBgYAoKTVZQCgpRdWVzdGlvbiAxCgpMb2FkIGluIHRoZSBzdW5zcG90cyBkYXRhIGFuZCBjaGVjayBpdCBpcyBhIHRpbWUgc2VyaWVzLiBHZXQgdGhlIHN0YXJ0LCBlbmQsCnBlcmlvZGljaXR5LCBmcmVxdWVuY3kgYW5kIGN5Y2xlIGluZm9ybWF0aW9uLiBHZXQgdGhlIHN0YXJ0IGFuZCBlbmQgdGltZXMsCnBlcmlvZGljaXR5LCBmcmVxdWVuY3ksIGFuZCBhbnl0aGluZyBlbHNlIHlvdSBuZWVkIHRvIHVuZGVyc3RhbmQgeW91ciBkYXRhLgpgYGB7cn0KZGF0YShzdW5zcG90cykKc3RhcnQoc3Vuc3BvdHMpCmVuZChzdW5zcG90cykKZnJlcXVlbmN5KHN1bnNwb3RzKQpjeWNsZShzdW5zcG90cykKc3Vuc3BvdHMKYGBgCgpRdWVzdGlvbiAyCgpXcml0ZSBhbiBpbml0aWFsIGRlc2NyaXB0aW9uIG9mIHlvdXIgZGF0YS4gR2l2ZSBlbm91Z2ggZGV0YWlsIHRoYXQgeW91IGNvdWxkIHVzZQppdCBhcyBhIGRlc2NyaXB0aW9uIGZvciBhIGRhdGEgZGljdGlvbmFyeSBvciBmb3IgYW5vdGhlciBhbmFseXN0IHRvIGZvbGxvdy4KYGBge3J9CiMgRGF0YSBpcyBhIHRpbWUgc2VyaWVzIG1hdHJpeCBjb250YWluaW5nIHRoZSBtZWFuIHJlbGF0aXZlIHN1bnNwb3QgbnVtYmVycyBmb3IKIyBlYWNoIG1vbnRoIGZyb20gMTc0OSB0byAxOTgzIGluY2x1c2l2ZS4KYGBgCgpRdWVzdGlvbiAzCgpDYWxjdWxhdGUgdGhlIHJvbGxpbmcgYXZlcmFnZSBvZiB5b3VyIHN1bnNwb3RzIGRhdGEsIGFuZCBwbG90IGl0LiBIaW50OiBZb3XigJlsbCAKbmVlZCB0byBjaG9vc2UgdGhlIHdpbmRvdyB5b3Ugd2FudCB0byBhdmVyYWdlIG92ZXIgdG8gbWFrZSBzdXJlIGl04oCZcyAKcmVwcmVzZW50YXRpdmUgb2YgdGhpcyBwYXJ0aWN1bGFyIHRpbWUgc2VyaWVzCmBgYHtyfQpyb2xsaW5nX2F2ZXJhZ2UgPC0gcm9sbGFwcGx5KHN1bnNwb3RzLCB3aWR0aCA9IDEyLCBhbGlnbiA9ICJyaWdodCIsIEZVTiA9IG1lYW4sCiAgICAgICAgbmEucm0gPSBUUlVFKQoKc3Vuc3BvdHNfY2JpbmQgPC0gY2JpbmQoc3Vuc3BvdHMsIHJvbGxpbmdfYXZlcmFnZSkKcGxvdChzdW5zcG90c19jYmluZCkKYGBgCgpRdWVzdGlvbiA0CgpEZWNvbXBvc2UgdGhlIHRpbWUgc2VyaWVzIGFuZCBsb29rIGF0IHRoZSBkaWZmZXJlbnQgY29tcG9uZW50cy4gTWFrZSBzdXJlIHlvdSAKdXNlIHRoZSByaWdodCB0eXBlIG9mIGRlY29tcG9zaXRpb24uIFRoZW4gdGFrZSBhIGxvb2sgYXQgeW91ciBkaWZmZXJlbnQgCmNvbXBvbmVudHMuIFdoYXQgZG9lcyBpdCBhbGwgdGVsbCB5b3U/IEhpbnQ6IHlvdSBtaWdodCBuZWVkIHRvIHN1YnNldCBzb21lIG9mIAp5b3VyIGRhdGEgaW4gb3JkZXIgdG8gc2VlIHBhdHRlcm5zIG1vcmUgY2xlYXJseQpgYGB7cn0Kc3Vuc3BvdHNfc3Vic2V0IDwtIHRzKHN1bnNwb3RzWzE6MTkyXSwgZnJlcXVlbmN5ID0gMTIsIHN0YXJ0ID0gMTc0OSkKcGxvdChkZWNvbXBvc2Uoc3Vuc3BvdHNfc3Vic2V0LCB0eXBlID0gIm11bHRpcGxpY2F0aXZlIikpCiMgdHJlbmQgaXMgdmFyaWVkCiMgc3Ryb25nbHkgc2Vhc29uYWwKIyBubyBjbGVhciBwYXR0ZXJuIG9mIHJhbmRvbSBub2lzZQpgYGAKClF1ZXN0aW9uIDUKCkNoZWNrIGlmIHlvdXIgZGF0YSBpcyBzdGF0aW9uYXJ5IHVzaW5nIHRoZSBhcHByb3ByaWF0ZSBwbG90cy4gRG8geW91IGhhdmUgCnN0YXRpb25hcnkgZGF0YT8gSWYgbm8sIG1ha2UgdGhlIGRhdGEgc3RhdGlvbmFyeS4KYGBge3J9CnBsb3QoYWdncmVnYXRlKHN1bnNwb3RzLCBGVU4gPSBtZWFuKSkKYm94cGxvdChzdW5zcG90cyB+IGN5Y2xlKHN1bnNwb3RzKSkKIyB5ZWFyIG9uIHllYXIgdHJlbmQgdmFyaWVzIHdpbGRseQojIG1pbmltYWwgc2Vhc29uYWwgZWZmZWN0CiMgbm90IHN0YXRpb25hcnkKCnN1bnNwb3RzX2xvZyA8LSBsb2coc3Vuc3BvdHMpCnN1bnNwb3RzX2RldHJlbmQgPC0gZGlmZihzdW5zcG90c19sb2cpCnBsb3Qoc3Vuc3BvdHNfZGV0cmVuZCkKCmFkZi50ZXN0KHN1bnNwb3RzX2RldHJlbmQsIGFsdGVybmF0aXZlID0gInN0YXRpb25hcnkiLCBrID0gMCkKIyBkb2Vzbid0IHdvcmsgYmVjYXVzZSBzdW5zcG90c19kZXRyZW5kIGhhcyAiaW5mIiBhbmQgIk5hTicgdmFsdWVzIGluIGl0LgpgYGAKClF1ZXN0aW9uIDYKCk5vdyB3ZSBoYXZlIG91ciBkYXRhLCBjaG9vc2UgeW91ciBBUklNQSBtb2RlbCBwYXJhbWV0ZXJzLiBDcmVhdGUgQUNGIGFuZCBQQUNGIApwbG90cyB0byBjaGVjaywgYW5kIHdyaXRlIGEgc3VtbWFyeSBvZiB3aGF0IHlvdSBoYXZlIGZvdW5kLgpgYGB7cn0KYWNmKHN1bnNwb3RzX2RldHJlbmQpCnBhY2Yoc3Vuc3BvdHNfZGV0cmVuZCkKIyB3b24ndCB3b3JrIGFzIGl0IGJ1aWxkcyBvbiA1CmBgYAoKUXVlc3Rpb24gNwoKRml0IGFuIEFSSU1BIG1vZGVsIHRoYXQgcHJlZGljdHMgdGhlIHN1bnNwb3RzIGZvciB0aGUgbmV4dCAyMCB5ZWFycy4gUGxvdCB0aGUgCmRhdGEsIGFuZCBoYXZlIGEgbG9vayBhdCB5b3VyIGZvcmVjYXN0LiBEb2VzIGl0IGxvb2sgbGlrZSBhIGdvb2QgZm9yZWNhc3Qgb3IgCmdvb2QgZml0PwpgYGB7cn0KZml0IDwtIGFyaW1hKHN1bnNwb3RzX2xvZywgYygwLCAxLCAxKSxzZWFzb25hbCA9IGxpc3Qob3JkZXIgPSBjKDAsIDEsIDEpLCBwZXJpb2QgPSAyNDApKQojIGxzbyB3b24ndCB3b3JrIGFzIGl0IGJ1aWxkcyBvbiA1CmBgYAoKUXVlc3Rpb24gOAoKUHJvYmxlbSBzb2x2aW5nOiBZb3VyIG1vZGVsIGlzbuKAmXQgcHJlZGljdGluZyB0aGF0IHdlbGwuIFdoYXQgYXJlIHNvbWUgcmVhc29ucyAKeW91IGNhbiB0aGluayBmb3IgdGhpcz8KYGBge3J9CiMgc2Vhc29uYWxpdHkgaXMgaW5jb3JyZWN0CmBgYAoKUXVlc3Rpb24gOQoKUHJvYmxlbSBzb2x2aW5nOgoKSW4gdGhlIHByZXNlbnQgY2FzZSwgc3Vuc3BvdHMgaGF2ZSBhIGN5Y2xlIG9mIGxlbmd0aCAxMSB5ZWFycy4gVG8ga25vdyB0aGlzLCAKeW914oCZZCBoYXZlIHRvIGtub3cgc29tZXRoaW5nIGFib3V0IHN1bnNwb3RzLiBZb3UgY2FuIGZpbmQgdGhpcyBoZXJlLiBUaGUgCnN1bnNwb3RzIGRhdGEgYXJlIGEgbW9udGhseSB0aW1lIHNlcmllcy4gVGh1cywgdGhlIGltcGxpY2l0IHNlYXNvbmFsaXR5IG9mIApzdW5zcG90cyBpcyAxMiAobW9udGhzKSwgbm90IDExw5cxMj0xMzIgKG1vbnRocykuCgpBUklNQSBhbmQgYXV0by5hcmltYSgpIHdlcmUgbmV2ZXIgYnVpbHQgdG8gYXV0b21hdGljYWxseSBkZXRlY3QgYSBzZWFzb25hbCBjeWNsZQp3aG9zZSBsZW5ndGggaXMgbm90IHByZS1zcGVjaWZpZWQuIEl0IGlzIG5vdCBvdmVybHkgc3VycHJpc2luZyBpdCBkb2VzIG5vdCBzZWUgCnRoYXQgaXQgc2hvdWxkIGRvIDExIHNlYXNvbmFsIGRpZmZlcmVuY2VzIHRvIG1vZGVsIGEgc2Vhc29uYWxpdHkgdGhhdCByZXBlYXRzIApldmVyeSAxMSBjeWNsZXMgb2YgaXRzIHByZXNwZWNpZmllZCBmcmVxdWVuY3kuCgpTbywgdGhlIGZpcnN0IG9yZGVyIG9mIGJ1c2luZXNzIHdvdWxkIGJlIHRvIHNwZWNpZnkgdGhhdCBzZWFzb25hbCBjeWNsZXMgYXJlIAppbmRlZWQgb2YgbGVuZ3RoIDEzMiAoaS5lLiAxMTEyKS4gVGhlbiB5b3XigJlsbCBuZWVkIHRvIHVzZSB0aGlzIHNlYXNvbmFsbHkgCmFkanVzdGVkIGRhdGEgaW4geW91ciBtb2RlbCwgYW5kIGluY2x1ZGUgYSBzZWFzb25hbGl0eSBwYXJhbWV0ZXIgaW50byB5b3VyIAphcmltYSBtb2RlbCAodHJ5ID9hdXRvLmFyaW1hKSB0byBzaG93IGhvdyB0byBkbyB0aGlzLiBIaW50LCBpdCBpbnZvbHZlcyBzZXR0aW5nCnlvdXIgRCBwYXJhbWV0ZXIgPSAxKi4gVGhlbiB5b3UgY2FuIHBsb3QgeW91ciBkYXRhIGFuZCBwcmVkaWN0IHRoZSBuZXh0IDIwIAp5ZWFycy4gSXMgdGhpcyBhIGJldHRlciBmaXQ/CmBgYHtyfQojIGFsc28gYnVpbGRzIG9uIDUgc28gd2hhdGV2ZXIgZ29lcyBoZXJlIHdvbid0IHdvcmsgZWl0aGVyLgpgYGAKCkV4dGVuc2lvbnMKClF1ZXN0aW9uIDEKClRoZSBkYXRhc2V0LCBzdW5zcG90Lm1vbnRoIGlzIGEgdHMgY2xhc3MsIHJhdGhlciB0aGFuIGEgY2xhc3NpYyB0aWR5IHRpYmJsZS4gClVzaW5nIHlvdXIga25vd2xlZGdlIG9mIHRpZHl2ZXJzZSBhbmQgdHMgb2JqZWN0cywgY29udmVydCB0aGUgc3Vuc3BvdC5tb250aCBkYXRhCnRvIGEgdGlkeSBkYXRhIHNldCB1c2luZyB0aGUgdGtfdGJsKCkgZnVuY3Rpb24gZnJvbSB0aW1ldGsgcGFja2FnZS4gVXNpbmcgdGhpcyAKaW5zdGVhZCBvZiBhcy50aWJibGUoKSAoZnJvbSB0aGUgdGliYmxlIHBhY2thZ2UpIGlzIGJldHRlciBiZWNhdXNlIGl0IAphdXRvbWF0aWNhbGx5IHByZXNlcnZlcyB0aGUgdGltZSBzZXJpZXMgaW5kZXguCgpUaGVuLCBjb252ZXJ0IHRoZSBpbmRleCB0byBkYXRlIHVzaW5nIGx1YnJpZGF0ZTo6YXNfZGF0ZSgpIGFuZCB0aGVuIGNoYW5nZSB0byBhIAp0YmxfdGltZSBvYmplY3QgKGZyb20gdGhlIHRpYmJsZXRpbWUgcGFja2FnZSkuCgpUaGVuIHN1bW1hcmlzZSB0aGUgbWVkaWFuIHZhbHVlIG9mIHN1bnNwb3RzIGluIHRoZSB5ZWFyIDE5ODAuIEhpbnQ6IHlvdeKAmWxsIGhhdmUgCnRvIGNvbWJpbmUgeW91ciBrbm93bGVkZ2Ugb2YgaG93IHRvIGZpbHRlciBhbmQgc3VtbWFyaXNlIGRhdGVzIGFuZCB0aW1lcyBpbiAKdGlkeXZlcnNlIHRvIGRvIHRoaXMuCmBgYHtyfQpzdW5zcG90X21vbnRoX3RpYmJsZSA8LSB0a190YmwoZGF0YSA9IHN1bnNwb3QubW9udGgsIHJlbmFtZV9pbmRleCA9ICJkYXRlIikKCnN1bnNwb3RfbW9udGhfdGliYmxlJGRhdGUgPC0gbHVicmlkYXRlOjphc19kYXRlKHN1bnNwb3RfbW9udGhfdGliYmxlJGRhdGUpCgpzdW5zcG90X21vbnRoX3RpYmJsZSA8LSB0YmxfdGltZShzdW5zcG90X21vbnRoX3RpYmJsZSwgaW5kZXggPSBkYXRlKQoKc3Vuc3BvdF9tb250aF90aWJibGUgJT4lCiAgICAgICAgZmlsdGVyKGRhdGUgPj0gIjE5ODAtMDEtMDEiICYgZGF0ZSA8PSAiMTk4MC0xMi0wMSIpICU+JQogICAgICAgIHN1bW1hcmlzZShtZWRpYW4gPSBtZWRpYW4odmFsdWUpKQpgYGAKClF1ZXN0aW9uIDIKCkdldCBhbmQgbG9hZCB0aGUgcGFja2FnZSDigJh4dHPigJkgYW5kIGFsbCByZXF1aXJlZCBwYWNrYWdlcy4gQ3JlYXRlIHRoZSBvYmplY3RzIArigJhtZWFzdXJtZW504oCZIGFuZCDigJhkYXRlc+KAmSBsaWtlIGJlbG93LgoKbWVhc3VyZW1lbnQgPC0gcmVwKHNpbihzZXEoMCwxMCxsZW5ndGgub3V0ID0gOTApKSw0KSArIHJub3JtKDkwKjQpCmRhdGVzIDwtIHNlcShhcy5EYXRlKCIxOTg3LTAxLTAxIiksIGFzLkRhdGUoIjE5ODctMTItMjYiKSwgImRheSIpCgpVc2UgdGhlIHR3byBvYmplY3RzIHRvIGNyZWF0ZSBhbiB4dHMgdGltZSBzZXJpZXMgKG15dGltZXNlcmllcykgb3JkZXJlZCBieSAKZGF0ZXMuIENoZWNrIHRoZSBjbGFzcywgc3RydWN0dXJlLCBudW1iZXIgb2YgeWVhcnMsIG1vbnRocyBhbmQgcXVhcnRlcnMuIEdldCB0aGUKY29yZSBkYXRhIGFuZCBpbmRleCBhcyB3ZWxsLCBhbmQgY2hlY2sgdGhlc2UgYXJlIG1hdHJpeCBhbmQgaW5kZXggZGF0YS4KClNlbGVjdCBhbGwgb2YgdGhlIEF1Z3VzdCB0byBTZXB0ZW1iZXIgZGF0YSBpbiB5b3VyIHh0cyBvYmplY3QuIFBsb3QgdGhpcyBuZXcgeHRzCnRpbWUgc2VyaWVzLlVzZSBhcHBseS5tb250aGx5IGZyb20geHRzIHRvIGdldCBhIG1vbnRobHkgbWVhbiBvbiB0aGUgdGltZSBzZXJpZXMuCkZpbmFsbHksIGdldCBhIG1vbnRobHkgcGxvdC4KYGBge3J9Cm1lYXN1cmVtZW50IDwtIHJlcChzaW4oc2VxKDAsIDEwLCBsZW5ndGgub3V0ID0gOTApKSwgNCkgKyBybm9ybSg5MCAqIDQpCmRhdGVzIDwtIHNlcShhcy5EYXRlKCIxOTg3LTAxLTAxIiksIGFzLkRhdGUoIjE5ODctMTItMjYiKSwgImRheSIpCgpteXRpbWVzZXJpZXMgPC0geHRzKHggPSBtZWFzdXJlbWVudCwgb3JkZXIuYnkgPSBkYXRlcykKY2xhc3MobXl0aW1lc2VyaWVzKQpzdHIobXl0aW1lc2VyaWVzKQoKZXBfeSA8LSBlbmRwb2ludHMobXl0aW1lc2VyaWVzLCBvbiA9ICJ5ZWFycyIpCmVwX20gPC0gZW5kcG9pbnRzKG15dGltZXNlcmllcywgb24gPSAibW9udGhzIikKZXBfcSA8LSBlbmRwb2ludHMobXl0aW1lc2VyaWVzLCBvbiA9ICJxdWFydGVycyIpCgp4dHNfY29yZSA8LSBjb3JlZGF0YShteXRpbWVzZXJpZXMpCnh0c19pbmRleCA8LSBpbmRleCh4dHNfY29yZSkKY2xhc3MoeHRzX2NvcmUpCmNsYXNzKHh0c19pbmRleCkKCnBsb3QobXl0aW1lc2VyaWVzWyIxOTg3MDgwMS8xOTg3MDkzMCJdKQphcHBseS5tb250aGx5KG15dGltZXNlcmllcywgRlVOID0gbWVhbikKcGxvdChhcHBseS5tb250aGx5KG15dGltZXNlcmllcywgRlVOID0gbWVhbikpCmBgYAo=</div>
 
 
 

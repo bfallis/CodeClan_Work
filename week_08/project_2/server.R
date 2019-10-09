@@ -60,7 +60,7 @@ shinyServer(function(input, output) {
         output$goal_plot <- renderPlot({
                 
                 # set the date to range for plots
-                start_month = seq(floor_date(today(), "month"), 
+                start_month = seq(floor_date(date("2019-10-08"), "month"), 
                         length = 3, by = "-1 months")
                 date_end_month = start_month - 1
                 
@@ -74,15 +74,25 @@ shinyServer(function(input, output) {
                 
                 # Getting the data for the number of clicks and number of
                 # sessions
+                #goals_and_session <- reactive({
+                #        google_analytics(
+                #                google_analytics_id, 
+                #                date_range = c(start_date_clicks, today()), 
+                #                metrics = c("goal3Completions", 
+                #                        "goal5Completions", 
+                #                        "sessions"), 
+                #                dimensions = c("date")
+                #        )
+                #})
+                
                 goals_and_session <- reactive({
-                        google_analytics(
-                                google_analytics_id, 
-                                date_range = c(start_date_clicks, today()), 
-                                metrics = c("goal3Completions", 
-                                        "goal5Completions", 
-                                        "sessions"), 
-                                dimensions = c("date")
-                        )
+                        df <- read_csv("user_functions/tab_1a_1.csv")
+                
+                        df <- df %>%
+                                filter(date >= input$date_range[1] & 
+                                        date <= input$date_range[2])
+                        
+                        return(df)
                 })
                 
                 # Creating the plots

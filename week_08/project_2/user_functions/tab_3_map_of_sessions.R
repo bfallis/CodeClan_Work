@@ -9,14 +9,21 @@
 create_map <- function(start_date, end_date) {
         
         # Create a dataset from google analytics.
-        Cities <- google_analytics(google_analytics_id,
-                date_range = c(as.character(start_date),
-                        as.character(end_date)
-                ),
-                metrics = c("sessions"),
-                dimensions = c("city","latitude","longitude"),
-                order =  order_type("sessions","DESCENDING", "VALUE")
-        )
+        #Cities <- google_analytics(google_analytics_id,
+        #        date_range = c(as.character(start_date),
+        #                as.character(end_date)
+        #        ),
+        #        metrics = c("sessions"),
+        #        dimensions = c("city","latitude","longitude"),
+        #        order =  order_type("sessions","DESCENDING", "VALUE")
+        #)
+        
+        Cities <- read_csv("user_functions/tab_3.csv")
+        
+        Cities <- Cities %>%
+                filter(date >= start_date & date <= end_date) %>%
+                group_by(city, latitude, longitude) %>%
+                summarise(sessions = sum(sessions))
         
         # Repeat each row for the number of times in the sessions variable.
         # This is so when leaflet creates the groupings on the map, the

@@ -6,11 +6,18 @@
 
 # Plotting the devices used from all sessions
 get_all_sessions <- function(start_date, end_date) {      
-        device_data <- google_analytics(google_analytics_id,
-                date_range = c(start_date, end_date),
-                metrics = c("sessions"),
-                dimensions = c("deviceCategory")
-        )
+        #device_data <- google_analytics(google_analytics_id,
+        #        date_range = c(start_date, end_date),
+        #        metrics = c("sessions"),
+        #        dimensions = c("deviceCategory")
+        #)
+        
+        device_data <- read_csv("user_functions/tab_1b_1.csv")
+        
+        device_data <- device_data %>%
+                filter(date >= start_date & date <= end_date) %>%
+                group_by(deviceCategory) %>%
+                summarise(sessions = sum(sessions))
         
         ggplot(device_data) +
                 geom_col(aes(x = deviceCategory, 
@@ -30,17 +37,31 @@ get_all_sessions <- function(start_date, end_date) {
 
 # Plotting the devices used to book events
 get_device_plot <- function(start_date, end_date) {
-        test_2 <- google_analytics(google_analytics_id,
-                date_range = c(start_date, end_date),
-                metrics = c("goal3Completions"),
-                dimensions = c("deviceCategory")
-        )
+        #test_2 <- google_analytics(google_analytics_id,
+        #        date_range = c(start_date, end_date),
+        #        metrics = c("goal3Completions"),
+        #        dimensions = c("deviceCategory")
+        #)
         
-        test_3 <- google_analytics(google_analytics_id,
-                date_range = c(start_date, end_date),
-                metrics = c( "goal5Completions"),
-                dimensions = c("deviceCategory")
-        )
+        test_2 <- read_csv("user_functions/tab_1b_2.csv")
+        
+        test_2 <- test_2 %>%
+                filter(date >= start_date & date <= end_date) %>%
+                group_by(deviceCategory) %>%
+                summarise(goal3Completions = sum(goal3Completions))
+        
+        #test_3 <- google_analytics(google_analytics_id,
+        #        date_range = c(start_date, end_date),
+        #        metrics = c( "goal5Completions"),
+        #        dimensions = c("deviceCategory")
+        #)
+        
+        test_3 <- read_csv("user_functions/tab_1b_3.csv")
+        
+        test_3 <- test_3 %>%
+                filter(date >= start_date & date <= end_date) %>%
+                group_by(deviceCategory) %>%
+                summarise(goal5Completions = sum(goal5Completions))
         
         test_2$goal5Completions <- test_3$goal5Completions
         

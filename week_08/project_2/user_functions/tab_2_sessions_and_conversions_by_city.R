@@ -7,24 +7,50 @@
 # Pulling the data for the channel groups
 get_channel_group_df <- function(start_date, end_date) {
         
-        channel_group_df <- google_analytics(google_analytics_id, 
-                date_range = c(as.character(start_date), as.character(end_date)), 
-                metrics = c("sessions", "bounceRate", "organicSearches", 
-                        "goal5ConversionRate", "goal3ConversionRate"
-                ), 
-                dimensions = "channelGrouping")
+        #channel_group_df <- google_analytics(google_analytics_id, 
+        #        date_range = c(as.character(start_date), as.character(end_date)), 
+        #        metrics = c("sessions", "bounceRate", "organicSearches", 
+        #                "goal5ConversionRate", "goal3ConversionRate"
+        #        ), 
+        #        dimensions = "channelGrouping")
+        
+        channel_group_df <- read_csv("user_functions/tab_2a_1.csv")
+        
+        channel_group_df <- channel_group_df %>%
+                filter(date >= start_date & date <= end_date) %>%
+                group_by(channelGrouping) %>%
+                summarise(sessions = sum(sessions),
+                        bounceRate = mean(bounceRate),
+                        organicSearches = sum(organicSearches),
+                        goal5ConversionRate = median(goal5ConversionRate),
+                        goal3ConversionRate = median(goal3ConversionRate)
+                )
         
         return(channel_group_df)
 }
 
 # Pulling the data for the Social networks
 get_social_group_df <- function(start_date, end_date) {
-        social_group_df <- google_analytics(google_analytics_id,
-                date_range = c(start_date, end_date),
-                metrics = c("sessions", "bounceRate", "organicSearches",
-                        "goal5ConversionRate", "goal3ConversionRate"
-                ),
-                dimensions = "socialNetwork")
+        #social_group_df <- google_analytics(google_analytics_id,
+        #        date_range = c(start_date, end_date),
+        #        metrics = c("sessions", "bounceRate", "organicSearches",
+        #                "goal5ConversionRate", "goal3ConversionRate"
+        #        ),
+        #        dimensions = "socialNetwork")
+        
+        social_group_df <- read_csv("user_functions/tab_2a_2.csv")
+        
+        social_group_df <- social_group_df %>%
+                filter(date >= start_date & date <= end_date) %>%
+                group_by(socialNetwork) %>%
+                summarise(sessions = sum(sessions),
+                          bounceRate = mean(bounceRate),
+                          organicSearches = sum(organicSearches),
+                          goal5ConversionRate = median(goal5ConversionRate),
+                          goal3ConversionRate = median(goal3ConversionRate)
+                )
+        
+        
         
         ##removing the row which is (not set)
         social_group_df<- dplyr::filter(social_group_df, 

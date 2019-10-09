@@ -121,7 +121,7 @@ get_goal_monthly <- function (graph_data){
 get_goal_map <- function(start_date, end_date) {
         
         # set the date to range for plots
-        start_month = seq(floor_date(today(), "month"), length = 3,
+        start_month = seq(floor_date(date("2019-10-08"), "month"), length = 3,
                 by = "-1 months"
         )
         
@@ -134,15 +134,24 @@ get_goal_map <- function(start_date, end_date) {
         }
         
         # call the api
-        goals_geo <- google_analytics(
-                google_analytics_id, 
-                date_range = c(start_date_clicks, today()), 
-                metrics = c("goal3Completions", 
-                        "goal5Completions"), 
-                dimensions = c("city", "latitude", "longitude"), 
-                filtersExpression = 
-                        "ga:goal3Completions!=0,ga:goal5Completions!=0"
-        )
+        #goals_geo <- google_analytics(
+        #        google_analytics_id, 
+        #        date_range = c(start_date_clicks, today()), 
+        #        metrics = c("goal3Completions", 
+        #                "goal5Completions"), 
+        #        dimensions = c("city", "latitude", "longitude"), 
+        #        filtersExpression = 
+        #                "ga:goal3Completions!=0,ga:goal5Completions!=0"
+        #)
+        
+        goals_geo <- read_csv("user_functions/tab_1a_2.csv")
+        
+        goals_geo <- goals_geo %>%
+                filter(date >= start_date & date <= end_date) %>%
+                group_by(city, latitude, longitude) %>%
+                summarise(goal3Completions = sum(goal3Completions),
+                        goal5Completions = sum(goal5Completions)
+                )
         
         # format the data to create the map
         goals_map <- goals_geo %>%

@@ -7,10 +7,12 @@ library(shiny)
 library(shinythemes)
 library(stringr)
 library(tidyverse)
+library(keyring)
+library(googleAnalyticsR)
 
 #Source in files containing functions.
 source("user_functions/plot_theme.R")
-source("user_functions/get_google_analytics_details.R")
+#source("user_functions/get_google_analytics_details.R")
 source("user_functions/top_of_page.R")
 source("user_functions/tab_1a_sessions_vs_conversions_and_map.R")
 source("user_functions/tab_1b_sessions_and_conversions_by_device_type.R")

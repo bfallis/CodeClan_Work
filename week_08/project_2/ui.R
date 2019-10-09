@@ -14,7 +14,7 @@ shinyUI(fluidPage(
         theme = shinytheme("cerulean"),
         
         # Title
-        titlePanel(tags$h2("CodeClan Website Performance")),
+        titlePanel(tags$h2("Sample Website Performance")),
         
         # Creates heading row with date range picker and total sessions and
         # conversions.

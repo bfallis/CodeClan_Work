@@ -1,13 +1,10 @@
 # Gets credentials from keyring and google analytics details for CodeClan
 
-library(keyring)
-library(googleAnalyticsR)
-
 # Get google developer API details from keyring
 options(googleAuthR.client_id =
-        keyring::key_get(service = "google_client_id", keyring = "remote"))
+        keyring::key_get(service = "google_client_id"))
 options(googleAuthR.client_secret =
-        keyring::key_get(service = "google_secret", keyring = "remote"))
+        keyring::key_get(service = "google_secret"))
 
 #Reload package with new credentials
 devtools::reload(pkg = devtools::inst("googleAnalyticsR"))
